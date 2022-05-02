@@ -11,8 +11,8 @@ func save_data():
 	var _result = ResourceSaver.save(FILE_NAME, self)
 
 
-func _init():
+func load_data():
 	if ResourceLoader.exists(FILE_NAME):
-		var res = ResourceLoader.load(FILE_NAME)
-		salt = res.salt
-		pw_file = res.pw_file
+		return ResourceLoader.load(FILE_NAME)
+	else:
+		return self
