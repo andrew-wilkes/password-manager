@@ -18,10 +18,16 @@ _global_script_classes=[ {
 "class": "Settings",
 "language": "GDScript",
 "path": "res://settings.gd"
+}, {
+"base": "Resource",
+"class": "Temp",
+"language": "GDScript",
+"path": "res://temp.gd"
 } ]
 _global_script_class_icons={
 "Passwords": "",
-"Settings": ""
+"Settings": "",
+"Temp": ""
 }
 
 [application]

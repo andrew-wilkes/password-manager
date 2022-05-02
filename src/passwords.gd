@@ -4,15 +4,10 @@ class_name Passwords
 
 const IV_SIZE = 16
 
-export var data: PoolByteArray
+export(PoolByteArray) var data
 export var iv := PoolByteArray()
 
 var aes = AESContext.new()
-var settings: Settings
-
-func _init(_settings):
-	settings = _settings
-
 
 func set_iv():
 	iv.resize(IV_SIZE)
@@ -20,13 +15,13 @@ func set_iv():
 		iv.set(n, randi() * 0xff)
 
 
-func encode_data(pdata, key):
+func encode_data(pdata, key, settings):
 	aes.start(AESContext.MODE_CBC_ENCRYPT, (key + settings.salt).sha256_buffer(), iv)
 	data = aes.update(pad_data(pdata.to_utf8()))
 	aes.finish()
 
 
-func decode_data(key):
+func decode_data(key, settings):
 	var decrypted
 	aes.start(AESContext.MODE_CBC_DECRYPT, (key + settings.salt).sha256_buffer(), iv)
 	decrypted = aes.update(data)
@@ -44,27 +39,21 @@ func pad_data(d: PoolByteArray):
 	return d
 
 
-func save_data():
+func save_data(settings):
 	var _result = ResourceSaver.save("user://" + settings.pw_file, self)
 
 
-func load_data():
+func load_data(settings):
 	if ResourceLoader.exists("user://" + settings.pw_file):
-		var res = ResourceLoader.load("user://" + settings.pw_file)
-		if res.has("data"):
-			data = res.data
-			iv = res.iv
+		return ResourceLoader.load("user://" + settings.pw_file)
 
 
-func test():
+func test(settings):
 	set_iv()
 	print("IV: ", iv)
 	var key = "MyKey"
 	var mydata = "Some data"
-	encode_data(mydata, key)
+	encode_data(mydata, key, settings)
 	print("Data: ", data)
-	var decoded = decode_data(key)
+	var decoded = decode_data(key, settings)
 	assert(decoded == mydata.to_utf8())
-	save_data()
-	load_data()
-	pass
