@@ -18,5 +18,8 @@ The AES encryption algorithm will be used in CBC (Cipher Block Chaining) mode.
 * List in order of updated passwords
 * Categories
 * Feature to create a copy of the file with incremented index value
-* Attach a random IV value in clear text to each save of the data file.
+* Attach a random IV value in clear text to each save of the data file (best practice)
 
+## Reference material
+
+[AES Encryption Modes](https://www.highgo.ca/2019/08/08/the-difference-in-five-modes-in-the-aes-encryption-algorithm/)
