@@ -12,7 +12,7 @@ var aes = AESContext.new()
 func set_iv():
 	iv.resize(IV_SIZE)
 	for n in IV_SIZE:
-		iv.set(n, randi() * 0xff)
+		iv.set(n, randi() % 0xff)
 
 
 func encode_data(pdata, key, settings):
