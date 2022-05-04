@@ -33,15 +33,3 @@ func get_char(x):
 			return str(x)
 		else:
 			return char(x + 87)
-
-
-func test_get_char():
-	var chrs = PoolStringArray()
-	for n in 36:
-		chrs.append(get_char(n))
-	print(chrs)
-
-
-func test_generate_salt():
-	for n in 10:
-		print(generate_salt())

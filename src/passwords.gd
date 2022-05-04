@@ -16,14 +16,14 @@ func set_iv():
 
 
 func encode_data(pdata, key, settings):
-	aes.start(AESContext.MODE_CBC_ENCRYPT, (key + settings.salt).sha256_buffer(), iv)
+	aes.start(AESContext.MODE_CBC_ENCRYPT, (settings.salt + key).sha256_buffer(), iv)
 	data = aes.update(pad_data(pdata.to_utf8()))
 	aes.finish()
 
 
 func decode_data(key, settings):
 	var decrypted
-	aes.start(AESContext.MODE_CBC_DECRYPT, (key + settings.salt).sha256_buffer(), iv)
+	aes.start(AESContext.MODE_CBC_DECRYPT, (settings.salt + key).sha256_buffer(), iv)
 	decrypted = aes.update(data)
 	aes.finish()
 	decrypted.resize(decrypted.size() - decrypted[-1])
@@ -46,14 +46,3 @@ func save_data(settings):
 func load_data(settings):
 	if ResourceLoader.exists("user://" + settings.pw_file):
 		return ResourceLoader.load("user://" + settings.pw_file)
-
-
-func test(settings):
-	set_iv()
-	print("IV: ", iv)
-	var key = "MyKey"
-	var mydata = "Some data"
-	encode_data(mydata, key, settings)
-	print("Data: ", data)
-	var decoded = decode_data(key, settings)
-	assert(decoded == mydata.to_utf8())
