@@ -16,14 +16,14 @@ func set_iv():
 
 
 func encode_data(pdata, key, settings):
-	aes.start(AESContext.MODE_CBC_ENCRYPT, (settings.salt + key).sha256_buffer(), iv)
+	aes.start(AESContext.MODE_CBC_ENCRYPT, salted_key(settings, key), iv)
 	data = aes.update(pad_data(pdata.to_utf8()))
 	aes.finish()
 
 
 func decode_data(key, settings):
 	var decrypted
-	aes.start(AESContext.MODE_CBC_DECRYPT, (settings.salt + key).sha256_buffer(), iv)
+	aes.start(AESContext.MODE_CBC_DECRYPT, salted_key(settings, key), iv)
 	decrypted = aes.update(data)
 	aes.finish()
 	decrypted.resize(decrypted.size() - decrypted[-1])
@@ -40,9 +40,18 @@ func pad_data(d: PoolByteArray):
 
 
 func save_data(settings):
-	var _result = ResourceSaver.save("user://" + settings.pw_file, self)
+	var _result = ResourceSaver.save(pw_file(settings), self)
 
 
 func load_data(settings):
-	if ResourceLoader.exists("user://" + settings.pw_file):
-		return ResourceLoader.load("user://" + settings.pw_file)
+	if ResourceLoader.exists(pw_file(settings)):
+		return ResourceLoader.load(pw_file(settings))
+
+
+func salted_key(settings, key):
+	# This function allows us to change how we may apply the salt
+	return (settings.salt + key).sha256_buffer()
+
+
+func pw_file(settings):
+	return "user://" + settings.pw_file
