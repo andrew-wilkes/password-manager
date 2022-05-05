@@ -30,7 +30,7 @@ window_title = "Open a File"
 mode = 0
 access = 2
 filters = PoolStringArray( "*.kdbx ; KeePass2 files" )
-current_dir = "/mnt/windows/WData/"
+current_dir = "/mnt/windows/WData"
 current_path = "/mnt/windows/WData/"
 
 [connection signal="pressed" from="C/VBox/GetKeePass" to="." method="_on_GetKeePass_pressed"]
