@@ -13,14 +13,20 @@ anchor_bottom = 1.0
 
 [node name="VBox" type="VBoxContainer" parent="C"]
 margin_left = 446.0
-margin_top = 290.0
+margin_top = 268.0
 margin_right = 577.0
-margin_bottom = 310.0
+margin_bottom = 332.0
 custom_constants/separation = 20
 
-[node name="GetKeePass" type="Button" parent="C/VBox"]
+[node name="Password" type="LineEdit" parent="C/VBox"]
 margin_right = 131.0
-margin_bottom = 20.0
+margin_bottom = 24.0
+placeholder_text = "Password"
+
+[node name="GetKeePass" type="Button" parent="C/VBox"]
+margin_top = 44.0
+margin_right = 131.0
+margin_bottom = 64.0
 text = "Open KeePass File"
 
 [node name="FileDialog" type="FileDialog" parent="."]
@@ -30,8 +36,8 @@ window_title = "Open a File"
 mode = 0
 access = 2
 filters = PoolStringArray( "*.kdbx ; KeePass2 files" )
-current_dir = "/mnt/windows/WData"
-current_path = "/mnt/windows/WData/"
+current_dir = "/mnt/files/dev/godot/git/andrew-wilkes/godot-password-manager/src"
+current_path = "/mnt/files/dev/godot/git/andrew-wilkes/godot-password-manager/src/"
 
 [connection signal="pressed" from="C/VBox/GetKeePass" to="." method="_on_GetKeePass_pressed"]
 [connection signal="file_selected" from="FileDialog" to="." method="_on_FileDialog_file_selected"]
