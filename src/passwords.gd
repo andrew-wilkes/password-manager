@@ -31,11 +31,12 @@ func decode_data(key, settings):
 
 
 func pad_data(d: PoolByteArray):
-	# Resize to multiple of 16 bytes and record the pad_size in the last byte
+	# Resize to multiple of 16 bytes and record the pad_size in the padded bytes
 	var pad_size = IV_SIZE - d.size() % IV_SIZE
 	if pad_size == 0: pad_size = IV_SIZE
-	d.resize(d.size() + pad_size)
-	d[-1] = pad_size
+	# Pad with known byte values rather than simply resizing 
+	for _n in pad_size:
+		d.append(pad_size)
 	return d
 
 
