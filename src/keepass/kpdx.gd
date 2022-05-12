@@ -26,7 +26,7 @@ var data: PoolByteArray
 var encoded_db
 var key
 var composite_key
-var database
+var data_blocks: PoolByteArray
 
 
 func set_password(pwd: String):
@@ -53,7 +53,6 @@ func transform_key():
 	if rounds == null:
 		return "Missing TransformRounds field"
 	var encrypted = key
-	rounds.invert()
 	rounds = bytes_to_int(rounds)
 	var aes = AESContext.new()
 	aes.start(AESContext.MODE_ECB_ENCRYPT, tseed)
@@ -86,15 +85,24 @@ func decode_data():
 		return "Decoded data mismatch\nStreamStartBytes: " + String(stream_start_bytes) \
 		 + "\nStart bytes: " + String(start_bytes)
 	prints("End bytes:", db.subarray(-16, -1))
-	# Remove end padding and start bytes
-	var compressed_data = db.subarray(32, -db[-1] - 1)
-	# Try to decompress the data using GZip
+	# Remove start bytes and end padding
+	data_blocks = db.subarray(32, -db[-1] - 1)
+	var block = get_data_block(0)
+	block = get_data_block(block.idx)
+	pass
+
+
+func get_data_block(idx):
+	var id = bytes_to_int(data_blocks.subarray(idx, idx + 3))
+	var data_hash = data_blocks.subarray(idx + 4, idx + 35)
+	var block_size = bytes_to_int(data_blocks.subarray(idx + 36, idx + 39))
+	var block_data = data_blocks.subarray(idx + 40, idx + block_size - 1)
 	# GZip file format: https://datatracker.ietf.org/doc/html/rfc1952
-	# Header should start with 31, 139
-	database = compressed_data.decompress_dynamic(-1, File.COMPRESSION_GZIP)
-	if database.size() == 0:
-		return "Failed to decompress data"
-	return "OK"
+	# Starts with 31, 139
+	block_data = block_data.decompress_dynamic(-1, File.COMPRESSION_GZIP)
+	var hashed_data = hash_bytes(block_data)
+	var verified = true if data_hash == hashed_data else false
+	return { id = id, data = block_data, verified = verified, idx = idx + block_size }
 
 
 func get_header_fields_and_database():
@@ -129,6 +137,7 @@ func load_file(path):
 
 
 func bytes_to_int(bytes: PoolByteArray):
+	bytes.invert()
 	var x = 0
 	for idx in bytes.size():
 		x *= 256
