@@ -109,7 +109,7 @@ func get_header_fields_and_database():
 	var idx = 12
 	var scanning = true
 	while scanning:
-		var data_length = data[idx + 1] + data[idx + 2] * 16
+		var data_length = data[idx + 1] + data[idx + 2] * 256
 		header[data[idx]] = data.subarray(idx + 3, idx + 2 + data_length)
 		if data[idx] == FIELD_ID.EndOfHeader:
 			scanning = false
