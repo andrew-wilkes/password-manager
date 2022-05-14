@@ -1,6 +1,4 @@
-#from zxcvbn.scoring import START_UPPER, ALL_UPPER
-#from gettext import gettext as _
-
+extends Node
 
 func get_feedback(score, sequence: Array):
 	if len(sequence) == 0:
@@ -117,10 +115,14 @@ func get_dictionary_match_feedback(_match, is_sole_match):
 
 	var suggestions = []
 	var word = _match['token']
-	if Scoring.START_UPPER.search(word):
+	var regex = RegEx.new()
+	regex.compile(Scoring.START_UPPER)
+	if regex.search(word):
 		suggestions.append(_("Capitalization doesn't help very much."))
-	elif Scoring.ALL_UPPER.search(word) and word.lower() != word:
-		suggestions.append(_("All-uppercase is almost as easy to guess as all-lowercase."))
+	else:
+		regex.compile(Scoring.ALL_UPPER)
+		if regex.search(word) and word.lower() != word:
+			suggestions.append(_("All-uppercase is almost as easy to guess as all-lowercase."))
 
 	if _match['reversed'] and len(_match['token']) >= 4:
 		suggestions.append(_("Reversed words aren't much harder to guess."))

@@ -85,7 +85,7 @@ func nCk(n, k):
 #    D^(l-1) approximates Sum(D^i for i in [1..l-1]
 #
 # ------------------------------------------------------------------------------
-func most_guessable_match_sequence(password, matches, _exclude_additive = false):
+static func most_guessable_match_sequence(password, matches, _exclude_additive = false):
 	var n = len(password)
 
 	# partition matches into sublists according to ending index j
@@ -145,7 +145,7 @@ func most_guessable_match_sequence(password, matches, _exclude_additive = false)
 	}
 
 
-func get_array_of_dictionaries(n):
+static func get_array_of_dictionaries(n):
 	var array = []
 	for _n in n:
 		array.append({})
@@ -155,7 +155,7 @@ func get_array_of_dictionaries(n):
 # helper: considers whether a length-l sequence ending at _match m is better
 # (fewer guesses) than previously encountered sequences, updating state if
 # so.
-func update(m, l, password, _exclude_additive, optimal):
+static func update(m, l, password, _exclude_additive, optimal):
 	var k = m['j']
 	var pi = estimate_guesses(m, password)
 	if l > 1:
@@ -186,7 +186,7 @@ func update(m, l, password, _exclude_additive, optimal):
 	optimal['pi'][k][l] = pi
 
 # helper: evaluate bruteforce matches ending at k.
-func bruteforce_update(k, password, _exclude_additive, optimal):
+static func bruteforce_update(k, password, _exclude_additive, optimal):
 	# see if a single bruteforce _match spanning the k-prefix is optimal.
 	var m = make_bruteforce_match(0, k, password)
 	update(m, 1, password, _exclude_additive, optimal)
@@ -211,7 +211,7 @@ func bruteforce_update(k, password, _exclude_additive, optimal):
 			update(m, l + 1, password, _exclude_additive, optimal)
 
 # helper: make bruteforce _match objects spanning i to j, inclusive.
-func make_bruteforce_match(i, j, password):
+static func make_bruteforce_match(i, j, password):
 	return {
 		'pattern': 'bruteforce',
 		'token': password.slice(i, j + 1),
@@ -221,7 +221,7 @@ func make_bruteforce_match(i, j, password):
 
 # helper: step backwards through optimal.m starting at the end,
 # constructing the final optimal _match sequence.
-func unwind(n, optimal):
+static func unwind(n, optimal):
 	var optimal_match_sequence = []
 	var k = n - 1
 	# find the final best sequence length and score
@@ -241,7 +241,7 @@ func unwind(n, optimal):
 
 	return optimal_match_sequence
 
-func estimate_guesses(_match, password):
+static func estimate_guesses(_match, password):
 	if _match.get('guesses', false):
 		return Decimal(_match['guesses'])
 
@@ -389,17 +389,20 @@ func spatial_guesses(_match):
 func uppercase_variations(_match):
 	var word = _match['token']
 
-	if ALL_LOWER._match(word) or word.lower() == word:
+	var regex = RegEx.new()
+	regex.compile(ALL_LOWER)
+	if  regex.search(word) or word.to_lower() == word:
 		return 1
 
-	for regex in [START_UPPER, END_UPPER, ALL_UPPER]:
-		if regex._match(word):
+	for pattern in [START_UPPER, END_UPPER, ALL_UPPER]:
+		regex.compile(pattern)
+		if regex.search(word):
 			return 2
 
 	var U = 0 #sum(1 for c in word if c.isupper())
 	var L = 0 #sum(1 for c in word if c.islower())
 	for c in word:
-		if c < a:
+		if c < "a":
 			U += 1
 		else:
 			L += 1
@@ -411,7 +414,7 @@ func uppercase_variations(_match):
 
 
 func l33t_variations(_match):
-	if not _match.get('l33t', False):
+	if not _match['l33t']:
 		return 1
 
 	var variations = 1
@@ -420,14 +423,14 @@ func l33t_variations(_match):
 		var unsubbed = _match['sub'].items()[subbed]
 		# lower-case _match.token before calculating: capitalization shouldn't
 		# affect l33t calc.
-		var chrs = list(_match['token'].lower())
-		var U = 0 #sum(1 for c in word if c.isupper())
-		var L = 0 #sum(1 for c in word if c.islower())
-		for c in word:
-			if c < a:
+		var chrs = _match['token'].lower()
+		var S = 0
+		var U = 0
+		for c in chrs:
+			if c == subbed:
+				S += 1
+			if c == unsubbed:
 				U += 1
-			else:
-				L += 1
 		if S == 0 or U == 0:
 			# for this sub, password is either fully subbed (444) or fully
 			# unsubbed (aaa) treat that as doubling the space (attacker needs
@@ -448,7 +451,7 @@ func l33t_variations(_match):
 
 # Replacements for Python functions
 
-func factorial(n: int):
+static func factorial(n: int):
 	if n < 2: return 1
 	if n > 2:
 		for m in range(2, n):
@@ -456,5 +459,5 @@ func factorial(n: int):
 	return n
 
 
-func Decimal(n):
+static func Decimal(n):
 	return n

@@ -1,33 +1,5 @@
 extends Node
 
-func _init():
-	add_frequency_lists(FREQUENCY_LISTS)
-
-
-func build_ranked_dict(ordered_list):
-	var dict = {}
-	var n = 1
-	for word in ordered_list:
-		dict[word] = n
-		n += 1
-	return dict
-
-
-var RANKED_DICTIONARIES = {}
-
-
-func add_frequency_lists(frequency_lists_):
-	for name in frequency_lists_.keys():
-		RANKED_DICTIONARIES[name] = build_ranked_dict(frequency_lists_[name])
-
-
-var GRAPHS = {
-	'qwerty': adjacency_graphs.data['qwerty'],
-	'dvorak': adjacency_graphs.data['dvorak'],
-	'keypad': adjacency_graphs.data['keypad'],
-	'mac_keypad': adjacency_graphs.data['mac_keypad'],
-}
-
 const L33T_TABLE = {
 	'a': ['4', '@'],
 	'b': ['8'],
@@ -41,10 +13,6 @@ const L33T_TABLE = {
 	't': ['+', '7'],
 	'x': ['%'],
 	'z': ['2'],
-}
-
-var REGEXEN = {
-	'recent_year': re.compile(r'19\d\d|200\d|201\d'),
 }
 
 const DATE_MAX_YEAR = 2050
@@ -75,71 +43,119 @@ const DATE_SPLITS = {
 	],
 }
 
+const REGEXEN = {
+	'recent_year': '19\\d\\d|20\\d\\d'
+}
+
+const SHIFTED_RX = '[~!@#$%^&*()_+QWERTYUIOP{}|ASDFGHJKL:"ZXCVBNM<>?]'
+const MAX_DELTA = 5
+
+var RANKED_DICTIONARIES = {}
+
+var GRAPHS = {
+	'qwerty': AdjacencyGraphs.data['qwerty'],
+	'dvorak': AdjacencyGraphs.data['dvorak'],
+	'keypad': AdjacencyGraphs.data['keypad'],
+	'mac_keypad': AdjacencyGraphs.data['mac_keypad'],
+}
+
+class MatchSorter:
+	static func sort_by_ij(ma, mb):
+		if ma['i'] < mb['i']: return true
+		if ma['i'] > mb['i']: return false
+		if ma['j'] > mb['j']: return false
+		return true
+
+func _init():
+	add_frequency_lists(FrequencyLists.data)
+
+
+func add_frequency_lists(frequency_lists):
+	for name in frequency_lists.data.keys():
+		RANKED_DICTIONARIES[name] = build_ranked_dict(frequency_lists.data[name])
+
+
+func build_ranked_dict(ordered_list):
+	var dict = {}
+	var n = 1
+	for word in ordered_list:
+		dict[word] = n
+		n += 1
+	return dict
+
 
 # omnimatch -- perform all matches
 func omnimatch(password, _ranked_dictionaries=RANKED_DICTIONARIES):
-	matches = []
+	var matches = []
+	var args = [password, _ranked_dictionaries]
 	for matcher in [
-		dictionary_match,
-		reverse_dictionary_match,
-		l33t_match,
-		spatial_match,
-		repeat_match,
-		sequence_match,
-		regex_match,
-		date_match,
+		"dictionary_match",
+		"reverse_dictionary_match",
+		"l33t_match",
+		"spatial_match",
+		"repeat_match",
+		"sequence_match",
+		"regex_match",
+		"date_match",
 	]:
-		matches.extend(matcher(password, _ranked_dictionaries=_ranked_dictionaries))
+		matches.append(callv(matcher, args))
 
-	return sorted(matches, key=lambda x: (x['i'], x['j']))
+	return matches.sort_custom(MatchSorter, "sort_by_ij")
 
 
 # dictionary match (common passwords, english, last names, etc)
 func dictionary_match(password, _ranked_dictionaries=RANKED_DICTIONARIES):
-	matches = []
-	length = len(password)
-	password_lower = password.lower()
-	for dictionary_name, ranked_dict in _ranked_dictionaries.items():
+	var matches = []
+	var length = len(password)
+	var password_lower = password.to_lower()
+	for dictionary_name in _ranked_dictionaries.keys():
+		var ranked_dict = _ranked_dictionaries[dictionary_name]
 		for i in range(length):
 			for j in range(i, length):
-				if password_lower[i:j + 1] in ranked_dict:
-					word = password_lower[i:j + 1]
-					rank = ranked_dict[word]
+				var word = password_lower.substr(i, j + 1)
+				if word in ranked_dict:
+					var rank = ranked_dict[word]
 					matches.append({
 						'pattern': 'dictionary',
 						'i': i,
 						'j': j,
-						'token': password[i:j + 1],
+						'token': password.substr(i, j + 1),
 						'matched_word': word,
 						'rank': rank,
 						'dictionary_name': dictionary_name,
-						'reversed': False,
-						'l33t': False,
+						'reversed': false,
+						'l33t': false,
 					})
 
-	return sorted(matches, key=lambda x: (x['i'], x['j']))
+	return matches.sort_custom(MatchSorter, "sort_by_ij")
 
 
-func reverse_dictionary_match(password, _ranked_dictionaries = RANKED_DICTIONARIES):
-	reversed_password = ''.join(reversed(password))
-	matches = dictionary_match(reversed_password, _ranked_dictionaries)
-	for match in matches:
-		match['token'] = ''.join(reversed(match['token']))
-		match['reversed'] = True
-		match['i'], match['j'] = len(password) - 1 - match['j'], \
-								 len(password) - 1 - match['i']
+func reverse_dictionary_match(password: String, _ranked_dictionaries = RANKED_DICTIONARIES):
+	var reversed_password = reverse_string(password)
+	var matches = dictionary_match(reversed_password, _ranked_dictionaries)
+	for _match in matches:
+		_match['token'] = reverse_string(_match['token'])
+		_match['reversed'] = true
+		_match['i'] = len(password) - 1 - _match['j']
+		_match['j'] = len(password) - 1 - _match['i']
 
-	return sorted(matches, key=lambda x: (x['i'], x['j']))
+	return matches.sort_custom(MatchSorter, "sort_by_ij")
+
+func reverse_string(s):
+	return s.split("").invert().join("")
 
 
 func relevant_l33t_subtable(password, table):
-	password_chars = {}
-	for char in list(password):
-		password_chars[char] = True
+	var password_chars = {}
+	for ch in password:
+		password_chars[ch] = true
 
-	subtable = {}
-	for letter, subs in table.items():
-		relevant_subs = [sub for sub in subs if sub in password_chars]
+	var subtable = {}
+	var relevant_subs = []
+	for letter in table.keys():
+		for sub in table[letter]:
+			if sub in password_chars:
+				relevant_subs.append(sub)
 		if len(relevant_subs) > 0:
 			subtable[letter] = relevant_subs
 
@@ -147,152 +163,163 @@ func relevant_l33t_subtable(password, table):
 
 
 func enumerate_l33t_subs(table):
-	keys = list(table.keys())
-	subs = [[]]
-
-	func dedup(subs):
-		deduped = []
-		members = {}
-		for sub in subs:
-			assoc = [(k, v) for v, k in sub]
-			assoc.sort()
-			label = '-'.join([k + ',' + str(v) for k, v in assoc])
-			if label not in members:
-				members[label] = True
-				deduped.append(sub)
-
-		return deduped
-
-	func helper(keys, subs):
-		if not len(keys):
-			return subs
-
-		first_key = keys[0]
-		rest_keys = keys[1:]
-		next_subs = []
-		for l33t_chr in table[first_key]:
-			for sub in subs:
-				dup_l33t_index = -1
-				for i in range(len(sub)):
-					if sub[i][0] == l33t_chr:
-						dup_l33t_index = i
-						break
-				if dup_l33t_index == -1:
-					sub_extension = list(sub)
-					sub_extension.append([l33t_chr, first_key])
-					next_subs.append(sub_extension)
-				else:
-					sub_alternative = list(sub)
-					sub_alternative.pop(dup_l33t_index)
-					sub_alternative.append([l33t_chr, first_key])
-					next_subs.append(sub)
-					next_subs.append(sub_alternative)
-
-		subs = dedup(next_subs)
-		return helper(rest_keys, subs)
-
-	subs = helper(keys, subs)
-	sub_dicts = []  # convert from assoc lists to dicts
+	var keys = table.keys()
+	var subs = [[]]
+	subs = helper(keys, subs, table)
+	var sub_dicts = []  # convert from assoc lists to dicts
 	for sub in subs:
-		sub_dict = {}
-		for l33t_chr, chr in sub:
-			sub_dict[l33t_chr] = chr
+		var sub_dict = {}
+		for pair in sub:
+			sub_dict[pair[0]] = pair[1]
 		sub_dicts.append(sub_dict)
 
 	return sub_dicts
 
 
-func translate(string, chr_map):
-	chars = []
-	for char in list(string):
-		if chr_map.get(char, False):
-			chars.append(chr_map[char])
-		else:
-			chars.append(char)
+func dedup(subs):
+	var deduped = []
+	var members = {}
+	for sub in subs:
+		var assoc = []
+		for k in sub.keys():
+			assoc.append(sub[k] + "," + k)
+		assoc.sort()
+		var label = PoolStringArray(assoc).join("-")
+		if not label in members:
+			members[label] = true
+			deduped.append(sub)
 
-	return ''.join(chars)
+	return deduped
+
+func helper(keys, subs, table):
+	if not len(keys):
+		return subs
+
+	var first_key = keys[0]
+	var rest_keys = keys.slice(1, -1)
+	var next_subs = []
+	for l33t_chr in table[first_key]:
+		for sub in subs:
+			var dup_l33t_index = -1
+			for i in range(len(sub)):
+				if sub[i][0] == l33t_chr:
+					dup_l33t_index = i
+					break
+			if dup_l33t_index == -1:
+				var sub_extension = sub
+				sub_extension.append([l33t_chr, first_key])
+				next_subs.append(sub_extension)
+			else:
+				var sub_alternative = sub
+				sub_alternative.pop(dup_l33t_index)
+				sub_alternative.append([l33t_chr, first_key])
+				next_subs.append(sub)
+				next_subs.append(sub_alternative)
+
+	subs = dedup(next_subs)
+	return helper(rest_keys, subs, table)
+
+
+func translate(string, chr_map):
+	var chars = PoolStringArray()
+	for ch in string:
+		if chr_map.has(ch):
+			chars.append(chr_map[ch])
+		else:
+			chars.append(ch)
+
+	return chars.join("")
 
 
 func l33t_match(password, _ranked_dictionaries=RANKED_DICTIONARIES,
 			   _l33t_table=L33T_TABLE):
-	matches = []
+	var matches = []
 
 	for sub in enumerate_l33t_subs(
 			relevant_l33t_subtable(password, _l33t_table)):
 		if not len(sub):
 			break
 
-		subbed_password = translate(password, sub)
-		for match in dictionary_match(subbed_password, _ranked_dictionaries):
-			token = password[match['i']:match['j'] + 1]
-			if token.lower() == match['matched_word']:
+		var subbed_password = translate(password, sub)
+		for _match in dictionary_match(subbed_password, _ranked_dictionaries):
+			var token = password.substr(_match['i'], _match['j'] - _match['i'] + 1) # Check this
+			if token.lower() == _match['matched_word']:
 				# only return the matches that contain an actual substitution
 				continue
 
 			# subset of mappings in sub that are in use for this match
-			match_sub = {}
-			for subbed_chr, chr in sub.items():
+			var match_sub = {}
+			for subbed_chr in sub.keys():
 				if subbed_chr in token:
-					match_sub[subbed_chr] = chr
-			match['l33t'] = True
-			match['token'] = token
-			match['sub'] = match_sub
-			match['sub_display'] = ', '.join(
-				["%s -> %s" % (k, v) for k, v in match_sub.items()]
-			)
-			matches.append(match)
+					match_sub[subbed_chr] = sub[subbed_chr]
+			_match['l33t'] = true
+			_match['token'] = token
+			_match['sub'] = match_sub
+			var subs = PoolStringArray()
+			for k in match_sub.keys():
+				subs.append("%s -> %s" % [k, match_sub[k]])
+			_match['sub_display'] = subs.join(', ')
+			matches.append(_match)
+	var _matches = []
+	for _match in matches:
+		if len(_match['token']) > 1:
+			_matches.append(_match)
 
-	matches = [match for match in matches if len(match['token']) > 1]
-
-	return sorted(matches, key=lambda x: (x['i'], x['j']))
+	return _matches.sort_custom(MatchSorter, "sort_by_ij")
 
 
 # repeats (aaa, abcabcabc) and sequences (abcdef)
 func repeat_match(password, _ranked_dictionaries=RANKED_DICTIONARIES):
-	matches = []
-	greedy = re.compile(r'(.+)\1+')
-	lazy = re.compile(r'(.+?)\1+')
-	lazy_anchored = re.compile(r'^(.+?)\1+$')
-	last_index = 0
+	var matches = []
+	var greedy = RegEx.new()
+	greedy.compile('(.+)\\1+')
+	var lazy = RegEx.new()
+	lazy.compile('(.+?)\\1+')
+	var lazy_anchored = RegEx.new()
+	lazy_anchored.compile('^(.+?)\\1+$')
+	var last_index = 0
 	while last_index < len(password):
-		greedy_match = greedy.search(password, pos=last_index)
-		lazy_match = lazy.search(password, pos=last_index)
+		var greedy_match = greedy.search(password, last_index)
+		var lazy_match = lazy.search(password, last_index)
 
 		if not greedy_match:
 			break
 
-		if len(greedy_match.group(0)) > len(lazy_match.group(0)):
+		var _match
+		var base_token
+		if len(greedy_match.get_string()) > len(lazy_match.get_string()):
 			# greedy beats lazy for 'aabaab'
 			#   greedy: [aabaab, aab]
 			#   lazy:   [aa,     a]
-			match = greedy_match
+			_match = greedy_match
 			# greedy's repeated string might itself be repeated, eg.
 			# aabaab in aabaabaabaab.
 			# run an anchored lazy match on greedy's repeated string
 			# to find the shortest repeated string
-			base_token = lazy_anchored.search(match.group(0)).group(1)
+			base_token = lazy_anchored.search(_match.get_string()).get_string(1)
 		else:
-			match = lazy_match
-			base_token = match.group(1)
+			_match = lazy_match
+			base_token = _match.get_string()
 
-		i, j = match.span()[0], match.span()[1] - 1
+		var i = _match.get_start()
+		var j = _match.get_end()
 
 		# recursively match and score the base string
-		base_analysis = Scoring.most_guessable_match_sequence(
+		var base_analysis = Scoring.most_guessable_match_sequence(
 			base_token,
 			omnimatch(base_token)
 		)
-		base_matches = base_analysis['sequence']
-		base_guesses = base_analysis['guesses']
+		var base_matches = base_analysis['sequence']
+		var base_guesses = base_analysis['guesses']
 		matches.append({
 			'pattern': 'repeat',
 			'i': i,
 			'j': j,
-			'token': match.group(0),
+			'token': _match.get_string(),
 			'base_token': base_token,
 			'base_guesses': base_guesses,
 			'base_matches': base_matches,
-			'repeat_count': len(match.group(0)) / len(base_token),
+			'repeat_count': len(_match.get_string()) / len(base_token),
 		})
 		last_index = j + 1
 
@@ -300,47 +327,44 @@ func repeat_match(password, _ranked_dictionaries=RANKED_DICTIONARIES):
 
 
 func spatial_match(password, _graphs=GRAPHS, _ranked_dictionaries=RANKED_DICTIONARIES):
-	matches = []
-	for graph_name, graph in _graphs.items():
-		matches.extend(spatial_match_helper(password, graph, graph_name))
+	var matches = []
+	for graph_name in _graphs.keys():
+		matches.extend(spatial_match_helper(password, _graphs[graph_name], graph_name))
 
-	return sorted(matches, key=lambda x: (x['i'], x['j']))
-
-
-SHIFTED_RX = re.compile(r'[~!@#$%^&*()_+QWERTYUIOP{}|ASDFGHJKL:"ZXCVBNM<>?]')
+	return matches.sort_custom(MatchSorter, "sort_by_ij")
 
 
 func spatial_match_helper(password, graph, graph_name):
-	matches = []
-	i = 0
+	var matches = []
+	var i = 0
+	var shifted_rx = RegEx.new()
+	shifted_rx.compile(SHIFTED_RX)
 	while i < len(password) - 1:
-		j = i + 1
-		last_direction = None
-		turns = 0
-		if graph_name in ['qwerty', 'dvorak', ] and \
-				SHIFTED_RX.search(password[i]):
+		var j = i + 1
+		var last_direction = null
+		var turns = 0
+		var shifted_count = 0
+		if graph_name in ['qwerty', 'dvorak', ] and shifted_rx.search(password[i]):
 			# initial character is shifted
 			shifted_count = 1
-		else:
-			shifted_count = 0
 
-		while True:
-			prev_char = password[j - 1]
-			found = False
-			found_direction = -1
-			cur_direction = -1
-			try:
-				adjacents = graph[prev_char] or []
-			except KeyError:
-				adjacents = []
+		while true:
+			var prev_char = password[j - 1]
+			var found = false
+			var found_direction = -1
+			var cur_direction = -1
+			var adjacents = []
+			if graph.has(prev_char):
+				adjacents = graph[prev_char]
+				
 			# consider growing pattern by one character if j hasn't gone
 			# over the edge.
 			if j < len(password):
-				cur_char = password[j]
+				var cur_char = password[j]
 				for adj in adjacents:
 					cur_direction += 1
 					if adj and cur_char in adj:
-						found = True
+						found = true
 						found_direction = cur_direction
 						if adj.index(cur_char) == 1:
 							# index 1 in the adjacency means the key is shifted,
@@ -365,7 +389,7 @@ func spatial_match_helper(password, graph, graph_name):
 						'pattern': 'spatial',
 						'i': i,
 						'j': j - 1,
-						'token': password[i:j],
+						'token': password.substr(i, j - i),
 						'graph': graph_name,
 						'turns': turns,
 						'shifted_count': shifted_count,
@@ -375,9 +399,6 @@ func spatial_match_helper(password, graph, graph_name):
 				break
 
 	return matches
-
-
-MAX_DELTA = 5
 
 
 func sequence_match(password, _ranked_dictionaries=RANKED_DICTIONARIES):
@@ -396,65 +417,72 @@ func sequence_match(password, _ranked_dictionaries=RANKED_DICTIONARIES):
 	if len(password) == 1:
 		return []
 
-	func update(i, j, delta):
-		if j - i > 1 or (delta and abs(delta) == 1):
-			if 0 < abs(delta) <= MAX_DELTA:
-				token = password[i:j + 1]
-				if re.compile(r'^[a-z]+$').match(token):
-					sequence_name = 'lower'
-					sequence_space = 26
-				elif re.compile(r'^[A-Z]+$').match(token):
-					sequence_name = 'upper'
-					sequence_space = 26
-				elif re.compile(r'^\d+$').match(token):
-					sequence_name = 'digits'
-					sequence_space = 10
-				else:
-					sequence_name = 'unicode'
-					sequence_space = 26
-				result.append({
-					'pattern': 'sequence',
-					'i': i,
-					'j': j,
-					'token': password[i:j + 1],
-					'sequence_name': sequence_name,
-					'sequence_space': sequence_space,
-					'ascending': delta > 0
-				})
-
-	result = []
-	i = 0
-	last_delta = None
+	var result = []
+	var i = 0
+	var last_delta = null
 
 	for k in range(1, len(password)):
-		delta = ord(password[k]) - ord(password[k - 1])
-		if last_delta is None:
+		var delta = ord(password[k]) - ord(password[k - 1])
+		if last_delta == null:
 			last_delta = delta
 		if delta == last_delta:
 			continue
-		j = k - 1
-		update(i, j, last_delta)
+		var j = k - 1
+		update(i, j, last_delta, password)
 		i = j
 		last_delta = delta
-	update(i, len(password) - 1, last_delta)
+	update(i, len(password) - 1, last_delta, password)
 
+	return result
+
+func update(i, j, delta, password):
+	var result
+	if j - i > 1 or (delta and abs(delta) == 1):
+		if 0 < abs(delta) and abs(delta) <= MAX_DELTA:
+			var token = password.substr(i, j - i)
+			var regex = RegEx.new()
+			var sequence_name
+			var sequence_space
+			if regex.compile('^[a-z]+$').search(token):
+				sequence_name = 'lower'
+				sequence_space = 26
+			elif regex.compile('^[A-Z]+$').search(token):
+				sequence_name = 'upper'
+				sequence_space = 26
+			elif regex.compile('^\\d+$').search(token):
+				sequence_name = 'digits'
+				sequence_space = 10
+			else:
+				sequence_name = 'unicode'
+				sequence_space = 26
+			result.append({
+				'pattern': 'sequence',
+				'i': i,
+				'j': j,
+				'token': token,
+				'sequence_name': sequence_name,
+				'sequence_space': sequence_space,
+				'ascending': delta > 0
+			})
 	return result
 
 
 func regex_match(password, _regexen=REGEXEN, _ranked_dictionaries=RANKED_DICTIONARIES):
 	var matches = []
-	for name, regex in _regexen.items():
-		for rx_match in regex.finditer(password):
+	var regex = RegEx.new()
+	for name in _regexen.keys():
+		regex.compile(_regexen[name])
+		for rx_match in regex.search_all(password):
 			matches.append({
 				'pattern': 'regex',
-				'token': rx_match.group(0),
+				'token': rx_match.get_string(),
 				'i': rx_match.start(),
-				'j': rx_match.end()-1,
+				'j': rx_match.end(), # Check if this is correct
 				'regex_name': name,
 				'regex_match': rx_match,
 			})
 
-	return sorted(matches, key=lambda x: (x['i'], x['j']))
+	return matches.sort_custom(MatchSorter, "sort_by_ij")
 
 
 func date_match(password, _ranked_dictionaries=RANKED_DICTIONARIES):
@@ -476,10 +504,12 @@ func date_match(password, _ranked_dictionaries=RANKED_DICTIONARIES):
 	# note: instead of using a lazy or greedy regex to find many dates over the full string,
 	# this uses a ^...$ regex against every substring of the password -- less performant but leads
 	# to every possible date match.
-	matches = []
-	maybe_date_no_separator = re.compile(r'^\d{4,8}$')
-	maybe_date_with_separator = re.compile(
-		r'^(\d{1,4})([\s/\\_.-])(\d{1,2})\2(\d{1,4})$'
+	var matches = []
+	var maybe_date_no_separator = RegEx.new()
+	maybe_date_no_separator.compile('^\\d{4,8}$')
+	var maybe_date_with_separator = RegEx.new()
+	maybe_date_with_separator.compile(
+		'^(\\d{1,4})([\\s/\\_.-])(\\d{1,2})\\2(\\d{1,4})$'
 	)
 
 	# dates without separators are between length 4 '1191' and 8 '11111991'
@@ -488,15 +518,17 @@ func date_match(password, _ranked_dictionaries=RANKED_DICTIONARIES):
 			if j >= len(password):
 				break
 
-			token = password[i:j + 1]
+			var token = password.substr(i, j - i)
 			if not maybe_date_no_separator.match(token):
 				continue
-			candidates = []
-			for k, l in DATE_SPLITS[len(token)]:
-				dmy = map_ints_to_dmy([
-					int(token[0:k]),
-					int(token[k:l]),
-					int(token[l:])
+			var candidates = []
+			var ds = DATE_SPLITS[len(token)]
+			for k in ds.keys():
+				var l = ds[k]
+				var dmy = map_ints_to_dmy([
+					int(token.substr(0, k)),
+					int(token.substr(k, l - k)),
+					int(token.substr(l))
 				])
 				if dmy:
 					candidates.append(dmy)
@@ -508,16 +540,14 @@ func date_match(password, _ranked_dictionaries=RANKED_DICTIONARIES):
 			#
 			# ie, considering '111504', prefer 11-15-04 to 1-1-1504
 			# (interpreting '04' as 2004)
-			best_candidate = candidates[0]
-
-			func metric(candidate_):
-				return abs(candidate_['year'] - scoring.REFERENCE_YEAR)
-
-			min_distance = metric(candidates[0])
-			for candidate in candidates[1:]:
-				distance = metric(candidate)
+			var best_candidate = candidates[0]
+			
+			var min_distance = metric(candidates[0])
+			for candidate in candidates.slice(1, -1):
+				var distance = metric(candidate)
 				if distance < min_distance:
-					best_candidate, min_distance = candidate, distance
+					best_candidate = candidate
+					min_distance = distance
 			matches.append({
 				'pattern': 'date',
 				'token': token,
@@ -534,11 +564,11 @@ func date_match(password, _ranked_dictionaries=RANKED_DICTIONARIES):
 		for j in range(i + 5, i + 10):
 			if j >= len(password):
 				break
-			token = password[i:j + 1]
-			rx_match = maybe_date_with_separator.match(token)
+			var token = password.substr(i, j + 1)
+			var rx_match = maybe_date_with_separator.get_string(token)
 			if not rx_match:
 				continue
-			dmy = map_ints_to_dmy([
+			var dmy = map_ints_to_dmy([
 				int(rx_match.group(1)),
 				int(rx_match.group(3)),
 				int(rx_match.group(4)),
@@ -550,12 +580,11 @@ func date_match(password, _ranked_dictionaries=RANKED_DICTIONARIES):
 				'token': token,
 				'i': i,
 				'j': j,
-				'separator': rx_match.group(2),
+				'separator': rx_match.get_string(2),
 				'year': dmy['year'],
 				'month': dmy['month'],
 				'day': dmy['day'],
 			})
-
 	# matches now contains all valid date strings in a way that is tricky to
 	# capture with regexes only. while thorough, it will contain some
 	# unintuitive noise:
@@ -565,17 +594,27 @@ func date_match(password, _ranked_dictionaries=RANKED_DICTIONARIES):
 	# (matched as 5/1/2020)
 	#
 	# to reduce noise, remove date matches that are strict substrings of others
-	func filter_fun(match):
-		is_submatch = False
-		for other in matches:
-			if match == other:
-				continue
-			if other['i'] <= match['i'] and other['j'] >= match['j']:
-				is_submatch = True
-				break
-		return not is_submatch
+	var _matches = []
+	for _match in matches:
+		if filter_fun(_match, matches):
+			_matches.append(_match)
+	
+	return _matches.sort_custom(MatchSorter, "sort_by_ij")
 
-	return sorted(filter(filter_fun, matches), key=lambda x: (x['i'], x['j']))
+
+func metric(candidate_):
+	return abs(candidate_['year'] - Scoring.REFERENCE_YEAR)
+
+
+func filter_fun(_match, matches):
+	var is_submatch = false
+	for other in matches:
+		if _match == other:
+			continue
+		if other['i'] <= _match['i'] and other['j'] >= _match['j']:
+			is_submatch = true
+			break
+	return not is_submatch
 
 
 func map_ints_to_dmy(ints):
@@ -590,32 +629,32 @@ func map_ints_to_dmy(ints):
 	#   all ints are over 12, the max allowable month
 	if ints[1] > 31 or ints[1] <= 0:
 		return
-	over_12 = 0
-	over_31 = 0
-	under_1 = 0
-	for int in ints:
-		if 99 < int < DATE_MIN_YEAR or int > DATE_MAX_YEAR:
+	var over_12 = 0
+	var over_31 = 0
+	var under_1 = 0
+	for i in ints:
+		if 99 < i < DATE_MIN_YEAR or i > DATE_MAX_YEAR:
 			return
-		if int > 31:
+		if i > 31:
 			over_31 += 1
-		if int > 12:
+		if i > 12:
 			over_12 += 1
-		if int <= 0:
+		if i <= 0:
 			under_1 += 1
 	if over_31 >= 2 or over_12 == 3 or under_1 >= 2:
 		return
 
 	# first look for a four digit year: yyyy + daymonth or daymonth + yyyy
-	possible_four_digit_splits = [
-		(ints[2], ints[0:2]),
-		(ints[0], ints[1:3]),
+	var possible_four_digit_splits = [
+		[ints[2], [ints[0], ints[1]]],
+		[ints[0], [ints[1], ints[2]]],
 	]
-	for y, rest in possible_four_digit_splits:
-		if DATE_MIN_YEAR <= y <= DATE_MAX_YEAR:
-			dm = map_ints_to_dm(rest)
+	for date in possible_four_digit_splits:
+		if DATE_MIN_YEAR <= date[0] <= DATE_MAX_YEAR:
+			var dm = map_ints_to_dm(date[1])
 			if dm:
 				return {
-					'year': y,
+					'year': date[0],
 					'month': dm['month'],
 					'day': dm['day'],
 				}
@@ -627,24 +666,31 @@ func map_ints_to_dmy(ints):
 
 	# given no four-digit year, two digit years are the most flexible int to
 	# match, so try to parse a day-month out of ints[0..1] or ints[1..0]
-	for y, rest in possible_four_digit_splits:
-		dm = map_ints_to_dm(rest)
+	for date in possible_four_digit_splits:
+		var dm = map_ints_to_dm(date[1])
 		if dm:
-			y = two_to_four_digit_year(y)
 			return {
-				'year': y,
+				'year': two_to_four_digit_year(date[0]),
 				'month': dm['month'],
 				'day': dm['day'],
 			}
 
 
 func map_ints_to_dm(ints):
-	for d, m in [ints, reversed(ints)]:
-		if 1 <= d <= 31 and 1 <= m <= 12:
-			return {
-				'day': d,
-				'month': m,
-			}
+	var d = ints[0]
+	var m = ints[1]
+	if 1 <= d <= 31 and 1 <= m <= 12:
+		return {
+			'day': d,
+			'month': m,
+		}
+	d = m
+	m = ints[0]
+	if 1 <= d <= 31 and 1 <= m <= 12:
+		return {
+			'day': d,
+			'month': m,
+		}
 
 
 func two_to_four_digit_year(year):
