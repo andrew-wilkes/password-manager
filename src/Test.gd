@@ -7,6 +7,8 @@ func _ready():
 	test_get_char()
 	test_generate_salt()
 	test_enc_dec()
+	#var data = FrequencyLists.data.size()
+	#print(data)
 
 
 func test_enc_dec():

@@ -15,11 +15,6 @@ _global_script_classes=[ {
 "path": "res://zxcvbn/adjacency_graphs.gd"
 }, {
 "base": "Node",
-"class": "FrequencyLists",
-"language": "GDScript",
-"path": "res://zxcvbn/frequency_lists.gd"
-}, {
-"base": "Node",
 "class": "KPDX",
 "language": "GDScript",
 "path": "res://keepass/kpdx.gd"
@@ -41,7 +36,6 @@ _global_script_classes=[ {
 } ]
 _global_script_class_icons={
 "AdjacencyGraphs": "",
-"FrequencyLists": "",
 "KPDX": "",
 "Passwords": "",
 "Scoring": "",
@@ -53,6 +47,10 @@ _global_script_class_icons={
 config/name="Password Manager"
 run/main_scene="res://Main.tscn"
 config/icon="res://icon.png"
+
+[autoload]
+
+FrequencyLists="*res://zxcvbn/frequency_lists.gd"
 
 [physics]
 

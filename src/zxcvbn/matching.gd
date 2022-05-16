@@ -518,17 +518,16 @@ func date_match(password, _ranked_dictionaries=RANKED_DICTIONARIES):
 			if j >= len(password):
 				break
 
-			var token = password.substr(i, j - i)
-			if not maybe_date_no_separator.match(token):
+			var token = password.substr(i, j - i + 1)
+			if not maybe_date_no_separator.search(token):
 				continue
 			var candidates = []
 			var ds = DATE_SPLITS[len(token)]
-			for k in ds.keys():
-				var l = ds[k]
+			for splits in ds.keys:
 				var dmy = map_ints_to_dmy([
-					int(token.substr(0, k)),
-					int(token.substr(k, l - k)),
-					int(token.substr(l))
+					int(token.substr(0, splits[0])),
+					int(token.substr(splits[0], splits[1] - splits[0])),
+					int(token.substr(splits[1]))
 				])
 				if dmy:
 					candidates.append(dmy)
@@ -564,14 +563,14 @@ func date_match(password, _ranked_dictionaries=RANKED_DICTIONARIES):
 		for j in range(i + 5, i + 10):
 			if j >= len(password):
 				break
-			var token = password.substr(i, j + 1)
-			var rx_match = maybe_date_with_separator.get_string(token)
+			var token = password.substr(i, j - i + 1)
+			var rx_match = maybe_date_with_separator.search(token)
 			if not rx_match:
 				continue
 			var dmy = map_ints_to_dmy([
-				int(rx_match.group(1)),
-				int(rx_match.group(3)),
-				int(rx_match.group(4)),
+				int(rx_match.get_string(1)),
+				int(rx_match.get_string(3)),
+				int(rx_match.get_string(4)),
 			])
 			if not dmy:
 				continue
@@ -633,7 +632,7 @@ func map_ints_to_dmy(ints):
 	var over_31 = 0
 	var under_1 = 0
 	for i in ints:
-		if 99 < i < DATE_MIN_YEAR or i > DATE_MAX_YEAR:
+		if 99 < i and i < DATE_MIN_YEAR or i > DATE_MAX_YEAR:
 			return
 		if i > 31:
 			over_31 += 1
@@ -650,7 +649,7 @@ func map_ints_to_dmy(ints):
 		[ints[0], [ints[1], ints[2]]],
 	]
 	for date in possible_four_digit_splits:
-		if DATE_MIN_YEAR <= date[0] <= DATE_MAX_YEAR:
+		if DATE_MIN_YEAR <= date[0] and date[0] <= DATE_MAX_YEAR:
 			var dm = map_ints_to_dm(date[1])
 			if dm:
 				return {
@@ -679,14 +678,14 @@ func map_ints_to_dmy(ints):
 func map_ints_to_dm(ints):
 	var d = ints[0]
 	var m = ints[1]
-	if 1 <= d <= 31 and 1 <= m <= 12:
+	if 1 <= d and d <= 31 and 1 <= m and m <= 12:
 		return {
 			'day': d,
 			'month': m,
 		}
 	d = m
 	m = ints[0]
-	if 1 <= d <= 31 and 1 <= m <= 12:
+	if 1 <= d and d <= 31 and 1 <= m and m <= 12:
 		return {
 			'day': d,
 			'month': m,
