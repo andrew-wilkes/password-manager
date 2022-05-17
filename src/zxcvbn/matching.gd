@@ -71,8 +71,8 @@ func _init():
 
 
 func add_frequency_lists(frequency_lists):
-	for name in frequency_lists.data.keys():
-		RANKED_DICTIONARIES[name] = build_ranked_dict(frequency_lists.data[name])
+	for name in frequency_lists:
+		RANKED_DICTIONARIES[name] = build_ranked_dict(frequency_lists[name])
 
 
 func build_ranked_dict(ordered_list):
@@ -100,7 +100,8 @@ func omnimatch(password, _ranked_dictionaries=RANKED_DICTIONARIES):
 	]:
 		matches.append(callv(matcher, args))
 
-	return matches.sort_custom(MatchSorter, "sort_by_ij")
+	matches.sort_custom(MatchSorter, "sort_by_ij")
+	return matches
 
 
 # dictionary match (common passwords, english, last names, etc)
@@ -108,11 +109,11 @@ func dictionary_match(password, _ranked_dictionaries=RANKED_DICTIONARIES):
 	var matches = []
 	var length = len(password)
 	var password_lower = password.to_lower()
-	for dictionary_name in _ranked_dictionaries.keys():
+	for dictionary_name in _ranked_dictionaries:
 		var ranked_dict = _ranked_dictionaries[dictionary_name]
 		for i in range(length):
 			for j in range(i, length):
-				var word = password_lower.substr(i, j + 1)
+				var word = password_lower.substr(i, j - i + 1)
 				if word in ranked_dict:
 					var rank = ranked_dict[word]
 					matches.append({
@@ -127,7 +128,8 @@ func dictionary_match(password, _ranked_dictionaries=RANKED_DICTIONARIES):
 						'l33t': false,
 					})
 
-	return matches.sort_custom(MatchSorter, "sort_by_ij")
+	matches.sort_custom(MatchSorter, "sort_by_ij")
+	return matches
 
 
 func reverse_dictionary_match(password: String, _ranked_dictionaries = RANKED_DICTIONARIES):
@@ -139,7 +141,8 @@ func reverse_dictionary_match(password: String, _ranked_dictionaries = RANKED_DI
 		_match['i'] = len(password) - 1 - _match['j']
 		_match['j'] = len(password) - 1 - _match['i']
 
-	return matches.sort_custom(MatchSorter, "sort_by_ij")
+	matches.sort_custom(MatchSorter, "sort_by_ij")
+	return matches
 
 
 func reverse_string(s):
@@ -163,14 +166,14 @@ func l33t_match(password, _ranked_dictionaries=RANKED_DICTIONARIES,
 
 			# subset of mappings in sub that are in use for this match
 			var match_sub = {}
-			for subbed_chr in sub.keys():
+			for subbed_chr in sub:
 				if subbed_chr in token:
 					match_sub[subbed_chr] = sub[subbed_chr]
 			_match['l33t'] = true
 			_match['token'] = token
 			_match['sub'] = match_sub
 			var subs = PoolStringArray()
-			for k in match_sub.keys():
+			for k in match_sub:
 				subs.append("%s -> %s" % [k, match_sub[k]])
 			_match['sub_display'] = subs.join(', ')
 			matches.append(_match)
@@ -179,7 +182,8 @@ func l33t_match(password, _ranked_dictionaries=RANKED_DICTIONARIES,
 		if len(_match['token']) > 1:
 			_matches.append(_match)
 
-	return _matches.sort_custom(MatchSorter, "sort_by_ij")
+	_matches.sort_custom(MatchSorter, "sort_by_ij")
+	return _matches
 
 
 func relevant_l33t_subtable(password, table):
@@ -189,11 +193,11 @@ func relevant_l33t_subtable(password, table):
 
 	var subtable = {}
 	var relevant_subs = []
-	for letter in table.keys():
+	for letter in table:
 		for sub in table[letter]:
 			if sub in password_chars:
 				relevant_subs.append(sub)
-		if len(relevant_subs) > 0:
+		if relevant_subs.size() > 0:
 			subtable[letter] = relevant_subs
 
 	return subtable
@@ -211,7 +215,7 @@ func translate(string, chr_map):
 
 
 func enumerate_l33t_subs(table):
-	var keys = table.keys()
+	var keys = table
 	var subs = [[]]
 	subs = helper(keys, subs, table)
 	var sub_dicts = []  # convert from assoc lists to dicts
@@ -225,7 +229,7 @@ func enumerate_l33t_subs(table):
 
 
 func helper(keys, subs, table):
-	if len(keys) < 1:
+	if keys.size() < 1:
 		return subs
 
 	var first_key = keys[0]
@@ -258,7 +262,7 @@ func dedup(subs):
 	var members = {}
 	for sub in subs:
 		var assoc = []
-		for k in sub.keys():
+		for k in sub:
 			assoc.append(sub[k] + "," + k)
 		assoc.sort()
 		var label = PoolStringArray(assoc).join("-")
@@ -320,6 +324,7 @@ func repeat_match(password, _ranked_dictionaries=RANKED_DICTIONARIES):
 			'base_token': base_token,
 			'base_guesses': base_guesses,
 			'base_matches': base_matches,
+# warning-ignore:integer_division
 			'repeat_count': len(_match.get_string()) / len(base_token),
 		})
 		last_index = j + 1
@@ -329,10 +334,11 @@ func repeat_match(password, _ranked_dictionaries=RANKED_DICTIONARIES):
 
 func spatial_match(password, _graphs=GRAPHS, _ranked_dictionaries=RANKED_DICTIONARIES):
 	var matches = []
-	for graph_name in _graphs.keys():
+	for graph_name in _graphs:
 		matches.append_array(spatial_match_helper(password, _graphs[graph_name], graph_name))
 
-	return matches.sort_custom(MatchSorter, "sort_by_ij")
+	matches.sort_custom(MatchSorter, "sort_by_ij")
+	return matches
 
 
 func spatial_match_helper(password, graph, graph_name):
@@ -469,7 +475,7 @@ func update(i, j, delta, password, result):
 func regex_match(password, _regexen=REGEXEN, _ranked_dictionaries=RANKED_DICTIONARIES):
 	var matches = []
 	var regex = RegEx.new()
-	for name in _regexen.keys():
+	for name in _regexen:
 		regex.compile(_regexen[name])
 		for rx_match in regex.search_all(password):
 			matches.append({
@@ -481,7 +487,8 @@ func regex_match(password, _regexen=REGEXEN, _ranked_dictionaries=RANKED_DICTION
 				'regex_match': rx_match,
 			})
 
-	return matches.sort_custom(MatchSorter, "sort_by_ij")
+	matches.sort_custom(MatchSorter, "sort_by_ij")
+	return matches
 
 
 func date_match(password, _ranked_dictionaries=RANKED_DICTIONARIES):
@@ -530,7 +537,7 @@ func date_match(password, _ranked_dictionaries=RANKED_DICTIONARIES):
 				])
 				if dmy:
 					candidates.append(dmy)
-			if not len(candidates) > 0:
+			if not candidates.size() > 0:
 				continue
 			# at this point: different possible dmy mappings for the same i,j
 			# substring. match the candidate date that likely takes the fewest
@@ -597,7 +604,8 @@ func date_match(password, _ranked_dictionaries=RANKED_DICTIONARIES):
 		if filter_fun(_match, matches):
 			_matches.append(_match)
 	
-	return _matches.sort_custom(MatchSorter, "sort_by_ij")
+	matches.sort_custom(MatchSorter, "sort_by_ij")
+	return matches
 
 
 func metric(candidate_):
