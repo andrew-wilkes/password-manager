@@ -19,6 +19,16 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://zxcvbn/feedback.gd"
 }, {
+"base": "Reference",
+"class": "GutHookScript",
+"language": "GDScript",
+"path": "res://addons/gut/hook_script.gd"
+}, {
+"base": "Node",
+"class": "GutTest",
+"language": "GDScript",
+"path": "res://addons/gut/test.gd"
+}, {
 "base": "Node",
 "class": "KPDX",
 "language": "GDScript",
@@ -47,6 +57,8 @@ _global_script_classes=[ {
 _global_script_class_icons={
 "AdjacencyGraphs": "",
 "Feedback": "",
+"GutHookScript": "",
+"GutTest": "",
 "KPDX": "",
 "Passwords": "",
 "Scoring": "",

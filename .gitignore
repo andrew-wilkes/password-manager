@@ -10,4 +10,9 @@ data_*/
 
 data/
 .fuse*
-plugins/
+
+# Gut and addons
+src/.gut*
+src/BigFont*
+src/asset_lib*
+addons/
