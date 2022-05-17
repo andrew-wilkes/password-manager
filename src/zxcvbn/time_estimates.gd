@@ -1,8 +1,9 @@
 extends Node
 
+class_name TimeEstimates
 # from decimal import Decimal, Context, Inexact
 
-func estimate_attack_times(guesses):
+static func estimate_attack_times(guesses):
 	var crack_times_seconds = {
 		'online_throttling_100_per_hour': Scoring.Decimal(guesses) / float_to_decimal(100.0 / 3600.0),
 		'online_no_throttling_10_per_second': Scoring.Decimal(guesses) / float_to_decimal(10.0),
@@ -21,7 +22,7 @@ func estimate_attack_times(guesses):
 	}
 
 
-func guesses_to_score(guesses):
+static func guesses_to_score(guesses):
 	var delta = 5
 
 	if guesses < 1e3 + delta:
@@ -45,7 +46,7 @@ func guesses_to_score(guesses):
 		return 4
 
 
-func display_time(seconds):
+static func display_time(seconds):
 	var minute = 60
 	var hour = minute * 60
 	var day = hour * 24
@@ -90,7 +91,7 @@ func display_time(seconds):
 	return display_str
 
 
-func float_to_decimal(f):
+static func float_to_decimal(f):
 	return f
 	"""
 	# Convert a floating point number to a Decimal with no loss of information

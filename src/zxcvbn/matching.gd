@@ -141,8 +141,45 @@ func reverse_dictionary_match(password: String, _ranked_dictionaries = RANKED_DI
 
 	return matches.sort_custom(MatchSorter, "sort_by_ij")
 
+
 func reverse_string(s):
 	return s.split("").invert().join("")
+
+
+func l33t_match(password, _ranked_dictionaries=RANKED_DICTIONARIES,
+			   _l33t_table=L33T_TABLE):
+	var matches = []
+
+	for sub in enumerate_l33t_subs(relevant_l33t_subtable(password, _l33t_table)):
+		if len(sub) < 1:
+			break
+
+		var subbed_password = translate(password, sub)
+		for _match in dictionary_match(subbed_password, _ranked_dictionaries):
+			var token = password.substr(_match['i'], _match['j'] - _match['i'] + 1)
+			if token.to_lower() == _match['matched_word']:
+				# only return the matches that contain an actual substitution
+				continue
+
+			# subset of mappings in sub that are in use for this match
+			var match_sub = {}
+			for subbed_chr in sub.keys():
+				if subbed_chr in token:
+					match_sub[subbed_chr] = sub[subbed_chr]
+			_match['l33t'] = true
+			_match['token'] = token
+			_match['sub'] = match_sub
+			var subs = PoolStringArray()
+			for k in match_sub.keys():
+				subs.append("%s -> %s" % [k, match_sub[k]])
+			_match['sub_display'] = subs.join(', ')
+			matches.append(_match)
+	var _matches = []
+	for _match in matches:
+		if len(_match['token']) > 1:
+			_matches.append(_match)
+
+	return _matches.sort_custom(MatchSorter, "sort_by_ij")
 
 
 func relevant_l33t_subtable(password, table):
@@ -162,6 +199,17 @@ func relevant_l33t_subtable(password, table):
 	return subtable
 
 
+func translate(string, chr_map):
+	var chars = PoolStringArray()
+	for ch in string:
+		if chr_map.has(ch):
+			chars.append(chr_map[ch])
+		else:
+			chars.append(ch)
+
+	return chars.join("")
+
+
 func enumerate_l33t_subs(table):
 	var keys = table.keys()
 	var subs = [[]]
@@ -176,23 +224,8 @@ func enumerate_l33t_subs(table):
 	return sub_dicts
 
 
-func dedup(subs):
-	var deduped = []
-	var members = {}
-	for sub in subs:
-		var assoc = []
-		for k in sub.keys():
-			assoc.append(sub[k] + "," + k)
-		assoc.sort()
-		var label = PoolStringArray(assoc).join("-")
-		if not label in members:
-			members[label] = true
-			deduped.append(sub)
-
-	return deduped
-
 func helper(keys, subs, table):
-	if not len(keys):
+	if len(keys) < 1:
 		return subs
 
 	var first_key = keys[0]
@@ -220,52 +253,20 @@ func helper(keys, subs, table):
 	return helper(rest_keys, subs, table)
 
 
-func translate(string, chr_map):
-	var chars = PoolStringArray()
-	for ch in string:
-		if chr_map.has(ch):
-			chars.append(chr_map[ch])
-		else:
-			chars.append(ch)
+func dedup(subs):
+	var deduped = []
+	var members = {}
+	for sub in subs:
+		var assoc = []
+		for k in sub.keys():
+			assoc.append(sub[k] + "," + k)
+		assoc.sort()
+		var label = PoolStringArray(assoc).join("-")
+		if not label in members:
+			members[label] = true
+			deduped.append(sub)
 
-	return chars.join("")
-
-
-func l33t_match(password, _ranked_dictionaries=RANKED_DICTIONARIES,
-			   _l33t_table=L33T_TABLE):
-	var matches = []
-
-	for sub in enumerate_l33t_subs(
-			relevant_l33t_subtable(password, _l33t_table)):
-		if not len(sub):
-			break
-
-		var subbed_password = translate(password, sub)
-		for _match in dictionary_match(subbed_password, _ranked_dictionaries):
-			var token = password.substr(_match['i'], _match['j'] - _match['i'] + 1) # Check this
-			if token.lower() == _match['matched_word']:
-				# only return the matches that contain an actual substitution
-				continue
-
-			# subset of mappings in sub that are in use for this match
-			var match_sub = {}
-			for subbed_chr in sub.keys():
-				if subbed_chr in token:
-					match_sub[subbed_chr] = sub[subbed_chr]
-			_match['l33t'] = true
-			_match['token'] = token
-			_match['sub'] = match_sub
-			var subs = PoolStringArray()
-			for k in match_sub.keys():
-				subs.append("%s -> %s" % [k, match_sub[k]])
-			_match['sub_display'] = subs.join(', ')
-			matches.append(_match)
-	var _matches = []
-	for _match in matches:
-		if len(_match['token']) > 1:
-			_matches.append(_match)
-
-	return _matches.sort_custom(MatchSorter, "sort_by_ij")
+	return deduped
 
 
 # repeats (aaa, abcabcabc) and sequences (abcdef)
@@ -329,7 +330,7 @@ func repeat_match(password, _ranked_dictionaries=RANKED_DICTIONARIES):
 func spatial_match(password, _graphs=GRAPHS, _ranked_dictionaries=RANKED_DICTIONARIES):
 	var matches = []
 	for graph_name in _graphs.keys():
-		matches.extend(spatial_match_helper(password, _graphs[graph_name], graph_name))
+		matches.append_array(spatial_match_helper(password, _graphs[graph_name], graph_name))
 
 	return matches.sort_custom(MatchSorter, "sort_by_ij")
 
@@ -357,8 +358,7 @@ func spatial_match_helper(password, graph, graph_name):
 			if graph.has(prev_char):
 				adjacents = graph[prev_char]
 				
-			# consider growing pattern by one character if j hasn't gone
-			# over the edge.
+			# consider growing pattern by one character if j hasn't gone over the edge.
 			if j < len(password):
 				var cur_char = password[j]
 				for adj in adjacents:
@@ -366,7 +366,7 @@ func spatial_match_helper(password, graph, graph_name):
 					if adj and cur_char in adj:
 						found = true
 						found_direction = cur_direction
-						if adj.index(cur_char) == 1:
+						if adj.find(cur_char) == 1:
 							# index 1 in the adjacency means the key is shifted,
 							# 0 means unshifted: A vs a, % vs 5, etc.
 							# for example, 'q' is adjacent to the entry '2@'.
@@ -389,7 +389,7 @@ func spatial_match_helper(password, graph, graph_name):
 						'pattern': 'spatial',
 						'i': i,
 						'j': j - 1,
-						'token': password.substr(i, j - i),
+						'token': password.substr(i, j - i + 1),
 						'graph': graph_name,
 						'turns': turns,
 						'shifted_count': shifted_count,
@@ -428,18 +428,17 @@ func sequence_match(password, _ranked_dictionaries=RANKED_DICTIONARIES):
 		if delta == last_delta:
 			continue
 		var j = k - 1
-		update(i, j, last_delta, password)
+		update(i, j, last_delta, password, result)
 		i = j
 		last_delta = delta
-	update(i, len(password) - 1, last_delta, password)
+	update(i, len(password) - 1, last_delta, password, result)
 
 	return result
 
-func update(i, j, delta, password):
-	var result
+func update(i, j, delta, password, result):
 	if j - i > 1 or (delta and abs(delta) == 1):
 		if 0 < abs(delta) and abs(delta) <= MAX_DELTA:
-			var token = password.substr(i, j - i)
+			var token = password.substr(i, j - i + 1)
 			var regex = RegEx.new()
 			var sequence_name
 			var sequence_space
@@ -477,7 +476,7 @@ func regex_match(password, _regexen=REGEXEN, _ranked_dictionaries=RANKED_DICTION
 				'pattern': 'regex',
 				'token': rx_match.get_string(),
 				'i': rx_match.start(),
-				'j': rx_match.end(), # Check if this is correct
+				'j': rx_match.end(),
 				'regex_name': name,
 				'regex_match': rx_match,
 			})

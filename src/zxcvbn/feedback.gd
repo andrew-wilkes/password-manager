@@ -1,6 +1,8 @@
 extends Node
 
-func get_feedback(score, sequence: Array):
+class_name Feedback
+
+static func get_feedback(score, sequence: Array):
 	if len(sequence) == 0:
 		return {
 			'warning': '',
@@ -36,7 +38,7 @@ func get_feedback(score, sequence: Array):
 	return feedback
 
 
-func get_match_feedback(_match, is_sole_match):
+static func get_match_feedback(_match, is_sole_match):
 	var warning
 	if _match['pattern'] == 'dictionary':
 		return get_dictionary_match_feedback(_match, is_sole_match)
@@ -88,7 +90,7 @@ func get_match_feedback(_match, is_sole_match):
 		}
 
 
-func get_dictionary_match_feedback(_match, is_sole_match):
+static func get_dictionary_match_feedback(_match, is_sole_match):
 	var warning = ''
 	if _match['dictionary_name'] == 'passwords':
 		if is_sole_match and not _match.get('l33t', false) and not \
@@ -134,5 +136,5 @@ func get_dictionary_match_feedback(_match, is_sole_match):
 		'suggestions': suggestions,
 	}
 
-func _(s):
+static func _(s):
 	return s

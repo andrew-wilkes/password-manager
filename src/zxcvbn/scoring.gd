@@ -226,7 +226,7 @@ static func unwind(n, optimal):
 	var k = n - 1
 	# find the final best sequence length and score
 	var l = null
-	var g = float('inf')
+	var g = float(INF)
 	for candidate_l in optimal['g'][k].items().keys():
 		var candidate_g = optimal['g'][k].items()[candidate_l]
 		if candidate_g < g:
@@ -306,7 +306,7 @@ func sequence_guesses(_match):
 	if first_chr in ['a', 'A', 'z', 'Z', '0', '1', '9']:
 		base_guesses = 4
 	else:
-		if regex.compile("\\d")._match(first_chr):
+		if regex.compile("\\d").search(first_chr):
 			base_guesses = 10  # digits
 		else:
 			# could give a higher base for uppercase,
@@ -334,7 +334,7 @@ func regex_guesses(_match):
 		# conservative estimate of year space: num years from REFERENCE_YEAR.
 		# if year is close to REFERENCE_YEAR, estimate a year space of
 		# MIN_YEAR_SPACE.
-		var year_space = abs(int(_match['regex_match'].group(0)) - REFERENCE_YEAR)
+		var year_space = abs(int(_match['regex_match'].get_string()) - REFERENCE_YEAR)
 		year_space = max(year_space, MIN_YEAR_SPACE)
 
 		return year_space
