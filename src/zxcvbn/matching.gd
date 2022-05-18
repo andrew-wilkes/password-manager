@@ -120,7 +120,7 @@ func dictionary_match(password, _ranked_dictionaries=RANKED_DICTIONARIES):
 						'pattern': 'dictionary',
 						'i': i,
 						'j': j,
-						'token': password.substr(i, j + 1),
+						'token': password.substr(i, j - i + 1),
 						'matched_word': word,
 						'rank': rank,
 						'dictionary_name': dictionary_name,
@@ -138,15 +138,19 @@ func reverse_dictionary_match(password: String, _ranked_dictionaries = RANKED_DI
 	for _match in matches:
 		_match['token'] = reverse_string(_match['token'])
 		_match['reversed'] = true
+		var i = _match['i']
 		_match['i'] = len(password) - 1 - _match['j']
-		_match['j'] = len(password) - 1 - _match['i']
+		_match['j'] = len(password) - 1 - i
 
 	matches.sort_custom(MatchSorter, "sort_by_ij")
 	return matches
 
 
 func reverse_string(s):
-	return s.split("").invert().join("")
+	var reversed = PoolStringArray()
+	for idx in range(s.length() - 1, -1, -1):
+		reversed.append(s[idx])
+	return reversed.join("")
 
 
 func l33t_match(password, _ranked_dictionaries=RANKED_DICTIONARIES,
@@ -192,8 +196,8 @@ func relevant_l33t_subtable(password, table):
 		password_chars[ch] = true
 
 	var subtable = {}
-	var relevant_subs = []
 	for letter in table:
+		var relevant_subs = []
 		for sub in table[letter]:
 			if sub in password_chars:
 				relevant_subs.append(sub)
@@ -215,7 +219,7 @@ func translate(string, chr_map):
 
 
 func enumerate_l33t_subs(table):
-	var keys = table
+	var keys = table.keys()
 	var subs = [[]]
 	subs = helper(keys, subs, table)
 	var sub_dicts = []  # convert from assoc lists to dicts
@@ -228,6 +232,8 @@ func enumerate_l33t_subs(table):
 	return sub_dicts
 
 
+# Not doing the same thing as the Python version
+# Need to debug
 func helper(keys, subs, table):
 	if keys.size() < 1:
 		return subs
@@ -248,7 +254,7 @@ func helper(keys, subs, table):
 				next_subs.append(sub_extension)
 			else:
 				var sub_alternative = sub
-				sub_alternative.pop(dup_l33t_index)
+				sub_alternative.pop_at(dup_l33t_index)
 				sub_alternative.append([l33t_chr, first_key])
 				next_subs.append(sub)
 				next_subs.append(sub_alternative)
@@ -262,8 +268,8 @@ func dedup(subs):
 	var members = {}
 	for sub in subs:
 		var assoc = []
-		for k in sub:
-			assoc.append(sub[k] + "," + k)
+		for kv in sub:
+			assoc.append(kv[1] + "," + kv[0])
 		assoc.sort()
 		var label = PoolStringArray(assoc).join("-")
 		if not label in members:
