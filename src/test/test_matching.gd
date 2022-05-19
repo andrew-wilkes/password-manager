@@ -32,7 +32,7 @@ func check_matches(prefix, matches, pattern_names, patterns, ijs, props):
 		if not is_equal_len_args or props[lst].size() != patterns.size():
 			fail_test('unequal argument lists to check_matches')
 
-	var msg = "%s: %s == %s" % [prefix, matches.size(), patterns.size()]
+	var msg = "%s: len(matches) == %s" % [prefix, patterns.size()]
 	assert_true(matches.size() == patterns.size(), msg)
 	if matches.size() != patterns.size():
 		return
@@ -55,8 +55,8 @@ func check_matches(prefix, matches, pattern_names, patterns, ijs, props):
 			var prop_msg = props[prop_name][k]
 			if prop_msg is String:
 				prop_msg = "'%s'" % prop_msg
-			msg = "%s: matches[%s].%s == %s" % [prefix, k, prop_name, prop_msg]
-			assert_true(_match[prop_name] == props[prop_name][k], msg)
+			var _msg = "%s: matches[%s].%s == %s" % [prefix, k, prop_name, prop_msg]
+			assert_eq_deep(_match[prop_name], props[prop_name][k])
 
 func test_build_ranked_dict():
 	var rd = Matching.build_ranked_dict(['a', 'b', 'c', ])
@@ -241,15 +241,15 @@ func test_l33t_matching():
 			'cgo': 1,
 		}
 	}
-	assert_true(lm('', dicts, test_table) == [], "doesn't match ''")
-	assert_true(lm('password', dicts, test_table) == [], "doesn't match pure dictionary words")
+	assert_true(Matching.l33t_match('', dicts, test_table) == [], "doesn't match ''")
+	assert_true(Matching.l33t_match('password', dicts, test_table) == [], "doesn't match pure dictionary words")
 	for items in [
 		['p4ssword', 'p4ssword', 'password', 'words', 3, [0, 7], {'4': 'a'}],
 		['p@ssw0rd', 'p@ssw0rd', 'password', 'words', 3, [0, 7], {'@': 'a', '0': 'o'}],
 		['aSdfO{G0asDfO', '{G0', 'cgo', 'words2', 1, [5, 7], {'{': 'c', '0': 'o'}],
 	]:
 		var msg = "matches against common l33t substitutions"
-		check_matches(msg, lm(items[PASSWORD], dicts, test_table), 'dictionary', [items[PATTERN]], [items[IJ]],
+		check_matches(msg, Matching.l33t_match(items[PASSWORD], dicts, test_table), 'dictionary', [items[PATTERN]], [items[IJ]],
 					  {
 						  'l33t': [true],
 						  'sub': [items[SUB]],
@@ -258,7 +258,7 @@ func test_l33t_matching():
 						  'dictionary_name': [items[DICTIONARY_NAME]],
 					  })
 
-	var matches = lm('@a(go{G0', dicts, test_table)
+	var matches = Matching.l33t_match('@a(go{G0', dicts, test_table)
 	var msg = "matches against overlapping l33t patterns"
 	check_matches(msg, matches, 'dictionary', ['@a(', '(go', '{G0'],
 				  [[0, 2], [2, 4], [5, 7]], {
@@ -271,7 +271,7 @@ func test_l33t_matching():
 				  })
 
 	msg = "doesn't match when multiple l33t substitutions are needed for the same letter"
-	assert_true(lm('p4@ssword', dicts, test_table) == [], msg)
+	assert_true(Matching.l33t_match('p4@ssword', dicts, test_table) == [], msg)
 
 	msg = "doesn't match single-character l33ted words"
 	matches = Matching.l33t_match('4 1 @')
@@ -284,7 +284,155 @@ func test_l33t_matching():
 	# but the subset {'4': 'a'} isn't tried, missing the match for asdf0.)
 	# TODO: consider partially fixing by trying all subsets of size 1 and maybe 2
 	msg = "doesn't match with subsets of possible l33t substitutions"
-	assert_true(lm('4sdf0', dicts, test_table) == [], msg)
+	assert_true(Matching.l33t_match('4sdf0', dicts, test_table) == [], msg)
 
-func lm(pw, dicts, test_table):
-	return Matching.l33t_match(pw, dicts, test_table)
+enum { PATTERN2, KEYBOARD, TURNS, SHIFTS }
+func test_spatial_matching():
+	var msg = "doesn't match 1- and 2-character spatial patterns"
+	for password in ['', '/', 'qw', '*/']:
+		assert_true(Matching.spatial_match(password) == [], msg)
+
+	# for testing, make a subgraph that contains a single keyboard
+	var _graphs = {'qwerty': AdjacencyGraphs.data['qwerty']}
+	var pattern = '6tfGHJ'
+	var matches = Matching.spatial_match("rz!%s%%z" % pattern, _graphs)
+	msg = "matches against spatial patterns surrounded by non-spatial patterns"
+	check_matches(msg, matches, 'spatial', [pattern],
+				  [[3, 3 + len(pattern) - 1]],
+				  {
+					  'graph': ['qwerty'],
+					  'turns': [2],
+					  'shifted_count': [3],
+				  })
+
+	for _data in [
+		['12345', 'qwerty', 1, 0],
+		['@WSX', 'qwerty', 1, 4],
+		['6tfGHJ', 'qwerty', 2, 3],
+		['hGFd', 'qwerty', 1, 2],
+		['/;p09876yhn', 'qwerty', 3, 0],
+		['Xdr%', 'qwerty', 1, 2],
+		['159-', 'keypad', 1, 0],
+		['*84', 'keypad', 1, 0],
+		['/8520', 'keypad', 1, 0],
+		['369', 'keypad', 1, 0],
+		['/963.', 'mac_keypad', 1, 0],
+		['*-632.0214', 'mac_keypad', 9, 0],
+		['aoEP%yIxkjq:', 'dvorak', 4, 5],
+		[';qoaOQ:Aoq;a', 'dvorak', 11, 4],
+	]:
+		_graphs = {_data[KEYBOARD]: AdjacencyGraphs.data[_data[KEYBOARD]]}
+		matches = Matching.spatial_match(_data[PATTERN2], _graphs)
+		msg = "matches '%s' as a %s pattern" % [_data[PATTERN2], _data[KEYBOARD]]
+		check_matches(msg, matches, 'spatial', [_data[PATTERN2]],
+					  [[0, len(_data[PATTERN2]) - 1]],
+					  {
+						  'graph': [_data[KEYBOARD]],
+						  'turns': [_data[TURNS]],
+						  'shifted_count': [_data[SHIFTS]],
+					  })
+
+enum { PASSWORD2, I, J }
+func test_sequence_matching():
+	var msg = "doesn't match length-#{len(password)} sequences"
+	for password in ['', 'a', '1']:
+		assert_true(Matching.sequence_match(password) == [], msg)
+
+	var matches = Matching.sequence_match('abcbabc')
+	msg = "matches overlapping patterns"
+	check_matches(msg, matches, 'sequence', ['abc', 'cba', 'abc'],
+				  [[0, 2], [2, 4], [4, 6]],
+				  {'ascending': [true, false, true]})
+
+	var prefixes = ['!', '22']
+	var suffixes = ['!', '22']
+	var pattern = 'jihg'
+	for _data in genpws(pattern, prefixes, suffixes):
+		matches = Matching.sequence_match(_data[PASSWORD])
+		msg = 'matches embedded sequence patterns'
+		check_matches(msg, matches, 'sequence', [pattern], [[_data[I], _data[J]]],
+					  {
+						  'sequence_name': ['lower'],
+						  'ascending': [false],
+					  })
+
+	for _data in [
+		['ABC', 'upper', true],
+		['CBA', 'upper', false],
+		['PQR', 'upper', true],
+		['RQP', 'upper', false],
+		['XYZ', 'upper', true],
+		['ZYX', 'upper', false],
+		['abcd', 'lower', true],
+		['dcba', 'lower', false],
+		['jihg', 'lower', false],
+		['wxyz', 'lower', true],
+		['zxvt', 'lower', false],
+		['0369', 'digits', true],
+		['97531', 'digits', false],
+	]:
+		matches = Matching.sequence_match(_data[0])
+		msg = "matches '#{pattern}' as a '#{name}' sequence"
+		check_matches(msg, matches, 'sequence', [_data[0]],
+					  [[0, len(_data[0]) - 1]],
+					  {
+						  'sequence_name': [_data[1]],
+						  'ascending': [_data[2]],
+					  })
+
+func test_repeat_matching():
+	var msg
+	for password in ['', '#']:
+		msg = "doesn't match length-%s repeat patterns" % len(password)
+		assert_true(Matching.repeat_match(password) == [], msg)
+
+	# test single-character repeats
+	var prefixes = ['@', 'y4@']
+	var suffixes = ['u', 'u%7']
+	var pattern = '&&&&&'
+	for _data in genpws(pattern, prefixes, suffixes):
+		var matches = Matching.repeat_match(_data[0])
+		msg = "matches embedded repeat patterns"
+		check_matches(msg, matches, 'repeat', [_data[0]], [[_data[1], _data[2]]],
+					  {'base_token': ['&']})
+
+	for length in [3, 12]:
+		for chr in ['a', 'Z', '4', '&']:
+			pattern = chr * (length + 1)
+			var matches = Matching.repeat_match(pattern)
+			msg = "matches repeats with base character '%s'" % chr
+			check_matches(msg, matches, 'repeat', [pattern],
+						  [[0, len(pattern) - 1]],
+						  {'base_token': [chr]})
+
+	var matches = Matching.repeat_match('BBB1111aaaaa@@@@@@')
+	var patterns = ['BBB', '1111', 'aaaaa', '@@@@@@']
+	msg = 'matches multiple adjacent repeats'
+	check_matches(msg, matches, 'repeat', patterns,
+				  [[0, 2], [3, 6], [7, 11], [12, 17]],
+				  {'base_token': ['B', '1', 'a', '@']})
+
+	matches = Matching.repeat_match('2818BBBbzsdf1111@*&@!aaaaaEUDA@@@@@@1729')
+	msg = 'matches multiple repeats with non-repeats in-between'
+	check_matches(msg, matches, 'repeat', patterns,
+				  [[4, 6], [12, 15], [21, 25], [30, 35]],
+				  {'base_token': ['B', '1', 'a', '@']})
+
+	# test multi-character repeats
+	pattern = 'abab'
+	matches = Matching.repeat_match(pattern)
+	msg = 'matches multi-character repeat pattern'
+	check_matches(msg, matches, 'repeat', [pattern], [[0, len(pattern) - 1]],
+				  {'base_token': ['ab']})
+
+	pattern = 'aabaab'
+	matches = Matching.repeat_match(pattern)
+	msg = 'matches aabaab as a repeat instead of the aa prefix'
+	check_matches(msg, matches, 'repeat', [pattern], [[0, len(pattern) - 1]],
+				  {'base_token': ['aab']})
+
+	pattern = 'abababab'
+	matches = Matching.repeat_match(pattern)
+	msg = 'identifies ab as repeat string, even though abab is also repeated'
+	check_matches(msg, matches, 'repeat', [pattern], [[0, len(pattern) - 1]],
+				  {'base_token': ['ab']})

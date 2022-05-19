@@ -249,7 +249,7 @@ func helper(keys, subs, table):
 					dup_l33t_index = i
 					break
 			if dup_l33t_index == -1:
-				var sub_extension = sub
+				var sub_extension = sub.duplicate()
 				sub_extension.append([l33t_chr, first_key])
 				next_subs.append(sub_extension)
 			else:
@@ -401,7 +401,7 @@ func spatial_match_helper(password, graph, graph_name):
 						'pattern': 'spatial',
 						'i': i,
 						'j': j - 1,
-						'token': password.substr(i, j - i + 1),
+						'token': password.substr(i, j - i),
 						'graph': graph_name,
 						'turns': turns,
 						'shifted_count': shifted_count,
@@ -454,18 +454,23 @@ func update(i, j, delta, password, result):
 			var regex = RegEx.new()
 			var sequence_name
 			var sequence_space
-			if regex.compile('^[a-z]+$').search(token):
+			regex.compile('^[a-z]+$')
+			if regex.search(token):
 				sequence_name = 'lower'
 				sequence_space = 26
-			elif regex.compile('^[A-Z]+$').search(token):
-				sequence_name = 'upper'
-				sequence_space = 26
-			elif regex.compile('^\\d+$').search(token):
-				sequence_name = 'digits'
-				sequence_space = 10
 			else:
-				sequence_name = 'unicode'
-				sequence_space = 26
+				regex.compile('^[A-Z]+$')
+				if regex.search(token):
+					sequence_name = 'upper'
+					sequence_space = 26
+				else:
+					regex.compile('^\\d+$')
+					if regex.search(token):
+						sequence_name = 'digits'
+						sequence_space = 10
+					else:
+						sequence_name = 'unicode'
+						sequence_space = 26
 			result.append({
 				'pattern': 'sequence',
 				'i': i,
