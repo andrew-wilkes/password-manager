@@ -1,7 +1,5 @@
 extends Node
 
-class_name Scoring
-
 const START_UPPER = "^[A-Z][^A-Z]+$"
 const END_UPPER = "^[^A-Z]+[A-Z]$"
 const ALL_UPPER = "^[^a-z]+$"
@@ -14,17 +12,18 @@ var KEYPAD_AVERAGE_DEGREE = calc_average_degree(AdjacencyGraphs.data['keypad'])
 var KEYBOARD_STARTING_POSITIONS = len(AdjacencyGraphs.data['qwerty'].keys())
 var KEYPAD_STARTING_POSITIONS = len(AdjacencyGraphs.data['keypad'].keys())
 
-# from decimal import Decimal
-
+class MatchSorter:
+	static func sort_by_i(ma, mb):
+		return ma['i'] < mb['i']
 
 func calc_average_degree(graph):
 	var average = 0
 	# Python: average += len([n for n in neighbors if n])
-	for neighbors in graph.items():
+	for neighbors in graph.values():
 		for n in neighbors:
 			if n:
 				average += 1
-	average /= float(len(graph.items()))
+	average /= float(graph.size())
 	return average
 
 
@@ -85,7 +84,7 @@ func nCk(n, k):
 #    D^(l-1) approximates Sum(D^i for i in [1..l-1]
 #
 # ------------------------------------------------------------------------------
-static func most_guessable_match_sequence(password, matches, _exclude_additive = false):
+func most_guessable_match_sequence(password, matches, _exclude_additive = false):
 	var n = len(password)
 
 	# partition matches into sublists according to ending index j
@@ -96,8 +95,7 @@ static func most_guessable_match_sequence(password, matches, _exclude_additive =
 		matches_by_j[m['j']].append(m)
 	# small detail: for deterministic output, sort each sublist by i.
 	for lst in matches_by_j:
-		pass # Create a custom sorting callback func
-		#lst.sort(key=lambda m1: m1['i'])
+		lst.sort_custom(MatchSorter, "sort_by_i")
 
 	var optimal = {
 	# optimal.m[k][l] holds final _match in the best length-l _match sequence
@@ -124,7 +122,7 @@ static func most_guessable_match_sequence(password, matches, _exclude_additive =
 					update(m, l + 1, password, _exclude_additive, optimal)
 			else:
 				update(m, 1, password, _exclude_additive, optimal)
-				bruteforce_update(k, password, _exclude_additive, optimal)
+		bruteforce_update(k, password, _exclude_additive, optimal)
 
 	var optimal_match_sequence = unwind(n, optimal)
 	var optimal_l = len(optimal_match_sequence)
@@ -145,7 +143,7 @@ static func most_guessable_match_sequence(password, matches, _exclude_additive =
 	}
 
 
-static func get_array_of_dictionaries(n):
+func get_array_of_dictionaries(n):
 	var array = []
 	for _n in n:
 		array.append({})
@@ -155,7 +153,7 @@ static func get_array_of_dictionaries(n):
 # helper: considers whether a length-l sequence ending at _match m is better
 # (fewer guesses) than previously encountered sequences, updating state if
 # so.
-static func update(m, l, password, _exclude_additive, optimal):
+func update(m, l, password, _exclude_additive, optimal):
 	var k = m['j']
 	var pi = estimate_guesses(m, password)
 	if l > 1:
@@ -173,8 +171,8 @@ static func update(m, l, password, _exclude_additive, optimal):
 	# first see if any competing sequences covering this prefix, with l or
 	# fewer matches, fare better than this sequence. if so, skip it and
 	# return.
-	for competing_l in optimal['g'][k].items().keys():
-		var competing_g = optimal['g'][k].items()[competing_l]
+	for competing_l in optimal['g'][k]:
+		var competing_g = optimal['g'][k][competing_l]
 		if competing_l > l:
 			continue
 		if competing_g <= g:
@@ -186,7 +184,7 @@ static func update(m, l, password, _exclude_additive, optimal):
 	optimal['pi'][k][l] = pi
 
 # helper: evaluate bruteforce matches ending at k.
-static func bruteforce_update(k, password, _exclude_additive, optimal):
+func bruteforce_update(k, password, _exclude_additive, optimal):
 	# see if a single bruteforce _match spanning the k-prefix is optimal.
 	var m = make_bruteforce_match(0, k, password)
 	update(m, 1, password, _exclude_additive, optimal)
@@ -211,24 +209,24 @@ static func bruteforce_update(k, password, _exclude_additive, optimal):
 			update(m, l + 1, password, _exclude_additive, optimal)
 
 # helper: make bruteforce _match objects spanning i to j, inclusive.
-static func make_bruteforce_match(i, j, password):
+func make_bruteforce_match(i, j, password):
 	return {
 		'pattern': 'bruteforce',
-		'token': password.slice(i, j + 1),
+		'token': password.substr(i, j - i + 1),
 		'i': i,
 		'j': j,
 	}
 
 # helper: step backwards through optimal.m starting at the end,
 # constructing the final optimal _match sequence.
-static func unwind(n, optimal):
+func unwind(n, optimal):
 	var optimal_match_sequence = []
 	var k = n - 1
 	# find the final best sequence length and score
 	var l = null
 	var g = float(INF)
-	for candidate_l in optimal['g'][k].items().keys():
-		var candidate_g = optimal['g'][k].items()[candidate_l]
+	for candidate_l in optimal['g'][k]:
+		var candidate_g = optimal['g'][k][candidate_l]
 		if candidate_g < g:
 			l = candidate_l
 			g = candidate_g
@@ -241,7 +239,7 @@ static func unwind(n, optimal):
 
 	return optimal_match_sequence
 
-static func estimate_guesses(_match, password):
+func estimate_guesses(_match, password):
 	if _match.get('guesses', false):
 		return Decimal(_match['guesses'])
 
@@ -262,7 +260,7 @@ static func estimate_guesses(_match, password):
 		'date': "date_guesses",
 	}
 
-	var guesses = estimation_functions[_match['pattern']] #(_match)
+	var guesses = callv(estimation_functions[_match['pattern']], [_match])
 	_match['guesses'] = max(guesses, min_guesses)
 	_match['guesses_log10'] = log(_match['guesses']) / 2.303
 
@@ -451,7 +449,7 @@ func l33t_variations(_match):
 
 # Replacements for Python functions
 
-static func factorial(n: int):
+func factorial(n: int):
 	if n < 2: return 1
 	if n > 2:
 		for m in range(2, n):
@@ -459,5 +457,5 @@ static func factorial(n: int):
 	return n
 
 
-static func Decimal(n):
+func Decimal(n):
 	return n

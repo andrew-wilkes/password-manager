@@ -380,6 +380,130 @@ func test_sequence_matching():
 						  'ascending': [_data[2]],
 					  })
 
+func test_regex_matching():
+	for pattern in [
+		['1922', 'recent_year'],
+		['2017', 'recent_year'],
+	]:
+		var matches = Matching.regex_match(pattern[0])
+		var msg = "matches #{pattern} as a #{name} pattern"
+		check_matches(
+			msg, matches, 'regex', [pattern[0]],
+			[[0, len(pattern[0]) - 1]],
+			{'regex_name': [pattern[1]]}
+		)
+
+func test_date_matching():
+	for sep in ['', ' ', '-', '/', '\\', '_', '.']:
+		var password = "13%s2%s1921" % [sep, sep]
+		var matches = Matching.date_match(password)
+		var msg = "matches dates that use '%s' as a separator" % sep
+		check_matches(msg, matches, 'date', [password],
+					  [[0, len(password) - 1]],
+					  {
+						  'separator': [sep],
+						  'year': [1921],
+						  'month': [2],
+						  'day': [13],
+					  })
+
+	for order in ['mdy', 'dmy', 'ymd', 'ydm']:
+		var d = 8
+		var m = 8
+		var y = 88
+		var password = order.replace('y', str(y)).replace('m', str(m)).replace('d', str(d))
+		var matches = Matching.date_match(password)
+		var msg = "matches dates with '%s' format" % order
+		check_matches(msg, matches, 'date', [password],
+					  [[0, len(password) - 1]],
+					  {
+						  'separator': [''],
+						  'year': [1988],
+						  'month': [8],
+						  'day': [8],
+					  })
+
+	var password = '111504'
+	var matches = Matching.date_match(password)
+	var msg = "matches the date with year closest to REFERENCE_YEAR when ambiguous"
+	check_matches(msg, matches, 'date', [password], [[0, len(password) - 1]],
+				  {
+					  'separator': [''],
+					  'year': [2004],  # picks '04' -> 2004 as year, not '1504'
+					  'month': [11],
+					  'day': [15],
+				  })
+
+	for dmy in [
+		[1, 1, 1999],
+		[11, 8, 2000],
+		[9, 12, 2005],
+		[22, 11, 1551],
+	]:
+		password = "%s%s%s" % [dmy[2], dmy[1], dmy[0]]
+		matches = Matching.date_match(password)
+		msg = "matches %s" % password
+		check_matches(msg, matches, 'date', [password],
+					  [[0, len(password) - 1]],
+					  {
+						  'separator': [''],
+						  'year': [dmy[2]],
+					  })
+		password = "%s.%s.%s" % [dmy[2], dmy[1], dmy[0]]
+		matches = Matching.date_match(password)
+		msg = "matches %s" % password
+		check_matches(msg, matches, 'date', [password],
+					  [[0, len(password) - 1]],
+					  {
+						  'separator': ['.'],
+						  'year': [dmy[2]],
+					  })
+
+	password = "02/02/02"
+	matches = Matching.date_match(password)
+	msg = "matches zero-padded dates"
+	check_matches(msg, matches, 'date', [password], [[0, len(password) - 1]],
+				  {
+					  'separator': ['/'],
+					  'year': [2002],
+					  'month': [2],
+					  'day': [2],
+				  })
+
+	var prefixes = ['a', 'ab']
+	var suffixes = ['!']
+	var pattern = '1/1/91'
+	for pij in genpws(pattern, prefixes, suffixes):
+		matches = Matching.date_match(pij[0])
+		msg = "matches embedded dates"
+		check_matches(msg, matches, 'date', [pattern], [[pij[1], pij[2]]],
+					  {
+						  'year': [1991],
+						  'month': [1],
+						  'day': [1],
+					  })
+
+	matches = Matching.date_match('12/20/1991.12.20')
+	msg = "matches overlapping dates"
+	check_matches(msg, matches, 'date', ['12/20/1991', '1991.12.20'],
+				  [[0, 9], [6, 15]],
+				  {
+					  'separator': ['/', '.'],
+					  'year': [1991, 1991],
+					  'month': [12, 12],
+					  'day': [20, 20],
+				  })
+
+	matches = Matching.date_match('912/20/919')
+	msg = "matches dates padded by non-ambiguous digits"
+	check_matches(msg, matches, 'date', ['12/20/91'], [[1, 8]],
+				  {
+					  'separator': ['/'],
+					  'year': [1991],
+					  'month': [12],
+					  'day': [20],
+				  })
+
 func test_repeat_matching():
 	var msg
 	for password in ['', '#']:
@@ -398,7 +522,7 @@ func test_repeat_matching():
 
 	for length in [3, 12]:
 		for chr in ['a', 'Z', '4', '&']:
-			pattern = chr * (length + 1)
+			pattern = chr.repeat(length + 1)
 			var matches = Matching.repeat_match(pattern)
 			msg = "matches repeats with base character '%s'" % chr
 			check_matches(msg, matches, 'repeat', [pattern],
@@ -436,3 +560,4 @@ func test_repeat_matching():
 	msg = 'identifies ab as repeat string, even though abab is also repeated'
 	check_matches(msg, matches, 'repeat', [pattern], [[0, len(pattern) - 1]],
 				  {'base_token': ['ab']})
+

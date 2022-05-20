@@ -98,7 +98,9 @@ func omnimatch(password, _ranked_dictionaries=RANKED_DICTIONARIES):
 		"regex_match",
 		"date_match",
 	]:
-		matches.append(callv(matcher, args))
+		var _matches = callv(matcher, args)
+		if _matches.size() > 0:
+			matches.append(_matches)
 
 	matches.sort_custom(MatchSorter, "sort_by_ij")
 	return matches
@@ -298,7 +300,7 @@ func repeat_match(password, _ranked_dictionaries=RANKED_DICTIONARIES):
 
 		var _match
 		var base_token
-		if len(greedy_match.get_string()) > len(lazy_match.get_string()):
+		if len(greedy_match.get_string(0)) > len(lazy_match.get_string(0)):
 			# greedy beats lazy for 'aabaab'
 			#   greedy: [aabaab, aab]
 			#   lazy:   [aa,     a]
@@ -307,13 +309,13 @@ func repeat_match(password, _ranked_dictionaries=RANKED_DICTIONARIES):
 			# aabaab in aabaabaabaab.
 			# run an anchored lazy match on greedy's repeated string
 			# to find the shortest repeated string
-			base_token = lazy_anchored.search(_match.get_string()).get_string(1)
+			base_token = lazy_anchored.search(_match.get_string(0)).get_string(1)
 		else:
 			_match = lazy_match
-			base_token = _match.get_string()
+			base_token = _match.get_string(1)
 
 		var i = _match.get_start()
-		var j = _match.get_end()
+		var j = _match.get_end() - 1
 
 		# recursively match and score the base string
 		var base_analysis = Scoring.most_guessable_match_sequence(
@@ -483,18 +485,18 @@ func update(i, j, delta, password, result):
 	return result
 
 
-func regex_match(password, _regexen=REGEXEN, _ranked_dictionaries=RANKED_DICTIONARIES):
+func regex_match(password, _ranked_dictionaries=RANKED_DICTIONARIES, _regexen=REGEXEN):
 	var matches = []
 	var regex = RegEx.new()
-	for name in _regexen:
-		regex.compile(_regexen[name])
+	for _name in _regexen:
+		regex.compile(_regexen[_name])
 		for rx_match in regex.search_all(password):
 			matches.append({
 				'pattern': 'regex',
 				'token': rx_match.get_string(),
-				'i': rx_match.start(),
-				'j': rx_match.end(),
-				'regex_name': name,
+				'i': rx_match.get_start(),
+				'j': rx_match.get_end() - 1,
+				'regex_name': _name,
 				'regex_match': rx_match,
 			})
 
@@ -526,7 +528,7 @@ func date_match(password, _ranked_dictionaries=RANKED_DICTIONARIES):
 	maybe_date_no_separator.compile('^\\d{4,8}$')
 	var maybe_date_with_separator = RegEx.new()
 	maybe_date_with_separator.compile(
-		'^(\\d{1,4})([\\s/\\_.-])(\\d{1,2})\\2(\\d{1,4})$'
+		'^(\\d{1,4})([\\s/\\\\_.-])(\\d{1,2})\\2(\\d{1,4})$'
 	)
 
 	# dates without separators are between length 4 '1191' and 8 '11111991'
@@ -540,7 +542,7 @@ func date_match(password, _ranked_dictionaries=RANKED_DICTIONARIES):
 				continue
 			var candidates = []
 			var ds = DATE_SPLITS[len(token)]
-			for splits in ds.keys:
+			for splits in ds:
 				var dmy = map_ints_to_dmy([
 					int(token.substr(0, splits[0])),
 					int(token.substr(splits[0], splits[1] - splits[0])),
@@ -615,8 +617,8 @@ func date_match(password, _ranked_dictionaries=RANKED_DICTIONARIES):
 		if filter_fun(_match, matches):
 			_matches.append(_match)
 	
-	matches.sort_custom(MatchSorter, "sort_by_ij")
-	return matches
+	_matches.sort_custom(MatchSorter, "sort_by_ij")
+	return _matches
 
 
 func metric(candidate_):
