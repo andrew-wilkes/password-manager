@@ -23,14 +23,33 @@ A SHA256 hash of the combined password and salt is saved with the encrypted data
 
 ## Reference Links
 
-[AES Encryption Modes](https://www.highgo.ca/2019/08/08/the-difference-in-five-modes-in-the-aes-encryption-algorithm/)
+[AES Encryption Modes Tutorial](https://www.highgo.ca/2019/08/08/the-difference-in-five-modes-in-the-aes-encryption-algorithm/)
 
-[KeePass Database Decryption](https://weekly-geekly.imtqy.com/articles/346820/index.html)
+[zxcvbn on GitHub](https://github.com/dropbox/zxcvbn) - password strength evaluation code.
 
-[zxcvbn on GitHub](https://github.com/dropbox/zxcvbn)
+[zxcvbn Python](https://github.com/dwolfhub/zxcvbn-python) - the reference code used to port zxcvbn to GDScript here.
+
+[KeePass2.x C# Source Code](https://github.com/dlech/KeePass2.x) - unofficial mirror on GitHub.
+
+[KeePass Database Decryption Tutorial](https://weekly-geekly.imtqy.com/articles/346820/index.html)
 
 ## Testing
 
 Unit testing is implemented with the GUT framework which may be installed from the Godot Asset Library in the Editor.
 
 The directory for the tests should be set to `res://test`
+
+## ToDos
+
+* Make all tests pass for zxcvbn
+* Debug how to unzip the KeePass Gzipped database given the master key
+* Extract passwords from KeePass database given the algorithm
+* Consider minimizing the memory footprint of clear passwords on a device
+* Create a UI
+* Test theory that KeePass DB includes password salt with database file
+* PEN test this solution
+* Create App Icon
+* Create password suggestion tool
+* Complete the logic code for this App
+* Write article comparing this to alternative solutions
+
