@@ -193,8 +193,8 @@ func bruteforce_update(k, password, _exclude_additive, optimal):
 		# (i=k, j=k). see if adding these new matches to any of the
 		# sequences in optimal[i-1] leads to new bests.
 		m = make_bruteforce_match(i, k, password)
-		for l in optimal['m'][i - 1].items().keys():
-			var last_m = optimal['m'][i - 1].items()[l]
+		for l in optimal['m'][i - 1]:
+			var last_m = optimal['m'][i - 1][l]
 			l = int(l)
 
 			# corner: an optimal sequence will never have two adjacent
@@ -297,14 +297,13 @@ func repeat_guesses(_match):
 
 
 func sequence_guesses(_match):
-	var regex = RegEx.new()
-	var first_chr = _match['token'].slice(1, -1)
+	var first_chr = _match['token'][0]
 	var base_guesses
 	# lower guesses for obvious starting points
 	if first_chr in ['a', 'A', 'z', 'Z', '0', '1', '9']:
 		base_guesses = 4
 	else:
-		if regex.compile("\\d").search(first_chr):
+		if first_chr.is_valid_integer():
 			base_guesses = 10  # digits
 		else:
 			# could give a higher base for uppercase,

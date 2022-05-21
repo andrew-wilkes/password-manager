@@ -517,7 +517,7 @@ func test_repeat_matching():
 	for _data in genpws(pattern, prefixes, suffixes):
 		var matches = Matching.repeat_match(_data[0])
 		msg = "matches embedded repeat patterns"
-		check_matches(msg, matches, 'repeat', [_data[0]], [[_data[1], _data[2]]],
+		check_matches(msg, matches, 'repeat', [pattern], [[_data[1], _data[2]]],
 					  {'base_token': ['&']})
 
 	for length in [3, 12]:

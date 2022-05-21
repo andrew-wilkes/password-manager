@@ -100,7 +100,7 @@ func omnimatch(password, _ranked_dictionaries=RANKED_DICTIONARIES):
 	]:
 		var _matches = callv(matcher, args)
 		if _matches.size() > 0:
-			matches.append(_matches)
+			matches.append_array(_matches)
 
 	matches.sort_custom(MatchSorter, "sort_by_ij")
 	return matches
