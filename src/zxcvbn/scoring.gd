@@ -286,7 +286,7 @@ func dictionary_guesses(_match):
 	_match['base_guesses'] = _match['rank']
 	_match['uppercase_variations'] = uppercase_variations(_match)
 	_match['l33t_variations'] = l33t_variations(_match)
-	var reversed_variations = _match.get('reversed', false) and 2 or 1
+	var reversed_variations = 2 if _match.get('reversed', false) else 1
 
 	return _match['base_guesses'] * _match['uppercase_variations'] * \
 		_match['l33t_variations'] * reversed_variations

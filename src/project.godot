@@ -71,6 +71,7 @@ config/icon="res://icon.png"
 FrequencyLists="*res://zxcvbn/frequency_lists.gd"
 Matching="*res://zxcvbn/matching.gd"
 Scoring="*res://zxcvbn/scoring.gd"
+ZXCVBN="*res://zxcvbn/zxcvbn.gd"
 
 [editor_plugins]
 

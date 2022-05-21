@@ -59,12 +59,17 @@ var GRAPHS = {
 	'mac_keypad': AdjacencyGraphs.data['mac_keypad'],
 }
 
+# Get error: partitioner: bad comparison function; sorting will be broken
+# https://github.com/godotengine/godot/blob/419e713a29f20bd3351a54d1e6c4c5af7ef4b253/core/sort_array.h#L186
 class MatchSorter:
 	static func sort_by_ij(ma, mb):
-		if ma['i'] < mb['i']: return true
-		if ma['i'] > mb['i']: return false
-		if ma['j'] > mb['j']: return false
-		return true
+		var b_after_a = true
+		if ma['i'] > mb['i']:
+			b_after_a = false
+		elif ma['i'] == mb['i']:
+			if ma['j'] > mb['j']:
+				b_after_a = false
+		return b_after_a
 
 func _init():
 	add_frequency_lists(FrequencyLists.data)
@@ -340,7 +345,7 @@ func repeat_match(password, _ranked_dictionaries=RANKED_DICTIONARIES):
 	return matches
 
 
-func spatial_match(password, _graphs=GRAPHS, _ranked_dictionaries=RANKED_DICTIONARIES):
+func spatial_match(password, _ranked_dictionaries=RANKED_DICTIONARIES, _graphs=GRAPHS):
 	var matches = []
 	for graph_name in _graphs:
 		matches.append_array(spatial_match_helper(password, _graphs[graph_name], graph_name))
