@@ -25,13 +25,15 @@ A SHA256 hash of the combined password and salt is saved with the encrypted data
 
 [AES Encryption Modes Tutorial](https://www.highgo.ca/2019/08/08/the-difference-in-five-modes-in-the-aes-encryption-algorithm/)
 
-[zxcvbn on GitHub](https://github.com/dropbox/zxcvbn) - password strength evaluation code.
+[zxcvbn: realistic password strength estimation](https://dropbox.tech/security/zxcvbn-realistic-password-strength-estimation) - 10 year old article. How far have we progressed?
 
 [zxcvbn Python](https://github.com/dwolfhub/zxcvbn-python) - the reference code used to port zxcvbn to GDScript here.
 
 [KeePass2.x C# Source Code](https://github.com/dlech/KeePass2.x) - unofficial mirror on GitHub.
 
 [KeePass Database Decryption Tutorial](https://weekly-geekly.imtqy.com/articles/346820/index.html)
+
+Hey, support my work! [Buy me a coffee](https://buymeacoffee.com/gdscriptdude)
 
 ## Testing
 
