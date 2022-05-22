@@ -92,7 +92,6 @@ static func display_time(seconds):
 
 
 static func float_to_decimal(f):
-	return f
 	"""
 	# Convert a floating point number to a Decimal with no loss of information
 	n, d = f.as_integer_ratio()
@@ -105,3 +104,4 @@ static func float_to_decimal(f):
 		result = ctx.divide(numerator, denominator)
 	return result
 	"""
+	return f

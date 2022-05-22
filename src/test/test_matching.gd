@@ -295,7 +295,7 @@ func test_spatial_matching():
 	# for testing, make a subgraph that contains a single keyboard
 	var _graphs = {'qwerty': AdjacencyGraphs.data['qwerty']}
 	var pattern = '6tfGHJ'
-	var matches = Matching.spatial_match("rz!%s%%z" % pattern, _graphs)
+	var matches = Matching.spatial_match("rz!%s%%z" % pattern, null, _graphs)
 	msg = "matches against spatial patterns surrounded by non-spatial patterns"
 	check_matches(msg, matches, 'spatial', [pattern],
 				  [[3, 3 + len(pattern) - 1]],
@@ -322,7 +322,7 @@ func test_spatial_matching():
 		[';qoaOQ:Aoq;a', 'dvorak', 11, 4],
 	]:
 		_graphs = {_data[KEYBOARD]: AdjacencyGraphs.data[_data[KEYBOARD]]}
-		matches = Matching.spatial_match(_data[PATTERN2], _graphs)
+		matches = Matching.spatial_match(_data[PATTERN2], null, _graphs)
 		msg = "matches '%s' as a %s pattern" % [_data[PATTERN2], _data[KEYBOARD]]
 		check_matches(msg, matches, 'spatial', [_data[PATTERN2]],
 					  [[0, len(_data[PATTERN2]) - 1]],

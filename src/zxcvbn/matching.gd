@@ -345,7 +345,7 @@ func repeat_match(password, _ranked_dictionaries=RANKED_DICTIONARIES):
 	return matches
 
 
-func spatial_match(password, _ranked_dictionaries=RANKED_DICTIONARIES, _graphs=GRAPHS):
+func spatial_match(password, _unused = null, _graphs = GRAPHS):
 	var matches = []
 	for graph_name in _graphs:
 		matches.append_array(spatial_match_helper(password, _graphs[graph_name], graph_name))
