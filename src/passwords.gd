@@ -15,16 +15,29 @@ func set_iv():
 		iv.set(n, randi() % 0xff)
 
 
-func encode_data(pdata, key, settings):
-	aes.start(AESContext.MODE_CBC_ENCRYPT, salted_key(settings, key), iv)
+# This step is to obscure the data, so even if a cracker brute-forces the
+# correct salted key they will not see recognizable data
+func pre_encode_data(pdata, settings):
+	aes.start(AESContext.MODE_ECB_ENCRYPT, settings.salt.sha256_buffer())
 	data = aes.update(pad_data(pdata.to_utf8()))
 	aes.finish()
 
 
-func decode_data(key, settings):
-	var decrypted
+func post_encode_data(key, settings):
+	aes.start(AESContext.MODE_CBC_ENCRYPT, salted_key(settings, key), iv)
+	data = aes.update(data)
+	aes.finish()
+
+
+func pre_decode_data(key, settings):
 	aes.start(AESContext.MODE_CBC_DECRYPT, salted_key(settings, key), iv)
-	decrypted = aes.update(data)
+	data = aes.update(data)
+	aes.finish()
+
+
+func post_decode_data(settings):
+	aes.start(AESContext.MODE_ECB_DECRYPT, settings.salt.sha256_buffer())
+	var decrypted = aes.update(data)
 	aes.finish()
 	decrypted.resize(decrypted.size() - decrypted[-1])
 	return decrypted

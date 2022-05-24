@@ -24,8 +24,14 @@ func test_salted_key():
 	assert_ne_shallow(key, key2)
 
 func test_encryption():
+	var settings = { "salt": "asalt"}
+	var key = "akey"
 	passwords.set_iv()
-	passwords.encode_data("mydata", "akey", { "salt": "asalt"})
+	passwords.pre_encode_data("mydata", settings)
 	assert_true(passwords.data is PoolByteArray, "Data is a PoolByteArray")
-	var decoded_data = passwords.decode_data("akey", { "salt": "asalt"})
+	passwords.post_encode_data(key, settings)
+	assert_true(passwords.data is PoolByteArray, "Data is a PoolByteArray")
+	passwords.pre_decode_data(key, settings)
+	assert_true(passwords.data is PoolByteArray, "Data is a PoolByteArray")
+	var decoded_data = passwords.post_decode_data(settings)
 	assert_eq(decoded_data.get_string_from_utf8(), "mydata")
