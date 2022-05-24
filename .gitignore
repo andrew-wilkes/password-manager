@@ -11,6 +11,7 @@ data_*/
 
 data/
 .fuse*
+tests
 
 # Gut and addons
 src/.gut*
