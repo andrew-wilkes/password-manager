@@ -41,6 +41,10 @@ Unit testing is implemented with the GUT framework which may be installed from t
 
 The directory for the tests should be set to `res://test`
 
+## Docs
+
+[Password Salting](docs/password_salting.md)
+
 ## ToDos
 
 * Debug how to unzip the KeePass Gzipped database given the master key

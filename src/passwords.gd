@@ -16,7 +16,8 @@ func set_iv():
 
 
 # This step is to obscure the data, so even if a cracker brute-forces the
-# correct salted key they will not see recognizable data
+# correct salted key they will not see recognizable data, and hence not
+# know that they identified the key (hopefully).
 func pre_encode_data(pdata, settings):
 	aes.start(AESContext.MODE_ECB_ENCRYPT, settings.salt.sha256_buffer())
 	data = aes.update(pad_data(pdata.to_utf8()))
