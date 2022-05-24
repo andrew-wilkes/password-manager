@@ -44,6 +44,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://passwords.gd"
 }, {
+"base": "Reference",
+"class": "Record",
+"language": "GDScript",
+"path": "res://record.gd"
+}, {
 "base": "Resource",
 "class": "Settings",
 "language": "GDScript",
@@ -62,6 +67,7 @@ _global_script_class_icons={
 "GutTest": "",
 "KPDX": "",
 "Passwords": "",
+"Record": "",
 "Settings": "",
 "TimeEstimates": ""
 }
