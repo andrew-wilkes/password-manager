@@ -14,6 +14,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://zxcvbn/adjacency_graphs.gd"
 }, {
+"base": "Reference",
+"class": "Database",
+"language": "GDScript",
+"path": "res://database.gd"
+}, {
 "base": "Node",
 "class": "Feedback",
 "language": "GDScript",
@@ -51,6 +56,7 @@ _global_script_classes=[ {
 } ]
 _global_script_class_icons={
 "AdjacencyGraphs": "",
+"Database": "",
 "Feedback": "",
 "GutHookScript": "",
 "GutTest": "",
