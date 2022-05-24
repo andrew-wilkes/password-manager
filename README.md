@@ -43,7 +43,6 @@ The directory for the tests should be set to `res://test`
 
 ## ToDos
 
-* Make all tests pass for zxcvbn
 * Debug how to unzip the KeePass Gzipped database given the master key
 * Extract passwords from KeePass database given the algorithm
 * Consider minimizing the memory footprint of clear passwords on a device
