@@ -34,3 +34,8 @@ This is just more time-consuming, but not very time-consuming. Of course, you ca
 
 In this case you need to Brute Force the salt value which could involve huge numbers of combinations. So this exercise becomes massively more expensive in terms of time and computing power.
 
+## How to know when you have cracked the password?
+
+You expect to see something recognizable as a common file format or recognizable text strings.
+
+Now this leads us on to the next stage: **how to encrypt data**.
