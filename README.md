@@ -37,7 +37,7 @@ Hey, support my work! [Buy me a coffee](https://buymeacoffee.com/gdscriptdude)
 
 ## Testing
 
-Unit testing is implemented with the GUT framework which may be installed from the Godot Asset Library in the Editor.
+Unit testing is implemented with the [GUT](https://github.com/bitwes/Gut) framework which may be installed from the Godot Asset Library in the Editor.
 
 The directory for the tests should be set to `res://test`
 
