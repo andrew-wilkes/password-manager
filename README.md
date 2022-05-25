@@ -45,6 +45,8 @@ The directory for the tests should be set to `res://test`
 
 [Password Salting](docs/password_salting.md)
 
+[Data Encryption](docs/data-encryption.md)
+
 ## ToDos
 
 * Debug how to unzip the KeePass Gzipped database given the master key

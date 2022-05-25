@@ -1,9 +1,11 @@
 extends Control
 
 enum { NO_ACTION, NEW, OPEN, SAVE, SAVE_AS, SAVE_INC, QUIT, ABOUT, LICENCES, PWD_GEN, CHG_PW, SETTINGS }
+enum { UNLOCKED, LOCKED }
 
 var settings: Settings
 var passwords: Passwords
+var database: Database
 
 var file_menu
 var tools_menu
@@ -14,7 +16,18 @@ func _ready():
 	settings = Settings.new()
 	settings = settings.load_data()
 	load_passwords()
+	database = Database.new()
 	configure_menu()
+
+
+func set_title(locked):
+	var title = ProjectSettings.get_setting("application/config/name")
+	title += " - " + settings.current_file
+	if locked:
+		title += " [LOCKED]"
+	if OS.is_debug_build():
+		title += " (DEBUG)"
+	OS.set_window_title(title)
 
 
 func load_passwords():
@@ -23,7 +36,11 @@ func load_passwords():
 	if pwd == null:
 		passwords.set_iv()
 	else:
-		passwords = pwd
+		if pwd is Passwords:
+			passwords = pwd
+			set_title(LOCKED)
+		else:
+			$Alert.show_message("Error opening password data file")
 
 
 func configure_menu():

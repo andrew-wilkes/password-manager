@@ -1,5 +1,9 @@
-extends Label
+extends MarginContainer
 
 func show_message(txt):
-	text = txt
+	$Label.text = txt
 	$Timer.start()
+
+
+func _on_Timer_timeout():
+	$Label.text = ""

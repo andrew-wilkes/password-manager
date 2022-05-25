@@ -2,10 +2,23 @@
 
 [ext_resource path="res://Alert.gd" type="Script" id=1]
 
-[node name="Alert" type="Label"]
+[node name="Alert" type="MarginContainer"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+custom_constants/margin_right = 5
+custom_constants/margin_top = 5
+custom_constants/margin_left = 5
+custom_constants/margin_bottom = 5
 script = ExtResource( 1 )
 
 [node name="Timer" type="Timer" parent="."]
 one_shot = true
+
+[node name="Label" type="Label" parent="."]
+modulate = Color( 1, 0, 0, 1 )
+margin_left = 5.0
+margin_top = 293.0
+margin_right = 1019.0
+margin_bottom = 307.0
+
+[connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]
