@@ -59,8 +59,9 @@ func save_data(settings):
 
 
 func load_data(settings):
-	if ResourceLoader.exists(pw_file(settings)):
-		return ResourceLoader.load(pw_file(settings))
+	if not settings.current_file.empty():
+		if ResourceLoader.exists(pw_file(settings)):
+			return ResourceLoader.load(pw_file(settings))
 
 
 func salted_key(settings, key):
@@ -69,4 +70,4 @@ func salted_key(settings, key):
 
 
 func pw_file(settings):
-	return "user://" + settings.pw_file
+	return settings.last_dir + "/" + settings.current_file
