@@ -38,4 +38,4 @@ In this case you need to Brute Force the salt value which could involve huge num
 
 You expect to see something recognizable as a common file format or recognizable text strings.
 
-Now this leads us on to the next stage: **how to encrypt data**.
+Now this leads us on to the next stage: [Data Encryption](data-encryption.md)
