@@ -14,7 +14,7 @@ Here are the results of using an online password cracker service where the passw
 
 ![Password + Salt](ptest1.png)
 
-We generated a SHA256 of our salted password and entered it to the online password cracker.
+We generated a SHA256 hash of our salted password and entered it to the online password cracker.
 
 ![Cracking Attempt](ptest2.png)
 
@@ -26,13 +26,13 @@ So that gives us a first rule of thumb for implementing a robust password protec
 
 ## How to crack the password when you know the Salt value
 
-In this case you would loop through the database of common passwords, combine each one with the Salt value, and then generate the hash value to compare with the one that you are trying to crack.
+In this case you would loop through the database of common passwords, combine each one with the Salt value, and then generate the hash value to compare with the hash that you are trying to crack.
 
-This is just more time-consuming, but not very time-consuming. Of course, you can make it cumbersome to figure out how to combine the salt value with the password, but if your project is Open Source, then it is a pointless exercise.
+This is just more time-consuming, but not very time-consuming. Of course, you can make it cumbersome to figure out how to combine the salt value with the password, but it is just a matter of trying out many kinds of ways to combine the password and salt. And widely adopted systems are likely to have their method of doing this published somewhere anyway.
 
 ## How to crack the password when you don't know the Salt value
 
-In this case you need to Brute Force the salt value which could involve huge numbers of combinations. So this exercise becomes massively more expensive in terms of time and computing power.
+In this case you need to Brute Force the key by looping through the various combinations of input characters which could involve huge numbers of combinations. So this exercise becomes massively more expensive in terms of time and computing power. On a server, this could be rate-limited, but for an App, we will assume that the data file is available offline.
 
 ## How to know when you have cracked the password?
 
