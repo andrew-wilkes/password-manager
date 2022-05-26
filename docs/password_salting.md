@@ -24,13 +24,13 @@ So that gives us a first rule of thumb for implementing a robust password protec
 
 * Create a Salt value that we don't save with our data file
 
-## To crack the password when you know the Salt value
+## How to crack the password when you know the Salt value
 
 In this case you would loop through the database of common passwords, combine each one with the Salt value, and then generate the hash value to compare with the one that you are trying to crack.
 
 This is just more time-consuming, but not very time-consuming. Of course, you can make it cumbersome to figure out how to combine the salt value with the password, but if your project is Open Source, then it is a pointless exercise.
 
-## To crack the password when you don't know the Salt value
+## How to crack the password when you don't know the Salt value
 
 In this case you need to Brute Force the salt value which could involve huge numbers of combinations. So this exercise becomes massively more expensive in terms of time and computing power.
 

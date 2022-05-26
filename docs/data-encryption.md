@@ -2,8 +2,6 @@
 
 To encrypt our raw data we will make use of AES encryption that is available in Godot. This allows us to encode and decode our data easily and quickly.
 
-AES encryption is used by U.S. for securing sensitive but unclassified material.
-
 We will use AES encryption in two stages using both of the available modes.
 
 ## Stage 1 - EBC Mode
