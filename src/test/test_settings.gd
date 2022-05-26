@@ -5,6 +5,8 @@ var settings = Settings.new()
 func test_get_char():
 	for n in 10:
 		assert_eq(settings.get_char(n), str(n))
+	assert_eq(settings.get_char(10), "a")
+	assert_eq(settings.get_char(35), "z")
 
 func test_generate_salt():
 	for n in 10:
