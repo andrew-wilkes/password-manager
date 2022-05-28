@@ -3,7 +3,7 @@
 [ext_resource path="res://Main.gd" type="Script" id=1]
 [ext_resource path="res://scenes/Alert.tscn" type="PackedScene" id=2]
 [ext_resource path="res://scenes/ScrollableWindowDialog.tscn" type="PackedScene" id=3]
-[ext_resource path="res://PasswordForm.tscn" type="PackedScene" id=4]
+[ext_resource path="res://scenes/PasswordForm.tscn" type="PackedScene" id=4]
 
 [node name="Main" type="VBoxContainer"]
 anchor_right = 1.0
@@ -59,6 +59,8 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="PasswordForm" parent="Content" instance=ExtResource( 4 )]
+margin_left = 318.0
+margin_right = 705.0
 
 [node name="c" type="CanvasLayer" parent="."]
 

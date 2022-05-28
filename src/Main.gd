@@ -39,6 +39,8 @@ func load_passwords():
 		if pwd is Passwords:
 			passwords = pwd
 			set_title(LOCKED)
+			$Content/PasswordForm.visible = true
+			$Content/PasswordForm.set_filename(settings.current_file)
 		else:
 			$Alert.show_message("Error opening password data file")
 

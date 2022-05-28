@@ -4,6 +4,9 @@ signal enter_pressed
 signal password_text_changed(txt)
 signal browse_pressed
 
+func set_filename(fname):
+	$Filename.text = fname
+
 func _on_Enter_pressed():
 	emit_signal("enter_pressed")
 
