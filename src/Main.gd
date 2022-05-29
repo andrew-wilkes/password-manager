@@ -137,8 +137,8 @@ func _notification(what):
 
 
 func save_data():
-		settings.save_data()
-		passwords.save_data(settings)
+	settings.save_data()
+	passwords.save_data(settings)
 
 
 func _on_File_pressed():
