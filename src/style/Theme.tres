@@ -1,0 +1,24 @@
+[gd_resource type="Theme" load_steps=9 format=2]
+
+[ext_resource path="res://style/type/TypeRegularNormal.tres" type="DynamicFont" id=1]
+[ext_resource path="res://style/box/BoxFGNormal.tres" type="StyleBox" id=2]
+[ext_resource path="res://style/box/BoxFGPressed.tres" type="StyleBox" id=3]
+[ext_resource path="res://style/box/BoxFGHover.tres" type="StyleBox" id=4]
+[ext_resource path="res://style/box/BoxFGDisable.tres" type="StyleBox" id=5]
+[ext_resource path="res://style/box/BoxBGNormal.tres" type="StyleBox" id=6]
+
+[sub_resource type="StyleBoxEmpty" id=1]
+
+[sub_resource type="StyleBoxEmpty" id=3]
+
+[resource]
+default_font = ExtResource( 1 )
+Button/styles/disabled = ExtResource( 5 )
+Button/styles/focus = SubResource( 1 )
+Button/styles/hover = ExtResource( 4 )
+Button/styles/normal = ExtResource( 2 )
+Button/styles/pressed = ExtResource( 3 )
+LineEdit/styles/focus = SubResource( 3 )
+LineEdit/styles/normal = ExtResource( 2 )
+LineEdit/styles/read_only = ExtResource( 5 )
+PanelContainer/styles/panel = ExtResource( 6 )
