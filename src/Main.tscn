@@ -76,9 +76,9 @@ margin_top = 262.0
 margin_right = 575.0
 margin_bottom = 276.0
 
-[node name="c" type="CanvasLayer" parent="."]
+[node name="Popups" type="CanvasLayer" parent="."]
 
-[node name="FileDialog" type="FileDialog" parent="c"]
+[node name="FileDialog" type="FileDialog" parent="Popups"]
 margin_left = 50.0
 margin_top = 64.0
 margin_right = 786.0
@@ -88,7 +88,7 @@ filters = PoolStringArray( "*.res ; Password Resource Files" )
 current_dir = "/mnt/windows/WData/dev/godot/git/andrew-wilkes/godot-password-manager/src"
 current_path = "/mnt/windows/WData/dev/godot/git/andrew-wilkes/godot-password-manager/src/"
 
-[node name="Licences" parent="c" instance=ExtResource( 3 )]
+[node name="Licences" parent="Popups" instance=ExtResource( 3 )]
 margin_right = -163.0
 margin_bottom = -99.0
 window_title = "Licence Information"
@@ -133,7 +133,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \\\"AS IS\\\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 "
 
-[node name="About" type="AcceptDialog" parent="c"]
+[node name="About" type="AcceptDialog" parent="Popups"]
 margin_right = 253.0
 margin_bottom = 123.0
 window_title = "About"
@@ -142,4 +142,4 @@ dialog_text = "Created by Andrew Wilkes 2022"
 [connection signal="pressed" from="M/Menu/File" to="." method="_on_File_pressed"]
 [connection signal="pressed" from="M/Menu/Tools" to="." method="_on_Tools_pressed"]
 [connection signal="pressed" from="M/Menu/Help" to="." method="_on_Help_pressed"]
-[connection signal="file_selected" from="c/FileDialog" to="." method="_on_FileDialog_file_selected"]
+[connection signal="file_selected" from="Popups/FileDialog" to="." method="_on_FileDialog_file_selected"]

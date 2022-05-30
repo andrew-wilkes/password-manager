@@ -39,7 +39,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/gut/test.gd"
 }, {
-"base": "Node",
+"base": "Reference",
 "class": "KPDX",
 "language": "GDScript",
 "path": "res://keepass/kpdx.gd"

@@ -1,5 +1,3 @@
-extends Node
-
 class_name KPDX
 
 enum FIELD_ID {

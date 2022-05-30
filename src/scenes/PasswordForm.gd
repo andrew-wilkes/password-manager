@@ -17,7 +17,7 @@ func set_text(txt):
 	$Label.text = txt
 
 func _on_Enter_pressed():
-	emit_signal("action", ENTER_PRESSED, $Label.text)
+	emit_signal("action", ENTER_PRESSED, $HBox/Password.text)
 
 
 func _on_Hidden_pressed():
