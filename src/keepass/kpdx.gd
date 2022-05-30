@@ -149,3 +149,11 @@ func hash_bytes(b: PoolByteArray):
 	ctx.update(b)
 	# Get the computed hash.
 	return ctx.finish()
+
+
+# Keeping this here in case it is useful later
+func hex_to_bytes(hex_string):
+	var bytes = PoolByteArray()
+	for idx in range(0, hex_string.length(), 2):
+		bytes.append(("0x" + hex_string.substr(idx, 2)).hex_to_int())
+	return bytes
