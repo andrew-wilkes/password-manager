@@ -4,9 +4,13 @@ This will be an App for storing passwords securely in a single database file.
 
 A user password (entered by the user) will be associated with the database file to unlock it along with a salt string stored in the software settings.
 
-The AES encryption algorithm will be used in CBC (Cipher Block Chaining) mode to encrypt the saved data.
+The AES encryption algorithm will be used in two stages to encrypt the saved data. See the Docs for more info.
 
-A SHA256 hash of the combined password and salt is saved with the encrypted database, and an IV vector.
+A SHA256 hash of the combined password and salt is used to form the key.
+
+The encrypted database is saved along with an IV vector.
+
+The integrity of the decoded data will be checked by the presence of a hash in the decoded data that matches one computed from the password and salt value.
 
 ## Features
 
