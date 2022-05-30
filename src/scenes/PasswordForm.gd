@@ -8,6 +8,11 @@ func _ready():
 	set_text("")
 
 
+func init(txt):
+	set_text(txt)
+	visible = true
+
+
 func set_text(txt):
 	$Label.text = txt
 

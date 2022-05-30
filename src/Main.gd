@@ -5,13 +5,23 @@ enum { UNLOCKED, LOCKED }
 enum { SET_PASSWORD, ENTER_PASSWORD, ACCESS_DATA }
 enum { ENTER_PRESSED, PASSWORD_TEXT_CHANGED, BROWSE_PRESSED }
 
+const form_map = {
+	SET_PASSWORD: "SetPasswordForm",
+	ENTER_PASSWORD: "PasswordForm",
+	ACCESS_DATA: "DataForm"
+}
+
 var settings: Settings
 var passwords: Passwords
 var database: Database
 
-var file_menu
-var tools_menu
-var help_menu
+onready var file_menu = find_node("File").get_popup()
+onready var file_dialog = find_node("FileDialog")
+onready var tools_menu = find_node("Tools").get_popup()
+onready var help_menu = find_node("Help").get_popup()
+onready var content_node = find_node("Content")
+onready var alert = find_node("Alert")
+
 var menu_action = NO_ACTION
 var state = ""
 var password = ""
@@ -22,7 +32,7 @@ func _ready():
 	load_passwords()
 	database = Database.new()
 	configure_menu()
-	for child in $Content.get_children():
+	for child in content_node.get_children():
 		var _e = child.connect("action", self, "state_handler")
 
 
@@ -33,7 +43,7 @@ func state_handler(action, data):
 				ENTER_PRESSED:
 					password = data.sha256_text()
 					state = ACCESS_DATA
-					show_content("DataForm")
+					show_content(form_map[state])
 				PASSWORD_TEXT_CHANGED:
 					# Evaluate the password strength
 					pass
@@ -43,7 +53,7 @@ func state_handler(action, data):
 					# Try to open the database
 					# If error, display alert
 					state = ACCESS_DATA
-					show_content("DataForm")
+					show_content(form_map[state])
 				BROWSE_PRESSED:
 					menu_action = OPEN
 					do_action()
@@ -66,29 +76,27 @@ func load_passwords():
 	var pwd = passwords.load_data(settings)
 	if pwd == null:
 		passwords.set_iv()
-		show_content("SetPasswordForm")
 		state = SET_PASSWORD
+		show_content(form_map[state], "")
 	else:
 		if pwd is Passwords:
 			passwords = pwd
 			set_title(LOCKED)
-			$Content/PasswordForm.set_text(settings.current_file)
-			show_content("PasswordForm")
 			state = ENTER_PASSWORD
+			show_content(form_map[state], settings.current_file)
 		else:
-			$Alert.show_message("Error opening password data file")
+			alert.show_message("Error opening password data file")
 
 
-func show_content(target_name):
-	for child in $Content.get_children():
+func show_content(target_name, data = null):
+	for child in content_node.get_children():
 		if child.name == target_name:
-			child.show()
+			child.init(data)
 		else:
 			child.hide()
 
 
 func configure_menu():
-	file_menu = $M/Menu/File.get_popup()
 	file_menu.add_item("New", NEW, KEY_MASK_CTRL | KEY_N)
 	file_menu.add_item("Open", OPEN, KEY_MASK_CTRL | KEY_O)
 	file_menu.add_separator()
@@ -99,13 +107,11 @@ func configure_menu():
 	file_menu.add_item("Quit", QUIT, KEY_MASK_CTRL | KEY_Q)
 	file_menu.connect("id_pressed", self, "_on_FileMenu_id_pressed")
 	
-	tools_menu = $M/Menu/Tools.get_popup()
 	tools_menu.add_item("Password Generator")
 	tools_menu.add_item("Change Password")
 	tools_menu.add_item("Settings")
 	tools_menu.connect("id_pressed", self, "_on_ToolsMenu_id_pressed")
 	
-	help_menu = $M/Menu/Help.get_popup()
 	help_menu.add_item("About", ABOUT)
 	help_menu.add_separator()
 	help_menu.add_item("Licences", LICENCES)
@@ -144,24 +150,24 @@ func _on_ToolsMenu_id_pressed(id):
 func _on_HelpMenu_id_pressed(id):
 	match id:
 		ABOUT:
-			$c/About.popup_centered()
+			find_node("About").popup_centered()
 		LICENCES:
-			$c/Licences.popup_centered()
+			find_node("Licences").popup_centered()
 
 
 func do_action():
 	match menu_action:
 		OPEN:
-			$c/FileDialog.current_dir = settings.last_dir
-			$c/FileDialog.current_file = settings.current_file
-			$c/FileDialog.mode = FileDialog.MODE_OPEN_FILE
-			$c/FileDialog.popup_centered()
+			file_dialog.current_dir = settings.last_dir
+			file_dialog.current_file = settings.current_file
+			file_dialog.mode = FileDialog.MODE_OPEN_FILE
+			file_dialog.popup_centered()
 		SAVE:
 			if settings.current_file == "":
-				$c/FileDialog.current_dir = settings.last_dir
-				$c/FileDialog.current_file = ""
-				$c/FileDialog.mode = FileDialog.MODE_SAVE_FILE
-				$c/FileDialog.popup_centered()
+				file_dialog.current_dir = settings.last_dir
+				file_dialog.current_file = ""
+				file_dialog.mode = FileDialog.MODE_SAVE_FILE
+				file_dialog.popup_centered()
 			else:
 				save_data()
 
@@ -197,7 +203,7 @@ func _on_Help_pressed():
 
 func _on_FileDialog_file_selected(path):
 	if path.rstrip("/") == path.get_base_dir():
-		$Alert.show_message("No filename was specified")
+		alert.show_message("No filename was specified")
 		return
 	settings.current_file = path.get_file()
 	settings.last_dir = path.get_base_dir()
