@@ -1,0 +1,133 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://style/Theme.tres" type="Theme" id=1]
+
+[sub_resource type="StyleBoxFlat" id=3]
+bg_color = Color( 0, 0, 0, 1 )
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends PanelContainer
+
+onready var container = $Container
+onready var container_config = $Container/Configuration
+
+var array_type :Array
+var array_box :Array
+var dic_directory :Dictionary = {
+	\"res://style/type/\" : array_type,
+	\"res://style/box/\" : array_box
+}
+
+var count :int = 0
+
+# Get Files
+func scan(directory :String, variabel :Array) -> void:
+	count += 1
+	var dir = Directory.new()
+	var err = dir.open(directory)
+	if err == OK:
+		dir.list_dir_begin()
+		var files = dir.get_next()
+		while (files != \"\"):
+			if files != \".\" and files != \"..\":
+				variabel.append(directory + files)
+			files = dir.get_next()
+	dir.list_dir_end()
+	
+	if count >= dic_directory.size():
+		create()
+
+
+# Create Example
+func create() -> void:
+	# Remove Child
+	for child in container.get_children():
+		if child != container_config:
+			child.queue_free()
+	
+	# Add Font Example
+	for font in array_type:
+		var ins := Label.new()
+		# Apply Custom Font
+		ins.set(\"custom_fonts/font\", load(font))
+		container.add_child(ins)
+		# extras
+		ins.text = str(font).replace(\"res://style/type/\", \"1234567890 Type Size Example for \")
+		yield(get_tree().create_timer(0.1), \"timeout\")
+	
+	# Add Box Example
+	for box in array_box:
+		var ins := PanelContainer.new()
+		# Apply Custom style
+		ins.set(\"custom_styles/panel\", load(box))
+		container.add_child(ins)
+		# extras
+		ins.rect_min_size = Vector2(16,16)
+		yield(get_tree().create_timer(0.1), \"timeout\")
+	
+	# Move Config Child
+	container.move_child(container_config, container.get_child_count() - 1)
+	container_config.show()
+
+
+func _ready() -> void:
+	for dic in dic_directory:
+		call_deferred(\"scan\", dic, dic_directory[dic])
+"
+
+[sub_resource type="GDScript" id=2]
+script/source = "extends HBoxContainer
+
+# ToDo : font size setting thingy
+
+const type_size := [-6,-4, -2, 0, 2, 4, 6]
+func _ready() -> void:
+	var grp := ButtonGroup.new()
+	for type in type_size:
+		var ins := Button.new()
+		ins.group = grp
+		ins.toggle_mode = true
+		ins.size_flags_horizontal = 3
+		ins.size_flags_vertical = 3
+		ins.text = str(type)
+		add_child(ins)
+	
+"
+
+[node name="Style" type="PanelContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource( 1 )
+custom_styles/panel = SubResource( 3 )
+script = SubResource( 1 )
+
+[node name="Container" type="VBoxContainer" parent="."]
+margin_left = 384.0
+margin_top = 277.0
+margin_right = 640.0
+margin_bottom = 323.0
+size_flags_horizontal = 6
+size_flags_vertical = 6
+
+[node name="Configuration" type="PanelContainer" parent="Container"]
+visible = false
+margin_right = 256.0
+margin_bottom = 25.0
+rect_min_size = Vector2( 256, 0 )
+size_flags_vertical = 0
+
+[node name="Container" type="VBoxContainer" parent="Container/Configuration"]
+margin_left = 4.0
+margin_top = 4.0
+margin_right = 252.0
+margin_bottom = 21.0
+
+[node name="TypeSize" type="HBoxContainer" parent="Container/Configuration/Container"]
+margin_right = 248.0
+margin_bottom = 17.0
+script = SubResource( 2 )
+
+[node name="Label" type="Label" parent="Container/Configuration/Container/TypeSize"]
+margin_right = 53.0
+margin_bottom = 17.0
+text = "Type Size"
