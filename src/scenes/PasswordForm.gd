@@ -1,14 +1,16 @@
 extends VBoxContainer
 
-signal enter_pressed
-signal password_text_changed(txt)
-signal browse_pressed
+signal action(id, data)
 
-func set_filename(fname):
-	$Filename.text = fname
+func _ready():
+	set_text("")
+
+
+func set_text(txt):
+	$Label.text = txt
 
 func _on_Enter_pressed():
-	emit_signal("enter_pressed")
+	emit_signal("action", "enter_pressed", $Label.text)
 
 
 func _on_Hidden_pressed():
@@ -24,8 +26,8 @@ func _on_Visible_pressed():
 
 
 func _on_Password_text_changed(new_text):
-	emit_signal("password_text_changed", new_text)
+	emit_signal("action", "password_text_changed", new_text)
 
 
 func _on_Browse_pressed():
-	emit_signal("browse_pressed")
+	emit_signal("action", "browse_pressed", null)

@@ -2,6 +2,7 @@ extends Control
 
 enum { NO_ACTION, NEW, OPEN, SAVE, SAVE_AS, SAVE_INC, QUIT, ABOUT, LICENCES, PWD_GEN, CHG_PW, SETTINGS }
 enum { UNLOCKED, LOCKED }
+enum { SET_PASSWORD, ENTER_PASSWORD, ACCESS_DATA }
 
 var settings: Settings
 var passwords: Passwords
@@ -10,7 +11,9 @@ var database: Database
 var file_menu
 var tools_menu
 var help_menu
-var action = NO_ACTION
+var menu_action = NO_ACTION
+var state = ""
+var password = ""
 
 func _ready():
 	settings = Settings.new()
@@ -18,6 +21,33 @@ func _ready():
 	load_passwords()
 	database = Database.new()
 	configure_menu()
+	for child in $Content.get_children():
+		var _e = child.connect("action", self, "state_handler")
+
+
+func state_handler(action, data):
+	match state:
+		SET_PASSWORD:
+			match action:
+				"enter_pressed":
+					password = data.sha256_text()
+					state = ACCESS_DATA
+					show_content("DataForm")
+				"password_text_changed":
+					# Evaluate the password strength
+					pass
+		ENTER_PASSWORD:
+			match action:
+				"enter_pressed":
+					# Try to open the database
+					# If error, display alert
+					state = ACCESS_DATA
+					show_content("DataForm")
+				"browse_pressed":
+					menu_action = OPEN
+					do_action()
+		ACCESS_DATA:
+			pass
 
 
 func set_title(locked):
@@ -35,14 +65,25 @@ func load_passwords():
 	var pwd = passwords.load_data(settings)
 	if pwd == null:
 		passwords.set_iv()
+		show_content("SetPasswordForm")
+		state = SET_PASSWORD
 	else:
 		if pwd is Passwords:
 			passwords = pwd
 			set_title(LOCKED)
-			$Content/PasswordForm.visible = true
-			$Content/PasswordForm.set_filename(settings.current_file)
+			$Content/PasswordForm.set_text(settings.current_file)
+			show_content("PasswordForm")
+			state = ENTER_PASSWORD
 		else:
 			$Alert.show_message("Error opening password data file")
+
+
+func show_content(target_name):
+	for child in $Content.get_children():
+		if child.name == target_name:
+			child.show()
+		else:
+			child.hide()
 
 
 func configure_menu():
@@ -71,7 +112,7 @@ func configure_menu():
 
 
 func _on_FileMenu_id_pressed(id):
-	action = id
+	menu_action = id
 	match id:
 		NEW:
 			passwords.save_data(settings)
@@ -82,7 +123,7 @@ func _on_FileMenu_id_pressed(id):
 		SAVE:
 			do_action()
 		SAVE_AS:
-			action = SAVE
+			menu_action = SAVE
 			settings.current_file = ""
 			do_action()
 		QUIT:
@@ -108,7 +149,7 @@ func _on_HelpMenu_id_pressed(id):
 
 
 func do_action():
-	match action:
+	match menu_action:
 		OPEN:
 			$c/FileDialog.current_dir = settings.last_dir
 			$c/FileDialog.current_file = settings.current_file
@@ -159,7 +200,7 @@ func _on_FileDialog_file_selected(path):
 		return
 	settings.current_file = path.get_file()
 	settings.last_dir = path.get_base_dir()
-	if action == SAVE:
+	if menu_action == SAVE:
 		passwords.save_data(settings)
 	else:
 		load_passwords()
