@@ -23,7 +23,7 @@ onready var content_node = find_node("Content")
 onready var alert = find_node("Alert")
 
 var menu_action = NO_ACTION
-var state = ""
+var state = NO_ACTION
 var password = ""
 
 func _ready():
@@ -107,9 +107,9 @@ func configure_menu():
 	file_menu.add_item("Quit", QUIT, KEY_MASK_CTRL | KEY_Q)
 	file_menu.connect("id_pressed", self, "_on_FileMenu_id_pressed")
 	
-	tools_menu.add_item("Password Generator")
-	tools_menu.add_item("Change Password")
-	tools_menu.add_item("Settings")
+	tools_menu.add_item("Password Generator", PWD_GEN)
+	tools_menu.add_item("Change Password", CHG_PW)
+	tools_menu.add_item("Settings", SETTINGS)
 	tools_menu.connect("id_pressed", self, "_on_ToolsMenu_id_pressed")
 	
 	help_menu.add_item("About", ABOUT)
@@ -133,6 +133,9 @@ func _on_FileMenu_id_pressed(id):
 			menu_action = SAVE
 			settings.current_file = ""
 			do_action()
+		SAVE_INC:
+			# Append an increment number to the file name and save
+			pass
 		QUIT:
 			get_tree().quit()
 
@@ -142,7 +145,8 @@ func _on_ToolsMenu_id_pressed(id):
 		PWD_GEN:
 			pass
 		CHG_PW:
-			pass
+			state = SET_PASSWORD
+			show_content(form_map[state], "")
 		SETTINGS:
 			pass
 
