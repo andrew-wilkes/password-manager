@@ -3,6 +3,7 @@ extends Control
 enum { NO_ACTION, NEW, OPEN, SAVE, SAVE_AS, SAVE_INC, QUIT, ABOUT, LICENCES, PWD_GEN, CHG_PW, SETTINGS }
 enum { UNLOCKED, LOCKED }
 enum { SET_PASSWORD, ENTER_PASSWORD, ACCESS_DATA }
+enum { ENTER_PRESSED, PASSWORD_TEXT_CHANGED, BROWSE_PRESSED }
 
 var settings: Settings
 var passwords: Passwords
@@ -29,21 +30,21 @@ func state_handler(action, data):
 	match state:
 		SET_PASSWORD:
 			match action:
-				"enter_pressed":
+				ENTER_PRESSED:
 					password = data.sha256_text()
 					state = ACCESS_DATA
 					show_content("DataForm")
-				"password_text_changed":
+				PASSWORD_TEXT_CHANGED:
 					# Evaluate the password strength
 					pass
 		ENTER_PASSWORD:
 			match action:
-				"enter_pressed":
+				ENTER_PRESSED:
 					# Try to open the database
 					# If error, display alert
 					state = ACCESS_DATA
 					show_content("DataForm")
-				"browse_pressed":
+				BROWSE_PRESSED:
 					menu_action = OPEN
 					do_action()
 		ACCESS_DATA:
