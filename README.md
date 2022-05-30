@@ -1,10 +1,12 @@
 # Password Manager
 
+![Icon](src/assets/app-icons/icon256.png)
+
 This will be an App for storing passwords securely in a single database file.
 
 A user password (entered by the user) will be associated with the database file to unlock it along with a salt string stored in the software settings.
 
-The AES encryption algorithm will be used in two stages to encrypt the saved data. See the Docs for more info.
+The AES encryption algorithm will be used in two stages to encrypt the saved data. See the [Docs](#docs) for more info.
 
 A SHA256 hash of the combined password and salt is used to form the key.
 
@@ -59,8 +61,6 @@ The directory for the tests should be set to `res://test`
 * Create a UI
 * Test theory that KeePass DB includes password salt with database file
 * PEN test this solution
-* Create App Icon
 * Create password suggestion tool
 * Complete the logic code for this App
 * Write article comparing this to alternative solutions
-
