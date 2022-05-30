@@ -71,8 +71,8 @@ margin_right = 786.0
 margin_bottom = 427.0
 access = 2
 filters = PoolStringArray( "*.res ; Password Resource Files" )
-current_dir = "/mnt/files/dev/godot/git/andrew-wilkes/godot-password-manager/src"
-current_path = "/mnt/files/dev/godot/git/andrew-wilkes/godot-password-manager/src/"
+current_dir = "/mnt/windows/WData/dev/godot/git/andrew-wilkes/godot-password-manager/src"
+current_path = "/mnt/windows/WData/dev/godot/git/andrew-wilkes/godot-password-manager/src/"
 
 [node name="Licences" parent="c" instance=ExtResource( 3 )]
 margin_right = -163.0

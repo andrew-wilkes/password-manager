@@ -82,7 +82,10 @@ _global_script_class_icons={
 
 config/name="Password Manager"
 run/main_scene="res://Main.tscn"
+boot_splash/image="res://assets/app-icons/splash.png"
+boot_splash/fullsize=false
 config/icon="res://icon.png"
+config/windows_native_icon="res://assets/app-icons/icon.ico"
 
 [autoload]
 
