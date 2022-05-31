@@ -2,7 +2,8 @@ extends Resource
 
 class_name Passwords
 
-const IV_SIZE = 16
+const IV_SIZE = 16 # Bytes
+const HASH_SIZE = 32 # Bytes
 
 export(PoolByteArray) var data
 export var iv := PoolByteArray()
@@ -83,3 +84,14 @@ func salted_key(settings, key):
 
 func password_filename(settings):
 	return settings.last_dir + "/" + settings.current_file
+
+
+func verify_data(decoded_data: PoolByteArray):
+	var result = { "verified": false, "data": null }
+	if data.size() > HASH_SIZE:
+		var hash_bytes = decoded_data.subarray(0, HASH_SIZE)
+		result.data = decoded_data.subarray(HASH_SIZE, -1)
+		var db_hash = result.data.sha256_buffer()
+		if db_hash.get_string_from_ascii() == hash_bytes.get_string_from_ascii():
+			result.verified = true
+	return result

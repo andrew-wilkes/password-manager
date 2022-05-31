@@ -36,7 +36,6 @@ func test_encryption():
 	var decoded_data = passwords.post_decode_data(settings)
 	assert_eq(decoded_data.get_string_from_utf8(), "mydata")
 
-
 func test_save_load():
 	var settings = { "last_dir": "./test", "current_file": "test.pwd" }
 	var fname = "./test/test.pwd"

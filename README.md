@@ -55,7 +55,7 @@ The directory for the tests should be set to `res://test`
 
 ## Password Database File Format
 
-We will store a sequence of bytes comprised of IV (16 bytes) + encrypted data bytes
+We will store a sequence of bytes comprised of IV (16 bytes) + encrypted data bytes.
 
 The file will be saved with a `.pwd` extension that means **password data**.
 
@@ -66,11 +66,7 @@ Other uses for this file extension:
 ## ToDos
 
 * Debug how to unzip the KeePass Gzipped database given the master key
-* Extract passwords from KeePass database given the algorithm
+* Extract passwords from example KeePass database given the algorithm
 * Consider minimizing the memory footprint of clear passwords on a device
-* Create a UI
-* Test theory that KeePass DB includes password salt with database file
-* PEN test this solution
 * Create password suggestion tool
-* Complete the logic code for this App
 * Write article comparing this to alternative solutions

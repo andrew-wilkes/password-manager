@@ -32,7 +32,7 @@ func generate_salt():
 
 
 func get_char(x):
-		if x < 10:
-			return str(x)
-		else:
-			return char(x + 87)
+	if x < 10:
+		return str(x)
+	else:
+		return char(x + 87)
