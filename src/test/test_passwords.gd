@@ -38,9 +38,9 @@ func test_encryption():
 
 
 func test_save_load():
-	var settings = { "last_dir": "./test", "current_file": "test.pdb" }
-	var fname = "./test/test.pdb"
-	assert_eq(passwords.pw_file(settings), fname)
+	var settings = { "last_dir": "./test", "current_file": "test.pwd" }
+	var fname = "./test/test.pwd"
+	assert_eq(passwords.password_filename(settings), fname)
 	passwords.set_iv()
 	var iv = passwords.iv
 	passwords.data = passwords.iv
@@ -51,4 +51,4 @@ func test_save_load():
 	assert_true(passwords.load_data(settings))
 	assert_eq(passwords.iv, iv)
 	assert_eq(passwords.data, iv)
-	gut.file_delete(fname)
+	gut.file_delete(fname) # Doesn't delete file

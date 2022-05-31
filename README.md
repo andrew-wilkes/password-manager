@@ -53,6 +53,16 @@ The directory for the tests should be set to `res://test`
 
 [Data Encryption](docs/data-encryption.md)
 
+## Password Database File Format
+
+We will store a sequence of bytes comprised of IV (16 bytes) + encrypted data bytes
+
+The file will be saved with a `.pwd` extension that means **password data**.
+
+Other uses for this file extension:
+
+![pwd file extension](docs/pwd.png)
+
 ## ToDos
 
 * Debug how to unzip the KeePass Gzipped database given the master key

@@ -58,7 +58,7 @@ func save_data(settings):
 	var bytes = iv
 	bytes.append_array(data)
 	var file = File.new()
-	if file.open(pw_file(settings), File.WRITE) == OK:
+	if file.open(password_filename(settings), File.WRITE) == OK:
 		file.store_buffer(bytes)
 		file.close()
 
@@ -66,9 +66,9 @@ func save_data(settings):
 func load_data(settings):
 	var loaded = false
 	var file = File.new()
-	if file.file_exists(pw_file(settings)):
-		if file.open(pw_file(settings), File.READ) == OK:
-			if file.get_len() > 16:
+	if file.file_exists(password_filename(settings)):
+		if file.open(password_filename(settings), File.READ) == OK:
+			if file.get_len() > IV_SIZE:
 				iv = file.get_buffer(IV_SIZE)
 				data = file.get_buffer(file.get_len() - IV_SIZE)
 				loaded = true
@@ -81,5 +81,5 @@ func salted_key(settings, key):
 	return (settings.salt + key).sha256_buffer()
 
 
-func pw_file(settings):
+func password_filename(settings):
 	return settings.last_dir + "/" + settings.current_file
