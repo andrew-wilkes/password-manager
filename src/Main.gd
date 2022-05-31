@@ -25,14 +25,14 @@ onready var alert = find_node("Alert")
 var menu_action = NO_ACTION
 var state = NO_ACTION
 var password = ""
-var locked = true
+var locked: bool
 
 func _ready():
 	settings = Settings.new()
 	settings = settings.load_data()
-	load_passwords()
 	database = Database.new()
 	configure_menu()
+	load_passwords()
 	for child in content_node.get_children():
 		var _e = child.connect("action", self, "state_handler")
 
@@ -62,7 +62,7 @@ func state_handler(action, data):
 			pass
 
 
-func set_title(locked):
+func set_title():
 	var title = ProjectSettings.get_setting("application/config/name")
 	title += " - " + settings.current_file
 	if locked:
@@ -78,15 +78,14 @@ func load_passwords():
 		passwords.set_iv()
 		state = SET_PASSWORD
 		show_content(form_map[state], "")
-		locked = false
+		set_locked(false)
 	else:
 		state = ENTER_PASSWORD
-		locked = true
+		set_locked(true)
 		if passwords.load_data(settings):
 			show_content(form_map[state], settings.current_file)
 		else:
 			alert.show_message("Error opening password data file")
-	set_title(locked)
 
 
 func show_content(target_name, data = null):
@@ -117,6 +116,17 @@ func configure_menu():
 	help_menu.add_separator()
 	help_menu.add_item("Licences", LICENCES)
 	help_menu.connect("id_pressed", self, "_on_HelpMenu_id_pressed")
+
+
+func set_locked(lock):
+	locked = lock
+	# Enable/disable Save menu items
+	for idx in [3, 4, 5]:
+		file_menu.set_item_disabled(idx, lock)
+		file_menu.set_item_shortcut_disabled(idx, lock)
+	tools_menu.set_item_disabled(1, lock)
+	tools_menu.set_item_shortcut_disabled(1, lock)
+	set_title()
 
 
 func _on_FileMenu_id_pressed(id):
