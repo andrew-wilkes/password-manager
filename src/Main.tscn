@@ -84,7 +84,7 @@ margin_top = 64.0
 margin_right = 786.0
 margin_bottom = 427.0
 access = 2
-filters = PoolStringArray( "*.res ; Password Resource Files" )
+filters = PoolStringArray( "*.pdb ; Password Database Files" )
 current_dir = "/mnt/windows/WData/dev/godot/git/andrew-wilkes/godot-password-manager/src"
 current_path = "/mnt/windows/WData/dev/godot/git/andrew-wilkes/godot-password-manager/src/"
 

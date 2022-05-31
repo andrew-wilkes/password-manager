@@ -5,7 +5,7 @@ class_name Settings
 const FILE_NAME = "user://settings.tres"
 
 export(String) var salt
-export var current_file = "pw-1.res"
+export var current_file = "pw1.pdb"
 export var last_dir = ""
 
 func save_data():

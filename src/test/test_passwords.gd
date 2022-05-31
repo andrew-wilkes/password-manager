@@ -35,3 +35,20 @@ func test_encryption():
 	assert_true(passwords.data is PoolByteArray, "Data is a PoolByteArray")
 	var decoded_data = passwords.post_decode_data(settings)
 	assert_eq(decoded_data.get_string_from_utf8(), "mydata")
+
+
+func test_save_load():
+	var settings = { "last_dir": "./test", "current_file": "test.pdb" }
+	var fname = "./test/test.pdb"
+	assert_eq(passwords.pw_file(settings), fname)
+	passwords.set_iv()
+	var iv = passwords.iv
+	passwords.data = passwords.iv
+	passwords.save_data(settings)
+	assert_file_exists(fname)
+	passwords.iv.invert()
+	passwords.data = passwords.iv
+	assert_true(passwords.load_data(settings))
+	assert_eq(passwords.iv, iv)
+	assert_eq(passwords.data, iv)
+	gut.file_delete(fname)

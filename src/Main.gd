@@ -25,6 +25,7 @@ onready var alert = find_node("Alert")
 var menu_action = NO_ACTION
 var state = NO_ACTION
 var password = ""
+var locked = true
 
 func _ready():
 	settings = Settings.new()
@@ -73,19 +74,19 @@ func set_title(locked):
 
 func load_passwords():
 	passwords = Passwords.new()
-	var pwd = passwords.load_data(settings)
-	if pwd == null:
+	if settings.current_file.empty():
 		passwords.set_iv()
 		state = SET_PASSWORD
 		show_content(form_map[state], "")
+		locked = false
 	else:
-		if pwd is Passwords:
-			passwords = pwd
-			set_title(LOCKED)
-			state = ENTER_PASSWORD
+		state = ENTER_PASSWORD
+		locked = true
+		if passwords.load_data(settings):
 			show_content(form_map[state], settings.current_file)
 		else:
 			alert.show_message("Error opening password data file")
+	set_title(locked)
 
 
 func show_content(target_name, data = null):
@@ -137,7 +138,7 @@ func _on_FileMenu_id_pressed(id):
 			# Append an increment number to the file name and save
 			pass
 		QUIT:
-			get_tree().quit()
+			save_and_quit()
 
 
 func _on_ToolsMenu_id_pressed(id):
@@ -167,7 +168,8 @@ func do_action():
 			file_dialog.mode = FileDialog.MODE_OPEN_FILE
 			file_dialog.popup_centered()
 		SAVE:
-			if settings.current_file == "":
+			if locked: return
+			if settings.last_dir == "" or settings.current_file == "":
 				file_dialog.current_dir = settings.last_dir
 				file_dialog.current_file = ""
 				file_dialog.mode = FileDialog.MODE_SAVE_FILE
@@ -179,7 +181,7 @@ func do_action():
 func _unhandled_input(event):
 	if event is InputEventKey:
 		if event.pressed and event.scancode == KEY_ESCAPE:
-			get_tree().quit()
+			save_data()
 
 
 # Handle shutdown of App
@@ -188,9 +190,15 @@ func _notification(what):
 		save_data()
 
 
+func save_and_quit():
+	save_data()
+	get_tree().quit()
+
+
 func save_data():
 	settings.save_data()
-	passwords.save_data(settings)
+	if not locked:
+		passwords.save_data(settings)
 
 
 func _on_File_pressed():
