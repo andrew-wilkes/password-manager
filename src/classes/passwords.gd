@@ -86,6 +86,7 @@ func password_filename(settings):
 	return settings.last_dir + "/" + settings.current_file
 
 
+# This function will be used to verify if the decrypted data is comprehensible or not.
 func verify_data(decoded_data: PoolByteArray):
 	var result = { "verified": false, "data": null }
 	if decoded_data.size() > HASH_SIZE:
