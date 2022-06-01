@@ -1,7 +1,6 @@
 extends VBoxContainer
 
 signal action(id, data)
-signal heading_clicked(heading)
 
 enum { HELLO }
 
@@ -34,4 +33,4 @@ func init(_data):
 
 func heading_clicked(heading):
 	print(heading.db_key)
-	emit_signal("heading_clicked", heading)
+	emit_signal("action", "heading_clicked", heading)

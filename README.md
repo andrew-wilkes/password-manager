@@ -31,7 +31,7 @@ The integrity of the decoded data will be checked by the presence of a prefixed 
 
 [AES Encryption Modes Tutorial](https://www.highgo.ca/2019/08/08/the-difference-in-five-modes-in-the-aes-encryption-algorithm/)
 
-[zxcvbn: realistic password strength estimation](https://dropbox.tech/security/zxcvbn-realistic-password-strength-estimation) - 10 year old article. How far have we progressed?
+[zxcvbn: realistic password strength estimation](https://dropbox.tech/security/zxcvbn-realistic-password-strength-estimation) - 10-year-old article. How far have we progressed?
 
 [zxcvbn Python](https://github.com/dwolfhub/zxcvbn-python) - the reference code used to port zxcvbn to GDScript here.
 
