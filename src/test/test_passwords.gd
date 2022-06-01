@@ -51,3 +51,12 @@ func test_save_load():
 	assert_eq(passwords.iv, iv)
 	assert_eq(passwords.data, iv)
 	gut.file_delete(fname) # Doesn't delete file
+
+func test_verify_data():
+	var txt = "yabbado"
+	# Get a PoolByteArray of the text data
+	var byte_data = txt.to_utf8()
+	var the_data = txt.sha256_buffer()
+	the_data.append_array(byte_data)
+	var result = passwords.verify_data(the_data)
+	assert_true(result.verified)

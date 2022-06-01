@@ -88,10 +88,18 @@ func password_filename(settings):
 
 func verify_data(decoded_data: PoolByteArray):
 	var result = { "verified": false, "data": null }
-	if data.size() > HASH_SIZE:
-		var hash_bytes = decoded_data.subarray(0, HASH_SIZE)
+	if decoded_data.size() > HASH_SIZE:
+		var hash_bytes = decoded_data.subarray(0, HASH_SIZE - 1)
 		result.data = decoded_data.subarray(HASH_SIZE, -1)
-		var db_hash = result.data.sha256_buffer()
-		if db_hash.get_string_from_ascii() == hash_bytes.get_string_from_ascii():
+		var db_hash = hash_bytes(result.data)
+		if [db_hash].hash() == [hash_bytes].hash():
 			result.verified = true
 	return result
+
+
+func hash_bytes(b: PoolByteArray):
+	var ctx = HashingContext.new()
+	ctx.start(HashingContext.HASH_SHA256)
+	ctx.update(b)
+	# Get the computed hash.
+	return ctx.finish()
