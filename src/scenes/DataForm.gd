@@ -28,6 +28,8 @@ func _ready():
 
 func init(_data):
 	visible = true
+	# Using a scroll container stops this control from expanding to fill the parent area
+	rect_min_size = get_parent().rect_size
 
 
 func heading_clicked(heading):

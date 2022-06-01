@@ -233,3 +233,7 @@ func _on_FileDialog_file_selected(path):
 		passwords.save_data(settings)
 	else:
 		load_passwords()
+
+
+func _on_Content_resized():
+	find_node("DataForm").rect_min_size = content_node.rect_size

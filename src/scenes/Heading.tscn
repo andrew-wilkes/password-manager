@@ -9,6 +9,7 @@ margin_left = 76.0
 margin_right = 76.0
 margin_bottom = 16.0
 mouse_filter = 1
+custom_constants/margin_right = 9
 custom_constants/margin_top = 9
 custom_constants/margin_left = 9
 custom_constants/margin_bottom = 9
@@ -17,7 +18,7 @@ script = ExtResource( 3 )
 [node name="HBox" type="HBoxContainer" parent="."]
 margin_left = 9.0
 margin_top = 9.0
-margin_right = 81.0
+margin_right = 65.0
 margin_bottom = 23.0
 
 [node name="Label" type="Label" parent="HBox"]
@@ -28,15 +29,14 @@ text = "Heading"
 
 [node name="Spacer" type="Control" parent="HBox"]
 margin_left = 56.0
-margin_right = 72.0
+margin_right = 56.0
 margin_bottom = 14.0
-rect_min_size = Vector2( 16, 0 )
 size_flags_horizontal = 3
 
 [node name="ArrowUp" type="TextureRect" parent="HBox"]
 visible = false
-margin_left = 56.0
-margin_right = 72.0
+margin_left = 60.0
+margin_right = 76.0
 margin_bottom = 16.0
 texture = ExtResource( 1 )
 
