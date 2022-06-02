@@ -52,6 +52,12 @@ func test_save_load():
 	assert_eq(passwords.data, iv)
 	gut.file_delete(fname) # Doesn't delete file
 
+func test_hash_bytes():
+	var db = PoolByteArray([1,2,5,6,7,])
+	var passwords = Passwords.new()
+	var x = passwords.hash_bytes(db)
+	print(x)
+
 func test_verify_data():
 	var txt = "yabbado"
 	# Get a PoolByteArray of the text data

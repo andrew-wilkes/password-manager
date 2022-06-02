@@ -5,9 +5,8 @@
 [ext_resource path="res://scenes/Heading.gd" type="Script" id=3]
 
 [node name="Heading" type="MarginContainer"]
-margin_left = 76.0
-margin_right = 76.0
-margin_bottom = 16.0
+margin_right = 74.0
+margin_bottom = 32.0
 mouse_filter = 1
 custom_constants/margin_right = 9
 custom_constants/margin_top = 9

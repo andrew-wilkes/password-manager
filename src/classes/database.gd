@@ -11,9 +11,9 @@ class ItemSorter:
 	
 	func sort(a, b):
 		if reverse:
-			return b[key] < a[key]
+			return b["data"][key] < a["data"][key]
 		else:
-			return a[key] < b[key]
+			return a["data"][key] < b["data"][key]
 
 
 func order_items(key, reverse):

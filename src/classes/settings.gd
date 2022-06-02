@@ -7,6 +7,7 @@ const FILE_NAME = "user://settings.tres"
 export(String) var salt
 export var current_file = "pw1.pwd"
 export var last_dir = ""
+export var date_format = "YYYY-MM-DD"
 
 func save_data():
 	var _result = ResourceSaver.save(FILE_NAME, self)

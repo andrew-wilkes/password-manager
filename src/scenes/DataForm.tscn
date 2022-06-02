@@ -8,6 +8,9 @@ anchor_bottom = 1.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource( 1 )
+light_color = Color( 1, 1, 1, 1 )
+dark_color = Color( 0.815686, 0.819608, 0.729412, 1 )
+highlight_color = Color( 0.752941, 0.756863, 0.141176, 1 )
 
 [node name="SC" type="ScrollContainer" parent="."]
 margin_right = 1024.0
@@ -21,3 +24,13 @@ margin_bottom = 600.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 columns = 5
+
+[node name="BG" type="CanvasLayer" parent="."]
+layer = -1
+
+[node name="VBox" type="VBoxContainer" parent="BG"]
+margin_left = 3.0
+margin_top = 74.0
+margin_right = 776.0
+margin_bottom = 377.0
+custom_constants/separation = 0
