@@ -1,4 +1,4 @@
-extends VBoxContainer
+extends CenterContainer
 
 signal action(id, data)
 
@@ -14,22 +14,22 @@ func init(txt):
 
 
 func set_text(txt):
-	$Label.text = txt
+	$VBox/Label.text = txt
 
 func _on_Enter_pressed():
-	emit_signal("action", ENTER_PRESSED, $HBox/Password.text)
+	emit_signal("action", ENTER_PRESSED, $VBox/HBox/Password.text)
 
 
 func _on_Hidden_pressed():
-	$HBox/Hidden.hide()
-	$HBox/Visible.show()
-	$HBox/Password.secret = false
+	$VBox/HBox/Hidden.hide()
+	$VBox/HBox/Visible.show()
+	$VBox/HBox/Password.secret = false
 
 
 func _on_Visible_pressed():
-	$HBox/Hidden.show()
-	$HBox/Visible.hide()
-	$HBox/Password.secret = true
+	$VBox/HBox/Hidden.show()
+	$VBox/HBox/Visible.hide()
+	$VBox/HBox/Password.secret = true
 
 
 func _on_Password_text_changed(new_text):

@@ -28,13 +28,14 @@ var password = ""
 var locked: bool
 
 func _ready():
+	var _e = get_tree().get_root().connect("size_changed", self, "viewport_size_changed")
 	settings = Settings.new()
 	settings = settings.load_data()
 	database = Database.new()
 	configure_menu()
 	load_passwords()
 	for child in content_node.get_children():
-		var _e = child.connect("action", self, "state_handler")
+		_e = child.connect("action", self, "state_handler")
 
 
 func state_handler(action, data):
@@ -237,3 +238,8 @@ func _on_FileDialog_file_selected(path):
 
 func _on_Content_resized():
 	find_node("DataForm").rect_min_size = content_node.rect_size
+
+
+func viewport_size_changed():
+	# Prevent the scroll area from being clamped to a minimum size
+	$Content/DataForm.rect_min_size = Vector2.ZERO

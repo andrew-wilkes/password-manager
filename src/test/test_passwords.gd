@@ -53,10 +53,9 @@ func test_save_load():
 	gut.file_delete(fname) # Doesn't delete file
 
 func test_hash_bytes():
-	var db = PoolByteArray([1,2,5,6,7,])
-	var passwords = Passwords.new()
+	var db = PoolByteArray([1,2,5,6,7])
 	var x = passwords.hash_bytes(db)
-	print(x)
+	assert_eq(x[0], 53)
 
 func test_verify_data():
 	var txt = "yabbado"

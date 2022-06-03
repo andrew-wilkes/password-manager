@@ -19,18 +19,16 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="Grid" type="GridContainer" parent="SC"]
-margin_right = 1024.0
-margin_bottom = 600.0
-size_flags_horizontal = 3
-size_flags_vertical = 3
+custom_constants/vseparation = 0
+custom_constants/hseparation = 0
 columns = 5
 
 [node name="BG" type="CanvasLayer" parent="."]
 layer = -1
 
 [node name="VBox" type="VBoxContainer" parent="BG"]
-margin_left = 3.0
-margin_top = 74.0
-margin_right = 776.0
-margin_bottom = 377.0
+visible = false
 custom_constants/separation = 0
+
+[connection signal="visibility_changed" from="." to="." method="_on_DataForm_visibility_changed"]
+[connection signal="item_rect_changed" from="SC/Grid" to="." method="_on_Grid_item_rect_changed"]
