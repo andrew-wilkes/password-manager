@@ -14,6 +14,10 @@ func _ready():
 	# Without this, the column width changes as the Arrows are shown and hidden
 	# when the heading is wider than the data.
 	# Could not find another working solution.
+	set_rect_size()
+
+
+func set_rect_size():
 	rect_min_size.x = rect_size.x
 
 

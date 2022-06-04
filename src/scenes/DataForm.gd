@@ -29,6 +29,8 @@ var current_key = ""
 var current_reverse_state = false
 
 func populate_grid(db: Database, key, reverse, group):
+	current_key = key
+	current_reverse_state = reverse
 	if not key.empty():
 		db.order_items(key, reverse)
 	for idx in range(grid.columns, grid.get_child_count()):
