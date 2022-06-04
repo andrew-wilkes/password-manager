@@ -98,6 +98,11 @@ ZXCVBN="*res://zxcvbn/zxcvbn.gd"
 
 enabled=PoolStringArray( "res://addons/gut/plugin.cfg" )
 
+[gui]
+
+theme/custom="res://style/Theme.tres"
+theme/custom_font="res://style/type/TypeRegularNormal.tres"
+
 [physics]
 
 common/enable_pause_aware_picking=true
