@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://scenes/DataForm.gd" type="Script" id=1]
+[ext_resource path="res://scenes/GroupButton.tscn" type="PackedScene" id=2]
 
 [node name="DataForm" type="VBoxContainer"]
 anchor_right = 1.0
@@ -12,7 +13,27 @@ light_color = Color( 1, 1, 1, 1 )
 dark_color = Color( 0.815686, 0.819608, 0.729412, 1 )
 highlight_color = Color( 0.752941, 0.756863, 0.141176, 1 )
 
+[node name="Groups" type="HBoxContainer" parent="."]
+margin_right = 1024.0
+margin_bottom = 20.0
+custom_constants/separation = 20
+
+[node name="Margin" type="Control" parent="Groups"]
+margin_bottom = 20.0
+
+[node name="Label" type="Label" parent="Groups"]
+margin_left = 20.0
+margin_top = 3.0
+margin_right = 63.0
+margin_bottom = 17.0
+text = "Group:"
+
+[node name="GroupButton" parent="Groups" instance=ExtResource( 2 )]
+margin_left = 83.0
+margin_right = 112.0
+
 [node name="SC" type="ScrollContainer" parent="."]
+margin_top = 24.0
 margin_right = 1024.0
 margin_bottom = 600.0
 size_flags_horizontal = 3
@@ -31,4 +52,5 @@ visible = false
 custom_constants/separation = 0
 
 [connection signal="visibility_changed" from="." to="." method="_on_DataForm_visibility_changed"]
+[connection signal="group_button_pressed" from="Groups/GroupButton" to="." method="set_group"]
 [connection signal="item_rect_changed" from="SC/Grid" to="." method="_on_Grid_item_rect_changed"]

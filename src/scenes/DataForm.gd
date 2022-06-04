@@ -10,6 +10,7 @@ export(Color) var highlight_color
 
 var heading_scene = preload("res://scenes/Heading.tscn")
 var cell_scene = preload("res://scenes/Cell.tscn")
+var group_button = preload("res://scenes/GroupButton.tscn")
 var grid: GridContainer
 var headings = {
 	"title": "Title",
@@ -23,6 +24,9 @@ var database: Database
 var heading_height = 0
 var row_height = 0
 var update_bars = false
+var current_group = 0
+var current_key = ""
+var current_reverse_state = false
 
 func populate_grid(db: Database, key, reverse, group):
 	if not key.empty():
@@ -76,6 +80,7 @@ func get_cell_content(data, key):
 func test():
 	settings = Settings.new()
 	database = Database.new()
+	add_groups()
 	var r1 = Record.new()
 	r1.data.title = "Title of entry"
 	r1.data.username = "User1"
@@ -111,13 +116,27 @@ func init(_data):
 	visible = true
 
 
+func add_groups():
+	for group in settings.groups:
+		var gb = group_button.instance()
+		gb.id = group
+		gb.text = settings.groups[group]
+		var _e = gb.connect("group_button_pressed", self, "set_group")
+		$Groups.add_child(gb)
+
+
+func set_group(id):
+	current_group = id
+	populate_grid(database, current_key, current_reverse_state, current_group)
+
+
 func heading_clicked(heading: Heading):
 	var idx = 0
 	for key in headings:
 		if key != heading.db_key:
 			grid.get_child(idx).set_sort_mode(heading.NONE)
 		idx += 1
-	populate_grid(database, heading.db_key, bool(heading.sort_mode), 0)
+	populate_grid(database, heading.db_key, bool(heading.sort_mode), current_group)
 
 
 func _on_Grid_item_rect_changed():
