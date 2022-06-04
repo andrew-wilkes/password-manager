@@ -1,10 +1,21 @@
 extends MarginContainer
 
+class_name Heading
+
 signal clicked(this)
 
-enum { NONE, UP, DOWN }
+enum { UP, DOWN, NONE }
 
 var db_key = ""
+var sort_mode = NONE
+
+func _ready():
+	# Get a stable column size.
+	# Without this, the column width changes as the Arrows are shown and hidden
+	# when the heading is wider than the data.
+	# Could not find another working solution.
+	rect_min_size.x = rect_size.x
+
 
 func set_sort_mode(mode):
 	match mode:
@@ -21,4 +32,6 @@ func set_sort_mode(mode):
 
 func _on_gui_input(event):
 	if event is InputEventMouseButton and event.pressed:
+		sort_mode = (sort_mode + 1) % 2
+		set_sort_mode(sort_mode)
 		emit_signal("clicked", self)

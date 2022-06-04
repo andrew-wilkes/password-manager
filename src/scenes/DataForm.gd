@@ -19,11 +19,14 @@ var headings = {
 	"modified": "Modified",
 }
 var settings: Settings
-var bar_height = 0
+var database: Database
+var heading_height = 0
+var row_height = 0
 var update_bars = false
 
 func populate_grid(db: Database, key, reverse, group):
-	db.order_items(key, reverse)
+	if not key.empty():
+		db.order_items(key, reverse)
 	for idx in range(grid.columns, grid.get_child_count()):
 		grid.get_child(idx).queue_free()
 	for item in db.items:
@@ -31,7 +34,7 @@ func populate_grid(db: Database, key, reverse, group):
 			continue
 		for key in headings:
 			var cell = cell_scene.instance()
-			cell.set_text(get_cell_content(item, key))
+			cell.set_text(get_cell_content(item, key), key == "url")
 			grid.add_child(cell)
 
 
@@ -40,10 +43,10 @@ func add_bars():
 	if num_bars_existing == 0:
 		var bar = ColorRect.new()
 		bar.color = light_color
-		bar.rect_min_size = Vector2(grid.rect_size.x, bar_height)
+		bar.rect_min_size = Vector2(grid.rect_size.x, row_height)
 		$BG/VBox.add_child(bar)
 		num_bars_existing = 1
-	var num_bars_needed = int(round(grid.rect_size.y / bar_height)) - 1
+	var num_bars_needed = int(round((grid.rect_size.y - heading_height) / row_height))
 	var to_add = num_bars_needed - num_bars_existing
 	if to_add > 0:
 		var bar = $BG/VBox.get_child(0)
@@ -72,19 +75,23 @@ func get_cell_content(data, key):
 
 func test():
 	settings = Settings.new()
-	var db = Database.new()
+	database = Database.new()
 	var r1 = Record.new()
 	r1.data.title = "Title of entry"
 	r1.data.username = "User1"
 	r1.data.url = "https://bing.com"
 	r1.data.notes = "Just some notes\nNext line"
 	r1.data.modified = OS.get_unix_time()
-	db.items.append(r1.data)
+	database.items.append(r1.data)
 	for n in 8:
 		var r = Record.new()
 		r.data = r1.data.duplicate()
-		db.items.append(r.data)
-	populate_grid(db, "title", false, 0)
+		r.data.title = char(97 + randi() % 8).repeat(6)
+		r.data.username = char(65 + n).repeat(randi() % 8 + 2)
+		r.data.modified = OS.get_unix_time_from_datetime(OS.get_datetime_from_unix_time(randi()))
+		r.data.notes = str(randi()).md5_text()
+		database.items.append(r.data)
+	populate_grid(database, "", false, 0)
 
 
 func _ready():
@@ -104,15 +111,20 @@ func init(_data):
 	visible = true
 
 
-func heading_clicked(heading):
-	print(heading.db_key)
-	emit_signal("action", "heading_clicked", heading)
+func heading_clicked(heading: Heading):
+	var idx = 0
+	for key in headings:
+		if key != heading.db_key:
+			grid.get_child(idx).set_sort_mode(heading.NONE)
+		idx += 1
+	populate_grid(database, heading.db_key, bool(heading.sort_mode), 0)
 
 
 func _on_Grid_item_rect_changed():
-	bar_height = grid.get_child(0).rect_size.y
+	heading_height = grid.get_child(0).rect_size.y
+	row_height = grid.get_children()[-1].rect_size.y
 	# Position below the grid header row
-	$BG/VBox.rect_position = grid.rect_global_position + Vector2(0, bar_height)
+	$BG/VBox.rect_position = grid.rect_global_position + Vector2(0, heading_height)
 	update_bars = true
 
 

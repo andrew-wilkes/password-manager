@@ -5,9 +5,11 @@
 [ext_resource path="res://scenes/Heading.gd" type="Script" id=3]
 
 [node name="Heading" type="MarginContainer"]
-margin_right = 74.0
-margin_bottom = 32.0
+margin_right = 126.0
+margin_bottom = 34.0
+rect_min_size = Vector2( 0, 34 )
 mouse_filter = 1
+size_flags_horizontal = 3
 custom_constants/margin_right = 9
 custom_constants/margin_top = 9
 custom_constants/margin_left = 9
@@ -17,25 +19,26 @@ script = ExtResource( 3 )
 [node name="HBox" type="HBoxContainer" parent="."]
 margin_left = 9.0
 margin_top = 9.0
-margin_right = 65.0
-margin_bottom = 23.0
+margin_right = 117.0
+margin_bottom = 25.0
+size_flags_horizontal = 3
 
 [node name="Label" type="Label" parent="HBox"]
+margin_top = 1.0
 margin_right = 52.0
-margin_bottom = 14.0
+margin_bottom = 15.0
 mouse_filter = 0
 text = "Heading"
 
-[node name="Spacer" type="Control" parent="HBox"]
+[node name="ExpandingSpacer" type="Control" parent="HBox"]
 margin_left = 56.0
-margin_right = 56.0
-margin_bottom = 14.0
+margin_right = 88.0
+margin_bottom = 16.0
 size_flags_horizontal = 3
 
 [node name="ArrowUp" type="TextureRect" parent="HBox"]
-visible = false
-margin_left = 60.0
-margin_right = 76.0
+margin_left = 92.0
+margin_right = 108.0
 margin_bottom = 16.0
 texture = ExtResource( 1 )
 
@@ -47,6 +50,6 @@ margin_bottom = 16.0
 texture = ExtResource( 2 )
 
 [connection signal="gui_input" from="HBox/Label" to="." method="_on_gui_input"]
-[connection signal="gui_input" from="HBox/Spacer" to="." method="_on_gui_input"]
+[connection signal="gui_input" from="HBox/ExpandingSpacer" to="." method="_on_gui_input"]
 [connection signal="gui_input" from="HBox/ArrowUp" to="." method="_on_gui_input"]
 [connection signal="gui_input" from="HBox/ArrowDown" to="." method="_on_gui_input"]
