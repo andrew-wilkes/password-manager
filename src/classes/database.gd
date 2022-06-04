@@ -2,7 +2,7 @@ extends Reference
 
 class_name Database
 
-# Array of dictionaries
+# Array of dictionaries (records)
 var items = []
 
 class ItemSorter:

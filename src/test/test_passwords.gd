@@ -35,3 +35,33 @@ func test_encryption():
 	assert_true(passwords.data is PoolByteArray, "Data is a PoolByteArray")
 	var decoded_data = passwords.post_decode_data(settings)
 	assert_eq(decoded_data.get_string_from_utf8(), "mydata")
+
+func test_save_load():
+	var settings = { "last_dir": "./test", "current_file": "test.pwd" }
+	var fname = "./test/test.pwd"
+	assert_eq(passwords.password_filename(settings), fname)
+	passwords.set_iv()
+	var iv = passwords.iv
+	passwords.data = passwords.iv
+	passwords.save_data(settings)
+	assert_file_exists(fname)
+	passwords.iv.invert()
+	passwords.data = passwords.iv
+	assert_true(passwords.load_data(settings))
+	assert_eq(passwords.iv, iv)
+	assert_eq(passwords.data, iv)
+	gut.file_delete(fname) # Doesn't delete file
+
+func test_hash_bytes():
+	var db = PoolByteArray([1,2,5,6,7])
+	var x = passwords.hash_bytes(db)
+	assert_eq(x[0], 53)
+
+func test_verify_data():
+	var txt = "yabbado"
+	# Get a PoolByteArray of the text data
+	var byte_data = txt.to_utf8()
+	var the_data = txt.sha256_buffer()
+	the_data.append_array(byte_data)
+	var result = passwords.verify_data(the_data)
+	assert_true(result.verified)

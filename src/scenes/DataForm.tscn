@@ -1,0 +1,34 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://scenes/DataForm.gd" type="Script" id=1]
+
+[node name="DataForm" type="VBoxContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource( 1 )
+light_color = Color( 1, 1, 1, 1 )
+dark_color = Color( 0.815686, 0.819608, 0.729412, 1 )
+highlight_color = Color( 0.752941, 0.756863, 0.141176, 1 )
+
+[node name="SC" type="ScrollContainer" parent="."]
+margin_right = 1024.0
+margin_bottom = 600.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Grid" type="GridContainer" parent="SC"]
+custom_constants/vseparation = 0
+custom_constants/hseparation = 0
+columns = 5
+
+[node name="BG" type="CanvasLayer" parent="."]
+layer = -1
+
+[node name="VBox" type="VBoxContainer" parent="BG"]
+visible = false
+custom_constants/separation = 0
+
+[connection signal="visibility_changed" from="." to="." method="_on_DataForm_visibility_changed"]
+[connection signal="item_rect_changed" from="SC/Grid" to="." method="_on_Grid_item_rect_changed"]

@@ -1,0 +1,25 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://scenes/Cell.gd" type="Script" id=1]
+
+[node name="Cell" type="MarginContainer"]
+margin_right = 45.0
+margin_bottom = 32.0
+mouse_filter = 1
+custom_constants/margin_right = 9
+custom_constants/margin_top = 9
+custom_constants/margin_left = 9
+custom_constants/margin_bottom = 9
+script = ExtResource( 1 )
+
+[node name="Label" type="Label" parent="."]
+margin_left = 9.0
+margin_top = 9.0
+margin_right = 36.0
+margin_bottom = 23.0
+mouse_filter = 0
+size_flags_horizontal = 3
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "Text"
+
+[connection signal="gui_input" from="Label" to="." method="_on_Label_gui_input"]

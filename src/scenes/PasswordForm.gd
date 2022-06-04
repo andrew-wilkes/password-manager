@@ -1,31 +1,40 @@
-extends VBoxContainer
+extends CenterContainer
 
-signal enter_pressed
-signal password_text_changed(txt)
-signal browse_pressed
+signal action(id, data)
 
-func set_filename(fname):
-	$Filename.text = fname
+enum { ENTER_PRESSED, PASSWORD_TEXT_CHANGED, BROWSE_PRESSED }
+
+func _ready():
+	set_text("")
+
+
+func init(txt):
+	set_text(txt)
+	visible = true
+
+
+func set_text(txt):
+	$VBox/Label.text = txt
 
 func _on_Enter_pressed():
-	emit_signal("enter_pressed")
+	emit_signal("action", ENTER_PRESSED, $VBox/HBox/Password.text)
 
 
 func _on_Hidden_pressed():
-	$HBox/Hidden.hide()
-	$HBox/Visible.show()
-	$HBox/Password.secret = false
+	$VBox/HBox/Hidden.hide()
+	$VBox/HBox/Visible.show()
+	$VBox/HBox/Password.secret = false
 
 
 func _on_Visible_pressed():
-	$HBox/Hidden.show()
-	$HBox/Visible.hide()
-	$HBox/Password.secret = true
+	$VBox/HBox/Hidden.show()
+	$VBox/HBox/Visible.hide()
+	$VBox/HBox/Password.secret = true
 
 
 func _on_Password_text_changed(new_text):
-	emit_signal("password_text_changed", new_text)
+	emit_signal("action", PASSWORD_TEXT_CHANGED, new_text)
 
 
 func _on_Browse_pressed():
-	emit_signal("browse_pressed")
+	emit_signal("action", BROWSE_PRESSED, null)

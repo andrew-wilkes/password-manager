@@ -2,7 +2,8 @@ extends Resource
 
 class_name Passwords
 
-const IV_SIZE = 16
+const IV_SIZE = 16 # Bytes
+const HASH_SIZE = 32 # Bytes
 
 export(PoolByteArray) var data
 export var iv := PoolByteArray()
@@ -55,13 +56,25 @@ func pad_data(d: PoolByteArray):
 
 
 func save_data(settings):
-	var _result = ResourceSaver.save(pw_file(settings), self)
+	var bytes = iv
+	bytes.append_array(data)
+	var file = File.new()
+	if file.open(password_filename(settings), File.WRITE) == OK:
+		file.store_buffer(bytes)
+		file.close()
 
 
 func load_data(settings):
-	if not settings.current_file.empty():
-		if ResourceLoader.exists(pw_file(settings)):
-			return ResourceLoader.load(pw_file(settings))
+	var loaded = false
+	var file = File.new()
+	if file.file_exists(password_filename(settings)):
+		if file.open(password_filename(settings), File.READ) == OK:
+			if file.get_len() > IV_SIZE:
+				iv = file.get_buffer(IV_SIZE)
+				data = file.get_buffer(file.get_len() - IV_SIZE)
+				loaded = true
+			file.close()
+	return loaded
 
 
 func salted_key(settings, key):
@@ -69,5 +82,25 @@ func salted_key(settings, key):
 	return (settings.salt + key).sha256_buffer()
 
 
-func pw_file(settings):
+func password_filename(settings):
 	return settings.last_dir + "/" + settings.current_file
+
+
+# This function will be used to verify if the decrypted data is comprehensible or not.
+func verify_data(decoded_data: PoolByteArray):
+	var result = { "verified": false, "data": null }
+	if decoded_data.size() > HASH_SIZE:
+		var hash_bytes = decoded_data.subarray(0, HASH_SIZE - 1)
+		result.data = decoded_data.subarray(HASH_SIZE, -1)
+		var db_hash = hash_bytes(result.data)
+		if [db_hash].hash() == [hash_bytes].hash():
+			result.verified = true
+	return result
+
+
+func hash_bytes(b: PoolByteArray):
+	var ctx = HashingContext.new()
+	ctx.start(HashingContext.HASH_SHA256)
+	ctx.update(b)
+	# Get the computed hash.
+	return ctx.finish()

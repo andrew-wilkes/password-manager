@@ -5,8 +5,9 @@ class_name Settings
 const FILE_NAME = "user://settings.tres"
 
 export(String) var salt
-export var current_file = "pw-1.res"
+export var current_file = "pw1.pwd"
 export var last_dir = ""
+export var date_format = "YYYY-MM-DD"
 
 func save_data():
 	var _result = ResourceSaver.save(FILE_NAME, self)
@@ -32,7 +33,7 @@ func generate_salt():
 
 
 func get_char(x):
-		if x < 10:
-			return str(x)
-		else:
-			return char(x + 87)
+	if x < 10:
+		return str(x)
+	else:
+		return char(x + 87)

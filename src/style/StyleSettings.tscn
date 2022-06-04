@@ -102,10 +102,10 @@ custom_styles/panel = SubResource( 3 )
 script = SubResource( 1 )
 
 [node name="Container" type="VBoxContainer" parent="."]
-margin_left = 384.0
-margin_top = 277.0
-margin_right = 640.0
-margin_bottom = 323.0
+margin_left = 512.0
+margin_top = 300.0
+margin_right = 512.0
+margin_bottom = 300.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
 
