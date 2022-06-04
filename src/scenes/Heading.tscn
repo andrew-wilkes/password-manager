@@ -30,15 +30,9 @@ margin_bottom = 15.0
 mouse_filter = 0
 text = "Heading"
 
-[node name="ExpandingSpacer" type="Control" parent="HBox"]
-margin_left = 56.0
-margin_right = 88.0
-margin_bottom = 16.0
-size_flags_horizontal = 3
-
 [node name="ArrowUp" type="TextureRect" parent="HBox"]
-margin_left = 92.0
-margin_right = 108.0
+margin_left = 56.0
+margin_right = 72.0
 margin_bottom = 16.0
 texture = ExtResource( 1 )
 
@@ -50,6 +44,5 @@ margin_bottom = 16.0
 texture = ExtResource( 2 )
 
 [connection signal="gui_input" from="HBox/Label" to="." method="_on_gui_input"]
-[connection signal="gui_input" from="HBox/ExpandingSpacer" to="." method="_on_gui_input"]
 [connection signal="gui_input" from="HBox/ArrowUp" to="." method="_on_gui_input"]
 [connection signal="gui_input" from="HBox/ArrowDown" to="." method="_on_gui_input"]

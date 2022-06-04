@@ -6,6 +6,7 @@
 [node name="DataForm" type="VBoxContainer"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+margin_right = -2.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource( 1 )
@@ -14,7 +15,7 @@ dark_color = Color( 0.815686, 0.819608, 0.729412, 1 )
 highlight_color = Color( 0.752941, 0.756863, 0.141176, 1 )
 
 [node name="Groups" type="HBoxContainer" parent="."]
-margin_right = 1024.0
+margin_right = 1022.0
 margin_bottom = 20.0
 custom_constants/separation = 20
 
@@ -34,7 +35,7 @@ margin_right = 112.0
 
 [node name="SC" type="ScrollContainer" parent="."]
 margin_top = 24.0
-margin_right = 1024.0
+margin_right = 1022.0
 margin_bottom = 600.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
