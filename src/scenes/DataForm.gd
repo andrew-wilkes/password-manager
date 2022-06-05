@@ -152,7 +152,7 @@ func set_group(id):
 
 
 func heading_clicked(heading: Heading):
-	var idx = 0
+	var idx = 1
 	for key in headings:
 		if key != heading.db_key:
 			grid.get_child(idx).set_sort_mode(heading.NONE)
@@ -161,7 +161,9 @@ func heading_clicked(heading: Heading):
 
 
 func _on_Grid_item_rect_changed():
-	heading_height = grid.get_child(0).rect_size.y
+	# Get one of the heading title heights
+	heading_height = grid.get_child(4).rect_size.y
+	# Get the height of the last data cell
 	row_height = grid.get_children()[-1].rect_size.y
 	# Position below the grid header row
 	$BG/VBox.rect_position = grid.rect_global_position + Vector2(0, heading_height)
