@@ -110,9 +110,8 @@ func configure_menu():
 	
 	tools_menu.add_item("Password Generator", PWD_GEN)
 	tools_menu.add_item("Change Password", CHG_PW)
-	tools_menu.add_item("Settings", SETTINGS)
 	tools_menu.connect("id_pressed", self, "_on_ToolsMenu_id_pressed")
-	
+
 	help_menu.add_item("About", ABOUT)
 	help_menu.add_separator()
 	help_menu.add_item("Licences", LICENCES)
@@ -218,6 +217,10 @@ func _on_File_pressed():
 
 func _on_Tools_pressed():
 	tools_menu.show()
+
+
+func _on_Settings_pressed():
+	pass
 
 
 func _on_Help_pressed():
