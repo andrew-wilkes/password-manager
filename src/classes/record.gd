@@ -12,7 +12,7 @@ var data = {
 	"url": "",
 	"group": 0,
 	"created": 0,
-	"modified":0,
+	"modified": 0,
 	"remind": 0,
 	"expire": 0,
 	"accessed": 0,

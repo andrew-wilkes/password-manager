@@ -28,6 +28,7 @@ var update_bars = false
 var current_group = 0
 var current_key = ""
 var current_reverse_state = false
+var refresh_grid = false
 
 func populate_grid(db: Database, key, reverse, group):
 	current_key = key
@@ -172,3 +173,18 @@ func _on_DataForm_visibility_changed():
 func _on_ItemDetails_delete_item(item):
 	database.items.erase(item)
 	populate_grid(database, "", false, 0)
+
+
+func _on_Add_pressed():
+	var record = Record.new()
+	var item = record.data
+	item.created = OS.get_unix_time()
+	database.items.push_front(item)
+	show_item_details(item)
+	refresh_grid = true
+
+
+func _on_ItemDetails_popup_hide():
+	if refresh_grid:
+		refresh_grid = false
+		populate_grid(database, "", false, 0)

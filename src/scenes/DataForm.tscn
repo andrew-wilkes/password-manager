@@ -95,5 +95,7 @@ custom_constants/separation = 0
 
 [connection signal="visibility_changed" from="." to="." method="_on_DataForm_visibility_changed"]
 [connection signal="group_button_pressed" from="Groups/GroupButton" to="." method="set_group"]
+[connection signal="pressed" from="SB/Add" to="." method="_on_Add_pressed"]
 [connection signal="item_rect_changed" from="SC/Grid" to="." method="_on_Grid_item_rect_changed"]
 [connection signal="delete_item" from="ItemDetails" to="." method="_on_ItemDetails_delete_item"]
+[connection signal="popup_hide" from="ItemDetails" to="." method="_on_ItemDetails_popup_hide"]
