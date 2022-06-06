@@ -8,29 +8,43 @@ bg_color = Color( 0, 0, 0, 1 )
 [sub_resource type="GDScript" id=1]
 script/source = "extends PanelContainer
 
-onready var container = $Container
-onready var container_config = $Container/Configuration
+onready var container := $Container
+onready var container_config := $Container/Configuration
+
+
+# Box
+onready var button_box_color := $Container/Configuration/Container/BoxAccent/ColorPicker
+# Type
+onready var slider_type_size := $Container/Configuration/Container/TypeSize/HSlider
+onready var label_type_size := $Container/Configuration/Container/TypeSize/Value
+var type_size_dif :int = 2
+# Extras
+onready var button_main := $Container/Configuration/Container/Main
 
 var array_type :Array
 var array_box :Array
+
 var dic_directory :Dictionary = {
 	\"res://style/type/\" : array_type,
-	\"res://style/box/\" : array_box
+	\"res://style/box/\" : array_box,
 }
 
 var count :int = 0
 
+
 # Get Files
 func scan(directory :String, variabel :Array) -> void:
 	count += 1
-	var dir = Directory.new()
-	var err = dir.open(directory)
+	
+	var dir := Directory.new()
+	var err := dir.open(directory)
 	if err == OK:
+		# warning-ignore: RETURN_VALUE_DISCARDED
 		dir.list_dir_begin()
-		var files = dir.get_next()
-		while (files != \"\"):
+		var files := dir.get_next()
+		while files != \"\":
 			if files != \".\" and files != \"..\":
-				variabel.append(directory + files)
+				variabel.append(load(directory + files))
 			files = dir.get_next()
 	dir.list_dir_end()
 	
@@ -45,54 +59,75 @@ func create() -> void:
 		if child != container_config:
 			child.queue_free()
 	
-	# Add Font Example
-	for font in array_type:
-		var ins := Label.new()
-		# Apply Custom Font
-		ins.set(\"custom_fonts/font\", load(font))
-		container.add_child(ins)
-		# extras
-		ins.text = str(font).replace(\"res://style/type/\", \"1234567890 Type Size Example for \")
-		yield(get_tree().create_timer(0.1), \"timeout\")
-	
 	# Add Box Example
 	for box in array_box:
 		var ins := PanelContainer.new()
 		# Apply Custom style
-		ins.set(\"custom_styles/panel\", load(box))
+		ins.set(\"custom_styles/panel\", box)
 		container.add_child(ins)
 		# extras
 		ins.rect_min_size = Vector2(16,16)
-		yield(get_tree().create_timer(0.1), \"timeout\")
+		yield(get_tree().create_timer(0.05), \"timeout\")
+	
+	# Add Type Example
+	for type in array_type:
+		var ins := Label.new()
+		# Apply Custom Font
+		ins.set(\"custom_fonts/font\", type)
+		container.add_child(ins)
+		# extras
+		ins.align = Label.ALIGN_CENTER
+		ins.valign = Label.VALIGN_CENTER
+		ins.text = str(type.resource_name) + \" Type Example 1234567890\"
+		yield(get_tree().create_timer(0.05), \"timeout\")
 	
 	# Move Config Child
 	container.move_child(container_config, container.get_child_count() - 1)
 	container_config.show()
 
 
+# Box Accent
+func box_accent(value :Color) -> void:
+	for box in array_box:
+		match box.resource_name:
+			\"Accent\":
+				box.set(\"bg_color\", value)
+				box.set(\"border_color\", value)
+			\"Window\":
+				box.set(\"border_color\", value)
+
+
+# Type Size
+func type_resize(value :float) -> void:
+	for type in array_type:
+		match type.resource_name:
+			\"Small\":
+				type.set(\"size\", value - type_size_dif)
+			\"Normal\":
+				type.set(\"size\", value)
+			\"Large\":
+				type.set(\"size\", value + type_size_dif)
+	
+	label_type_size.text = str(value)
+
+
+func to_main():
+	get_tree().change_scene(\"res://Main.tscn\")
+
+
 func _ready() -> void:
 	for dic in dic_directory:
 		call_deferred(\"scan\", dic, dic_directory[dic])
-"
-
-[sub_resource type="GDScript" id=2]
-script/source = "extends HBoxContainer
-
-# ToDo : font size setting thingy
-
-const type_size := [-6,-4, -2, 0, 2, 4, 6]
-func _ready() -> void:
-	var grp := ButtonGroup.new()
-	for type in type_size:
-		var ins := Button.new()
-		ins.group = grp
-		ins.toggle_mode = true
-		ins.size_flags_horizontal = 3
-		ins.size_flags_vertical = 3
-		ins.text = str(type)
-		add_child(ins)
 	
+	# warning-ignore: RETURN_VALUE_DISCARDED
+	button_box_color.connect(\"color_changed\", self, \"box_accent\")
+	# warning-ignore: RETURN_VALUE_DISCARDED
+	slider_type_size.connect(\"value_changed\", self, \"type_resize\")
+	# warning-ignore: RETURN_VALUE_DISCARDED
+	button_main.connect(\"button_up\", self, \"to_main\")
 "
+
+[sub_resource type="StyleBoxEmpty" id=4]
 
 [node name="Style" type="PanelContainer"]
 anchor_right = 1.0
@@ -112,22 +147,68 @@ size_flags_vertical = 6
 [node name="Configuration" type="PanelContainer" parent="Container"]
 visible = false
 margin_right = 256.0
-margin_bottom = 25.0
+margin_bottom = 58.0
 rect_min_size = Vector2( 256, 0 )
 size_flags_vertical = 0
 
 [node name="Container" type="VBoxContainer" parent="Container/Configuration"]
-margin_left = 4.0
+margin_left = 6.0
+margin_top = 6.0
+margin_right = 250.0
+margin_bottom = 52.0
+
+[node name="BoxAccent" type="HBoxContainer" parent="Container/Configuration/Container"]
+margin_right = 244.0
+margin_bottom = 25.0
+
+[node name="Label" type="Label" parent="Container/Configuration/Container/BoxAccent"]
 margin_top = 4.0
-margin_right = 252.0
+margin_right = 64.0
 margin_bottom = 21.0
+rect_min_size = Vector2( 64, 0 )
+text = "Accent"
+
+[node name="ColorPicker" type="ColorPickerButton" parent="Container/Configuration/Container/BoxAccent"]
+margin_left = 68.0
+margin_right = 244.0
+margin_bottom = 25.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_styles/normal = SubResource( 4 )
+color = Color( 0, 0.384314, 1, 1 )
 
 [node name="TypeSize" type="HBoxContainer" parent="Container/Configuration/Container"]
-margin_right = 248.0
-margin_bottom = 17.0
-script = SubResource( 2 )
+margin_top = 29.0
+margin_right = 244.0
+margin_bottom = 46.0
 
 [node name="Label" type="Label" parent="Container/Configuration/Container/TypeSize"]
-margin_right = 53.0
+margin_right = 64.0
 margin_bottom = 17.0
+rect_min_size = Vector2( 64, 0 )
 text = "Type Size"
+valign = 1
+
+[node name="HSlider" type="HSlider" parent="Container/Configuration/Container/TypeSize"]
+margin_left = 68.0
+margin_right = 226.0
+margin_bottom = 17.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+min_value = 8.0
+max_value = 24.0
+value = 12.0
+rounded = true
+
+[node name="Value" type="Label" parent="Container/Configuration/Container/TypeSize"]
+margin_left = 230.0
+margin_right = 244.0
+margin_bottom = 17.0
+text = "13"
+align = 1
+valign = 1
+
+[node name="Main" type="Button" parent="Container/Configuration/Container"]
+margin_right = 12.0
+margin_bottom = 25.0
+text = "To Main"
