@@ -39,6 +39,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/gut/test.gd"
 }, {
+"base": "MarginContainer",
+"class": "Heading",
+"language": "GDScript",
+"path": "res://scenes/Heading.gd"
+}, {
 "base": "Reference",
 "class": "KPDX",
 "language": "GDScript",
@@ -71,6 +76,7 @@ _global_script_class_icons={
 "Feedback": "",
 "GutHookScript": "",
 "GutTest": "",
+"Heading": "",
 "KPDX": "",
 "Passwords": "",
 "Record": "",

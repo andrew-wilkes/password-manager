@@ -1,10 +1,13 @@
 extends MarginContainer
 
+class_name Heading
+
 signal clicked(this)
 
-enum { NONE, UP, DOWN }
+enum { UP, DOWN, NONE }
 
 var db_key = ""
+var sort_mode = NONE
 
 func set_sort_mode(mode):
 	match mode:
@@ -21,4 +24,6 @@ func set_sort_mode(mode):
 
 func _on_gui_input(event):
 	if event is InputEventMouseButton and event.pressed:
+		sort_mode = (sort_mode + 1) % 2
+		set_sort_mode(sort_mode)
 		emit_signal("clicked", self)
