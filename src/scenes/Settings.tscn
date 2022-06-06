@@ -1,0 +1,31 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://scenes/Settings.gd" type="Script" id=1]
+
+[node name="Settings" type="WindowDialog"]
+margin_left = 9.0
+margin_top = 9.0
+margin_right = 783.0
+margin_bottom = 388.0
+window_title = "Settings"
+script = ExtResource( 1 )
+
+[node name="M" type="MarginContainer" parent="."]
+margin_right = 769.0
+margin_bottom = 374.0
+custom_constants/margin_right = 9
+custom_constants/margin_top = 9
+custom_constants/margin_left = 9
+custom_constants/margin_bottom = 9
+
+[node name="VB" type="VBoxContainer" parent="M"]
+margin_left = 9.0
+margin_top = 9.0
+margin_right = 760.0
+margin_bottom = 365.0
+custom_constants/separation = 10
+
+[node name="HB" type="HBoxContainer" parent="M/VB"]
+margin_right = 751.0
+margin_bottom = 27.0
+custom_constants/separation = 20

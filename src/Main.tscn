@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://Main.gd" type="Script" id=1]
 [ext_resource path="res://scenes/Alert.tscn" type="PackedScene" id=2]
@@ -7,6 +7,7 @@
 [ext_resource path="res://scenes/SetPasswordForm.tscn" type="PackedScene" id=5]
 [ext_resource path="res://scenes/DataForm.tscn" type="PackedScene" id=6]
 [ext_resource path="res://style/Theme.tres" type="Theme" id=7]
+[ext_resource path="res://scenes/Settings.tscn" type="PackedScene" id=8]
 
 [node name="Main" type="VBoxContainer"]
 anchor_right = 1.0
@@ -39,9 +40,16 @@ margin_bottom = 23.0
 focus_mode = 2
 text = "Tools"
 
-[node name="Help" type="MenuButton" parent="M/Menu"]
+[node name="Settings" type="Button" parent="M/Menu"]
 margin_left = 81.0
-margin_right = 119.0
+margin_right = 138.0
+margin_bottom = 23.0
+text = "Settings"
+flat = true
+
+[node name="Help" type="MenuButton" parent="M/Menu"]
+margin_left = 142.0
+margin_right = 180.0
 margin_bottom = 23.0
 focus_mode = 2
 text = "Help"
@@ -88,8 +96,8 @@ rect_min_size = Vector2( 186, 65.1 )
 theme = ExtResource( 7 )
 access = 2
 filters = PoolStringArray( "*.pdb ; Password Database Files" )
-current_dir = "/mnt/windows/WData/dev/godot/git/andrew-wilkes/godot-password-manager/src"
-current_path = "/mnt/windows/WData/dev/godot/git/andrew-wilkes/godot-password-manager/src/"
+current_dir = "/mnt/files/dev/godot/git/andrew-wilkes/godot-password-manager/src"
+current_path = "/mnt/files/dev/godot/git/andrew-wilkes/godot-password-manager/src/"
 
 [node name="Licences" parent="Popups" instance=ExtResource( 3 )]
 margin_right = -163.0
@@ -143,8 +151,11 @@ theme = ExtResource( 7 )
 window_title = "About"
 dialog_text = "Created by Andrew Wilkes 2022"
 
+[node name="Settings" parent="Popups" instance=ExtResource( 8 )]
+
 [connection signal="pressed" from="M/Menu/File" to="." method="_on_File_pressed"]
 [connection signal="pressed" from="M/Menu/Tools" to="." method="_on_Tools_pressed"]
+[connection signal="pressed" from="M/Menu/Settings" to="." method="_on_Settings_pressed"]
 [connection signal="pressed" from="M/Menu/Help" to="." method="_on_Help_pressed"]
 [connection signal="resized" from="Content" to="." method="_on_Content_resized"]
 [connection signal="file_selected" from="Popups/FileDialog" to="." method="_on_FileDialog_file_selected"]

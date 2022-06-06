@@ -220,7 +220,7 @@ func _on_Tools_pressed():
 
 
 func _on_Settings_pressed():
-	pass
+	$Popups/Settings.open(settings)
 
 
 func _on_Help_pressed():
