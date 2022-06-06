@@ -36,31 +36,20 @@ func populate_grid(db: Database, key, reverse, group):
 		db.order_items(key, reverse)
 	for idx in range(grid.columns, grid.get_child_count()):
 		grid.get_child(idx).queue_free()
-	var idx = grid.columns
 	for item in db.items:
 		if group > 0 and item.group != group:
 			continue
 		var vb = view_button.instance()
-		var _e = vb.connect("view_button_pressed", self, "show_item_details")
+		var _e = vb.connect("view_button_pressed", self, "show_item_details", [item])
 		grid.add_child(vb)
-		vb.idx = idx
-		idx += 1
 		for key in headings:
 			var cell = cell_scene.instance()
 			cell.set_text(get_cell_content(item, key), key == "url")
 			grid.add_child(cell)
-			idx += 1
 
 
-func show_item_details(cell_idx, show):
-	if show:
-		for idx in range(grid.columns, grid.get_child_count(), grid.columns):
-			if idx != cell_idx:
-				grid.get_child(idx).reset()
-		# Show details
-	else:
-		# Hide details
-		pass
+func show_item_details(item):
+	$ItemDetails.open(item)
 
 
 func add_bars():
