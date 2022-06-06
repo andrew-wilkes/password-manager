@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://assets/icon_GUI_visibility_hidden.svg" type="Texture" id=1]
 [ext_resource path="res://assets/icon_GUI_visibility_visible.svg" type="Texture" id=2]
@@ -8,9 +8,9 @@
 [ext_resource path="res://assets/Environment.svg" type="Texture" id=6]
 [ext_resource path="res://assets/Edit.svg" type="Texture" id=7]
 [ext_resource path="res://scenes/ItemDetails.gd" type="Script" id=8]
+[ext_resource path="res://style/Theme.tres" type="Theme" id=9]
 
 [node name="ItemDetails" type="WindowDialog"]
-visible = true
 margin_left = 9.0
 margin_top = 9.0
 margin_right = 783.0
@@ -120,7 +120,7 @@ margin_right = 16.0
 margin_bottom = 21.0
 texture_normal = ExtResource( 6 )
 
-[node name="LineEdit" type="LineEdit" parent="M/VB/HB3"]
+[node name="URL" type="LineEdit" parent="M/VB/HB3"]
 margin_left = 26.0
 margin_right = 751.0
 margin_bottom = 27.0
@@ -133,7 +133,7 @@ margin_right = 751.0
 margin_bottom = 165.0
 text = "Notes"
 
-[node name="TextEdit" type="TextEdit" parent="M/VB"]
+[node name="Notes" type="TextEdit" parent="M/VB"]
 margin_top = 175.0
 margin_right = 751.0
 margin_bottom = 275.0
@@ -264,5 +264,19 @@ margin_top = 27.0
 margin_right = 35.0
 margin_bottom = 27.0
 
+[node name="Confirm" type="ConfirmationDialog" parent="."]
+margin_right = 200.0
+margin_bottom = 70.0
+theme = ExtResource( 9 )
+dialog_text = "Delete?"
+
+[connection signal="text_changed" from="M/VB/HB/Title" to="." method="_on_Title_text_changed"]
+[connection signal="text_changed" from="M/VB/Username" to="." method="_on_Username_text_changed"]
 [connection signal="pressed" from="M/VB/HB2/C1/Show" to="." method="_on_Show_pressed"]
 [connection signal="pressed" from="M/VB/HB2/C1/Hide" to="." method="_on_Hide_pressed"]
+[connection signal="text_changed" from="M/VB/HB2/Password" to="." method="_on_Password_text_changed"]
+[connection signal="pressed" from="M/VB/HB3/C/WWW" to="." method="_on_WWW_pressed"]
+[connection signal="text_changed" from="M/VB/HB3/URL" to="." method="_on_URL_text_changed"]
+[connection signal="text_changed" from="M/VB/Notes" to="." method="_on_Notes_text_changed"]
+[connection signal="pressed" from="M/VB/HB4/Time/Delete" to="." method="_on_Delete_pressed"]
+[connection signal="confirmed" from="Confirm" to="." method="_on_Confirm_confirmed"]

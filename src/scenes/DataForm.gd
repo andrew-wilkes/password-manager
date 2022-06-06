@@ -49,7 +49,7 @@ func populate_grid(db: Database, key, reverse, group):
 
 
 func show_item_details(item):
-	$ItemDetails.open(item)
+	$ItemDetails.open(item, settings)
 
 
 func add_bars():
@@ -167,3 +167,8 @@ func _process(_delta):
 
 func _on_DataForm_visibility_changed():
 	$BG/VBox.visible = visible
+
+
+func _on_ItemDetails_delete_item(item):
+	database.items.erase(item)
+	populate_grid(database, "", false, 0)
