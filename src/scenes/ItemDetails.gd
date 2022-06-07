@@ -67,11 +67,15 @@ func _on_Username_text_changed(new_text):
 
 func _on_Password_text_changed(new_text):
 	item.password = new_text
-	# Check password strength
+	# Check password strength and show alerts
+	# Update the tick etc.
 	update_modified()
 
 
 func _on_URL_text_changed(new_text):
+	# May want to add some kind of filtering to the URL here to strip out tracking IDs etc.
+	# The user may copy and paste a URL for example
+	# Could have a settings option for the level of filtering
 	item.url = new_text
 	update_modified()
 

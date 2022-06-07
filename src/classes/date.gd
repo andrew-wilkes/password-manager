@@ -58,3 +58,40 @@ static func get_weekday_name(day : int, month : int, year : int):
 
 static func get_month_name(month : int):
 	return MONTH_NAME[month - 1]
+
+
+static func sanitize_date_format(txt: String):
+	var date = ""
+	txt = txt.lstrip("-")
+	txt = txt.rstrip("-")
+	var counts = {
+		"?": 0,
+		"-": 0,
+		"Y": 0,
+		"M": 0,
+		"D": 0,
+	}
+	var last_chr = "?"
+	txt += last_chr # Make the loop do one extra pass
+	for chr in txt:
+		if chr == last_chr:
+			if last_chr == "-":
+				continue
+			if chr == "Y" and counts[chr] < 4 or counts[chr] < 2:
+				date += chr
+				counts[chr] += 1
+		else:
+			if last_chr != "-":
+				if counts[last_chr] == 1 or counts[last_chr] == 3:
+					date += last_chr
+					counts[last_chr] = 4 # Don't allow any more of last_chr
+			if chr != "-":
+				if counts[chr] == 0:
+					date += chr
+					counts[chr] = 1
+			else:
+				if counts[chr] < 2:
+					date += chr
+					counts[chr] += 1
+		last_chr = chr
+	return date.rstrip("?")

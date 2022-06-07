@@ -19,5 +19,5 @@ func _on_Label_gui_input(event):
 		emit_signal("clicked", self)
 
 
-func _on_RichTextLabel_meta_clicked(meta):
-	print(meta)
+func _on_RichTextLabel_meta_clicked(url):
+	var _e = OS.shell_open(url)

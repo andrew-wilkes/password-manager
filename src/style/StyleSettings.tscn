@@ -137,17 +137,16 @@ custom_styles/panel = SubResource( 3 )
 script = SubResource( 1 )
 
 [node name="Container" type="VBoxContainer" parent="."]
-margin_left = 512.0
-margin_top = 300.0
-margin_right = 512.0
-margin_bottom = 300.0
+margin_left = 384.0
+margin_top = 260.0
+margin_right = 640.0
+margin_bottom = 339.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
 
 [node name="Configuration" type="PanelContainer" parent="Container"]
-visible = false
 margin_right = 256.0
-margin_bottom = 58.0
+margin_bottom = 79.0
 rect_min_size = Vector2( 256, 0 )
 size_flags_vertical = 0
 
@@ -155,32 +154,31 @@ size_flags_vertical = 0
 margin_left = 6.0
 margin_top = 6.0
 margin_right = 250.0
-margin_bottom = 52.0
+margin_bottom = 73.0
 
 [node name="BoxAccent" type="HBoxContainer" parent="Container/Configuration/Container"]
 margin_right = 244.0
-margin_bottom = 25.0
+margin_bottom = 17.0
 
 [node name="Label" type="Label" parent="Container/Configuration/Container/BoxAccent"]
-margin_top = 4.0
 margin_right = 64.0
-margin_bottom = 21.0
+margin_bottom = 17.0
 rect_min_size = Vector2( 64, 0 )
 text = "Accent"
 
 [node name="ColorPicker" type="ColorPickerButton" parent="Container/Configuration/Container/BoxAccent"]
 margin_left = 68.0
 margin_right = 244.0
-margin_bottom = 25.0
+margin_bottom = 17.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_styles/normal = SubResource( 4 )
 color = Color( 0, 0.384314, 1, 1 )
 
 [node name="TypeSize" type="HBoxContainer" parent="Container/Configuration/Container"]
-margin_top = 29.0
+margin_top = 21.0
 margin_right = 244.0
-margin_bottom = 46.0
+margin_bottom = 38.0
 
 [node name="Label" type="Label" parent="Container/Configuration/Container/TypeSize"]
 margin_right = 64.0
@@ -209,6 +207,7 @@ align = 1
 valign = 1
 
 [node name="Main" type="Button" parent="Container/Configuration/Container"]
-margin_right = 12.0
-margin_bottom = 25.0
+margin_top = 42.0
+margin_right = 244.0
+margin_bottom = 67.0
 text = "To Main"

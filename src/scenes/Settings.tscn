@@ -3,6 +3,7 @@
 [ext_resource path="res://scenes/Settings.gd" type="Script" id=1]
 
 [node name="Settings" type="WindowDialog"]
+visible = true
 margin_left = 9.0
 margin_top = 9.0
 margin_right = 783.0
@@ -27,5 +28,18 @@ custom_constants/separation = 10
 
 [node name="HB" type="HBoxContainer" parent="M/VB"]
 margin_right = 751.0
-margin_bottom = 27.0
 custom_constants/separation = 20
+
+[node name="Label" type="Label" parent="M/VB"]
+margin_top = 10.0
+margin_right = 751.0
+margin_bottom = 27.0
+text = "Date format (combinations of YMD- characters for year,month, and day digits)"
+
+[node name="DateFormat" type="LineEdit" parent="M/VB"]
+margin_top = 37.0
+margin_right = 751.0
+margin_bottom = 62.0
+
+[connection signal="text_changed" from="M/VB/DateFormat" to="." method="_on_DateFormat_text_changed"]
+[connection signal="text_entered" from="M/VB/DateFormat" to="." method="_on_DateFormat_text_entered"]

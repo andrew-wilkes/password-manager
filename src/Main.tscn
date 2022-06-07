@@ -16,7 +16,7 @@ script = ExtResource( 1 )
 
 [node name="M" type="MarginContainer" parent="."]
 margin_right = 1024.0
-margin_bottom = 33.0
+margin_bottom = 35.0
 custom_constants/margin_right = 10
 custom_constants/margin_top = 5
 custom_constants/margin_left = 10
@@ -26,43 +26,43 @@ custom_constants/margin_bottom = 5
 margin_left = 10.0
 margin_top = 5.0
 margin_right = 1014.0
-margin_bottom = 28.0
+margin_bottom = 30.0
 
 [node name="File" type="MenuButton" parent="M/Menu"]
 margin_right = 31.0
-margin_bottom = 23.0
+margin_bottom = 25.0
 text = "File"
 
 [node name="Tools" type="MenuButton" parent="M/Menu"]
 margin_left = 35.0
 margin_right = 77.0
-margin_bottom = 23.0
+margin_bottom = 25.0
 focus_mode = 2
 text = "Tools"
 
 [node name="Settings" type="Button" parent="M/Menu"]
 margin_left = 81.0
 margin_right = 138.0
-margin_bottom = 23.0
+margin_bottom = 25.0
 text = "Settings"
 flat = true
 
 [node name="Help" type="MenuButton" parent="M/Menu"]
 margin_left = 142.0
 margin_right = 180.0
-margin_bottom = 23.0
+margin_bottom = 25.0
 focus_mode = 2
 text = "Help"
 
 [node name="Alert" parent="." instance=ExtResource( 2 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 37.0
+margin_top = 39.0
 margin_right = 1024.0
-margin_bottom = 64.0
+margin_bottom = 66.0
 
 [node name="Content" type="VBoxContainer" parent="."]
-margin_top = 68.0
+margin_top = 70.0
 margin_right = 1024.0
 margin_bottom = 600.0
 size_flags_horizontal = 3
@@ -83,7 +83,7 @@ margin_bottom = 538.0
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_right = 1024.0
-margin_bottom = 532.0
+margin_bottom = 530.0
 
 [node name="Popups" type="CanvasLayer" parent="."]
 

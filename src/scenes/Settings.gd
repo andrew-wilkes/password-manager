@@ -2,8 +2,11 @@ extends WindowDialog
 
 var settings
 
+onready var date_format = $M/VB/DateFormat
+
 func open(_settings):
 	settings = _settings
+	date_format.text = settings.date_format
 	popup_centered()
 	call_deferred("set_panel_size")
 
@@ -16,3 +19,19 @@ func get_date(time_secs):
 
 func set_panel_size():
 	rect_size = $M.rect_size
+
+
+func _on_DateFormat_text_changed(new_text):
+	# Only allow YMD- characters
+	var date = ""
+	for chr in new_text.to_upper():
+		if chr in "YMD-":
+			date += chr
+	date_format.text = ""
+	date_format.append_at_cursor(date)
+
+
+func _on_DateFormat_text_entered(new_text):
+	settings.date_format = Date.sanitize_date_format(new_text)
+	date_format.text = ""
+	date_format.append_at_cursor(settings.date_format)
