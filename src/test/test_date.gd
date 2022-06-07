@@ -33,3 +33,5 @@ func test_sanitize_date_format():
 	assert_eq(date, "MM-DD-YYYY")
 	date = Date.sanitize_date_format("-YMD-")
 	assert_eq(date, "YYMMDD")
+	date = Date.sanitize_date_format("YY-MMDD-Y")
+	assert_eq(date, "YY-MMDD")
