@@ -61,7 +61,7 @@ static func get_month_name(month : int):
 
 
 static func sanitize_date_format(txt: String):
-	# Offer the user great flexibility in how they mix up dashes and YMD
+	# Allow the user great flexibility in how they mix up dashes and YMD
 	var date = ""
 	txt = txt.lstrip("-")
 	txt = txt.rstrip("-")
@@ -91,8 +91,8 @@ static func sanitize_date_format(txt: String):
 					date += last_chr
 					# Don't allow any more of last_chr
 					counts[last_chr] = 4
+			# Up to 2 seperated dashes are allowed
 			if chr == "-" and counts[chr] < 2:
-					# Up to 2 seperate dashes are allowed
 					date += chr
 					counts[chr] += 1
 			else:
