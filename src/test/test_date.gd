@@ -25,3 +25,11 @@ func test_get_weekday_name():
 func test_get_month_name():
 	var month = Date.get_month_name(12)
 	assert_eq(month, "Dec")
+
+func test_sanitize_date_format():
+	var date = Date.sanitize_date_format("MM-DD-YYYY")
+	assert_eq(date, "MM-DD-YYYY")
+	date = Date.sanitize_date_format("M--DDD-YYY")
+	assert_eq(date, "MM-DD-YYYY")
+	date = Date.sanitize_date_format("-YMD-")
+	assert_eq(date, "YYMMDD")
