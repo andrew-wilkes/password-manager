@@ -3,12 +3,15 @@ extends WindowDialog
 var settings
 
 onready var date_format = $M/VB/DateFormat
+onready var keys: OptionButton = $M/VB/Keys
 
 func open(_settings):
 	settings = _settings
 	date_format.text = settings.date_format
 	popup_centered()
 	call_deferred("set_panel_size")
+	for n in 4:
+		keys.add_item(str(n).md5_text())
 
 
 func get_date(time_secs):

@@ -6,13 +6,13 @@
 visible = true
 margin_left = 9.0
 margin_top = 9.0
-margin_right = 783.0
+margin_right = 650.0
 margin_bottom = 388.0
 window_title = "Settings"
 script = ExtResource( 1 )
 
 [node name="M" type="MarginContainer" parent="."]
-margin_right = 769.0
+margin_right = 637.0
 margin_bottom = 374.0
 custom_constants/margin_right = 9
 custom_constants/margin_top = 9
@@ -22,24 +22,67 @@ custom_constants/margin_bottom = 9
 [node name="VB" type="VBoxContainer" parent="M"]
 margin_left = 9.0
 margin_top = 9.0
-margin_right = 760.0
+margin_right = 628.0
 margin_bottom = 365.0
 custom_constants/separation = 10
 
-[node name="HB" type="HBoxContainer" parent="M/VB"]
-margin_right = 751.0
-custom_constants/separation = 20
-
 [node name="Label" type="Label" parent="M/VB"]
-margin_top = 10.0
-margin_right = 751.0
-margin_bottom = 27.0
-text = "Date format (combinations of YMD- characters for year,month, and day digits)"
+margin_right = 619.0
+margin_bottom = 17.0
+text = "Date format (combinations of ymdYMD- characters for year,month, and day digits)"
 
 [node name="DateFormat" type="LineEdit" parent="M/VB"]
-margin_top = 37.0
-margin_right = 751.0
-margin_bottom = 62.0
+margin_top = 27.0
+margin_right = 619.0
+margin_bottom = 52.0
+
+[node name="Label2" type="Label" parent="M/VB"]
+margin_top = 62.0
+margin_right = 619.0
+margin_bottom = 119.0
+text = "Keys
+DO NOT THINK OF A KEY VALUE BY YOURSELF. IT MUST BE COMPUTER GENERATED FOR SECURITY REASONS.
+A shared key value is one that may be entered on another device to access the same password data file ."
+
+[node name="HB" type="HBoxContainer" parent="M/VB"]
+margin_top = 129.0
+margin_right = 619.0
+margin_bottom = 154.0
+custom_constants/separation = 20
+
+[node name="EnterKey" type="Button" parent="M/VB/HB"]
+margin_right = 108.0
+margin_bottom = 25.0
+text = "Enter Shared Key"
+
+[node name="GenerateShortKey" type="Button" parent="M/VB/HB"]
+margin_left = 128.0
+margin_right = 276.0
+margin_bottom = 25.0
+text = "Generate Shareable Key"
+
+[node name="GenerateLongKey" type="Button" parent="M/VB/HB"]
+margin_left = 296.0
+margin_right = 424.0
+margin_bottom = 25.0
+text = "Generate Strong Key"
+
+[node name="DeleteKey" type="Button" parent="M/VB/HB"]
+margin_left = 444.0
+margin_right = 562.0
+margin_bottom = 25.0
+text = "Delete Current Key"
+
+[node name="Label3" type="Label" parent="M/VB"]
+margin_top = 164.0
+margin_right = 619.0
+margin_bottom = 181.0
+text = "Current key "
+
+[node name="Keys" type="OptionButton" parent="M/VB"]
+margin_top = 191.0
+margin_right = 619.0
+margin_bottom = 214.0
 
 [connection signal="text_changed" from="M/VB/DateFormat" to="." method="_on_DateFormat_text_changed"]
 [connection signal="text_entered" from="M/VB/DateFormat" to="." method="_on_DateFormat_text_entered"]
