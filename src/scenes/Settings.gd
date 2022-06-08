@@ -4,6 +4,7 @@ var settings
 
 onready var date_format = $M/VB/DateFormat
 onready var keys: OptionButton = $M/VB/Keys
+onready var groups: OptionButton = $M/VB/Groups
 
 func open(_settings):
 	settings = _settings
@@ -12,6 +13,8 @@ func open(_settings):
 	call_deferred("set_panel_size")
 	for n in 4:
 		keys.add_item(str(n).md5_text())
+	for n in 4:
+		groups.add_item("Group: " + str(n))
 
 
 func get_date(time_secs):

@@ -84,5 +84,33 @@ margin_top = 191.0
 margin_right = 619.0
 margin_bottom = 214.0
 
+[node name="Label4" type="Label" parent="M/VB"]
+margin_top = 224.0
+margin_right = 619.0
+margin_bottom = 241.0
+text = "Groups"
+
+[node name="HB2" type="HBoxContainer" parent="M/VB"]
+margin_top = 251.0
+margin_right = 619.0
+margin_bottom = 276.0
+custom_constants/separation = 20
+
+[node name="AddGroup" type="Button" parent="M/VB/HB2"]
+margin_right = 72.0
+margin_bottom = 25.0
+text = "Add Group"
+
+[node name="DeleteGroup" type="Button" parent="M/VB/HB2"]
+margin_left = 92.0
+margin_right = 230.0
+margin_bottom = 25.0
+text = "Delete Selected Group"
+
+[node name="Groups" type="OptionButton" parent="M/VB"]
+margin_top = 286.0
+margin_right = 619.0
+margin_bottom = 309.0
+
 [connection signal="text_changed" from="M/VB/DateFormat" to="." method="_on_DateFormat_text_changed"]
 [connection signal="text_entered" from="M/VB/DateFormat" to="." method="_on_DateFormat_text_entered"]
