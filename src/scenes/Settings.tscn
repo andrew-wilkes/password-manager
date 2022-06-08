@@ -42,7 +42,7 @@ margin_right = 619.0
 margin_bottom = 119.0
 text = "Keys
 DO NOT THINK OF A KEY VALUE BY YOURSELF. IT MUST BE COMPUTER GENERATED FOR SECURITY REASONS.
-A shared key value is one that may be entered on another device to access the same password data file ."
+A shared key value is one that may be entered on another device to access the same password data file."
 
 [node name="HB" type="HBoxContainer" parent="M/VB"]
 margin_top = 129.0
@@ -77,7 +77,7 @@ text = "Delete Current Key"
 margin_top = 164.0
 margin_right = 619.0
 margin_bottom = 181.0
-text = "Current key "
+text = "Current key"
 
 [node name="Keys" type="OptionButton" parent="M/VB"]
 margin_top = 191.0
