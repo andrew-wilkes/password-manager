@@ -23,33 +23,35 @@ custom_constants/margin_bottom = 9
 margin_left = 9.0
 margin_top = 9.0
 margin_right = 628.0
-margin_bottom = 365.0
+margin_bottom = 438.0
 custom_constants/separation = 10
 
 [node name="Label" type="Label" parent="M/VB"]
 margin_right = 619.0
-margin_bottom = 57.0
+margin_bottom = 77.0
 text = "Date format
 Combinations of YMD- characters for year,month, and day digits.
-Lower case text is convereted to upper case."
+Lower case text is converted to upper case.
+Customize to your preference."
 
 [node name="DateFormat" type="LineEdit" parent="M/VB"]
-margin_top = 67.0
+margin_top = 87.0
 margin_right = 619.0
-margin_bottom = 92.0
+margin_bottom = 112.0
 
 [node name="Label2" type="Label" parent="M/VB"]
-margin_top = 102.0
+margin_top = 122.0
 margin_right = 619.0
-margin_bottom = 159.0
+margin_bottom = 199.0
 text = "Keys
 DO NOT THINK OF A KEY VALUE BY YOURSELF. IT MUST BE COMPUTER GENERATED FOR SECURITY REASONS.
-A shared key value is one that may be entered on another device to access the same password data file."
+Use your creativity to decide on your password, and take note of the password strength feedback.
+A shared key value is one that is easy to enter on another device to access the same password data file."
 
 [node name="HB" type="HBoxContainer" parent="M/VB"]
-margin_top = 169.0
+margin_top = 209.0
 margin_right = 619.0
-margin_bottom = 194.0
+margin_bottom = 234.0
 custom_constants/separation = 20
 
 [node name="EnterKey" type="Button" parent="M/VB/HB"]
@@ -76,26 +78,28 @@ margin_bottom = 25.0
 text = "Delete Current Key"
 
 [node name="Label3" type="Label" parent="M/VB"]
-margin_top = 204.0
-margin_right = 619.0
-margin_bottom = 221.0
-text = "Current key"
-
-[node name="Keys" type="OptionButton" parent="M/VB"]
-margin_top = 231.0
-margin_right = 619.0
-margin_bottom = 254.0
-
-[node name="Label4" type="Label" parent="M/VB"]
-margin_top = 264.0
+margin_top = 244.0
 margin_right = 619.0
 margin_bottom = 281.0
-text = "Groups"
+text = "Current key
+This key value will be used to lock your currently loaded password data when it is saved."
 
-[node name="HB2" type="HBoxContainer" parent="M/VB"]
+[node name="Keys" type="OptionButton" parent="M/VB"]
 margin_top = 291.0
 margin_right = 619.0
-margin_bottom = 316.0
+margin_bottom = 314.0
+
+[node name="Label4" type="Label" parent="M/VB"]
+margin_top = 324.0
+margin_right = 619.0
+margin_bottom = 361.0
+text = "Groups
+Used to categorize your password records."
+
+[node name="HB2" type="HBoxContainer" parent="M/VB"]
+margin_top = 371.0
+margin_right = 619.0
+margin_bottom = 396.0
 custom_constants/separation = 20
 
 [node name="AddGroup" type="Button" parent="M/VB/HB2"]
@@ -110,9 +114,9 @@ margin_bottom = 25.0
 text = "Delete Selected Group"
 
 [node name="Groups" type="OptionButton" parent="M/VB"]
-margin_top = 326.0
+margin_top = 406.0
 margin_right = 619.0
-margin_bottom = 349.0
+margin_bottom = 429.0
 
 [connection signal="text_changed" from="M/VB/DateFormat" to="." method="_on_DateFormat_text_changed"]
 [connection signal="text_entered" from="M/VB/DateFormat" to="." method="_on_DateFormat_text_entered"]
