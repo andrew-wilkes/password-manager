@@ -116,6 +116,7 @@ func configure_menu():
 	help_menu.add_separator()
 	help_menu.add_item("Licences", LICENCES)
 	help_menu.connect("id_pressed", self, "_on_HelpMenu_id_pressed")
+	$M/Menu/Settings.show()
 
 
 func set_locked(lock):
