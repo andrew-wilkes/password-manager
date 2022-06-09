@@ -4,9 +4,9 @@
 
 [node name="Settings" type="WindowDialog"]
 visible = true
-margin_left = 9.0
+margin_left = 7.0
 margin_top = 9.0
-margin_right = 650.0
+margin_right = 648.0
 margin_bottom = 529.0
 window_title = "Settings"
 script = ExtResource( 1 )
@@ -45,8 +45,8 @@ margin_right = 619.0
 margin_bottom = 199.0
 text = "Keys
 DO NOT THINK OF A KEY VALUE BY YOURSELF. IT MUST BE COMPUTER GENERATED FOR SECURITY REASONS.
-Use your creativity to decide on your password, and take note of the password strength feedback.
-A shared key value is one that is easy to enter on another device to access the same password data file."
+A shared key value is one that is easy to enter on another device to access the same password data file.
+Use your creativity to decide on your password (not this key), and take note of the password strength feedback."
 
 [node name="HB" type="HBoxContainer" parent="M/VB"]
 margin_top = 209.0
