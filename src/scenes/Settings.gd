@@ -1,6 +1,9 @@
 extends WindowDialog
 
 signal group_removed(group_id)
+signal error(msg)
+
+const MIN_KEY_LENGTH = 8
 
 var settings
 
@@ -13,13 +16,19 @@ func open(_settings):
 	date_format.text = settings.date_format
 	popup_centered()
 	call_deferred("set_panel_size")
-	for n in 4:
-		keys.add_item(str(n).md5_text())
+	test()
 	var idx = 0
 	for group_id in settings.groups:
 		groups.add_item(settings.groups[group_id])
 		groups.set_item_id(idx, group_id)
 		idx += 1
+
+
+func test():
+	for n in 4:
+		var key = str(n).md5_text()
+		keys.add_item(key)
+		settings.keys.append(key)
 
 
 func get_date(time_secs):
@@ -53,24 +62,23 @@ func _on_AddGroup_pressed():
 
 
 func _on_GroupText_ok_pressed(txt, adding):
-	if not txt.empty():
+	if txt.empty():
+		emit_signal("error", "Ignoring empty entry")
+	else:
 		if adding:
 			add_group(txt)
 		else:
 			edit_group(txt)
 
 
-func add_group(txt):
-	var add = true
-	for group_name in settings.groups.values():
-		if txt == group_name:
-			add = false
-			break
-	if add:
+func add_group(group_name):
+	if group_name in settings.groups.values():
+		emit_signal("error", "Group already in the list")
+	else:
 		var max_id = settings.groups.keys().max()
 		var group_id = 1 if max_id == null else max_id + 1
-		settings.groups[group_id] = txt
-		groups.add_item(txt)
+		settings.groups[group_id] = group_name
+		groups.add_item(group_name)
 		var idx = groups.get_item_count() - 1
 		groups.select(idx)
 		groups.set_item_id(idx, group_id)
@@ -87,16 +95,54 @@ func _on_EditGroup_pressed():
 
 
 func _on_DeleteGroup_pressed():
-	$Confirm.popup_centered()
+	$GroupDelete.popup_centered()
 
 
-func _on_Confirm_confirmed():
+func _on_GroupDelete_confirmed():
 	var group_id = groups.get_selected_id()
 	var _e = settings.groups.erase(group_id)
 	groups.remove_item(groups.selected)
+	if groups.get_item_count() > 0:
+		select_next_option(groups)
 	emit_signal("group_removed", group_id)
-	call_deferred("select_first_group")
 
 
-func select_first_group():
-	groups.select(0)
+func _on_EnterKey_pressed():
+	$KeyEntry.open("Enter Key")
+
+
+func _on_KeyEntry_ok_pressed(key_text, _adding):
+	if key_text.length() < MIN_KEY_LENGTH:
+		emit_signal("error", "Key must be longer than " + str(MIN_KEY_LENGTH) + " characters")
+	else:
+		if key_text in settings.keys:
+			emit_signal("error", "Key already in the list")
+		else:
+			settings.keys.append(key_text)
+			keys.add_item(key_text)
+			var idx = keys.get_item_count() - 1
+			keys.select(idx)
+
+
+func _on_DeleteKey_pressed():
+	$KeyDelete.popup_centered()
+
+
+func _on_KeyDelete_confirmed():
+	var _e = settings.keys.remove(keys.selected)
+	if keys.get_item_count() == 1:
+		keys.add_item("new")
+	keys.remove_item(keys.selected)
+	select_next_option(keys)
+
+
+func select_next_option(ob: OptionButton):
+	for idx in ob.get_item_count():
+		if idx != ob.selected:
+			ob.select(idx)
+			return
+	# Workaround to be able to select the last remaining item
+	ob.add_item(ob.get_item_text(0))
+	ob.select(1)
+	ob.remove_item(0)
+	ob.select(0)

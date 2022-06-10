@@ -127,16 +127,28 @@ margin_bottom = 429.0
 
 [node name="GroupText" parent="." instance=ExtResource( 2 )]
 
-[node name="Confirm" type="ConfirmationDialog" parent="."]
+[node name="GroupDelete" type="ConfirmationDialog" parent="."]
 margin_right = 200.0
 margin_bottom = 70.0
 theme = ExtResource( 3 )
 dialog_text = "Delete group?"
 
+[node name="KeyEntry" parent="." instance=ExtResource( 2 )]
+
+[node name="KeyDelete" type="ConfirmationDialog" parent="."]
+margin_right = 200.0
+margin_bottom = 70.0
+theme = ExtResource( 3 )
+dialog_text = "Delete key?"
+
 [connection signal="text_changed" from="M/VB/DateFormat" to="." method="_on_DateFormat_text_changed"]
 [connection signal="text_entered" from="M/VB/DateFormat" to="." method="_on_DateFormat_text_entered"]
+[connection signal="pressed" from="M/VB/HB/EnterKey" to="." method="_on_EnterKey_pressed"]
+[connection signal="pressed" from="M/VB/HB/DeleteKey" to="." method="_on_DeleteKey_pressed"]
 [connection signal="pressed" from="M/VB/HB2/AddGroup" to="." method="_on_AddGroup_pressed"]
 [connection signal="pressed" from="M/VB/HB2/EditGroup" to="." method="_on_EditGroup_pressed"]
 [connection signal="pressed" from="M/VB/HB2/DeleteGroup" to="." method="_on_DeleteGroup_pressed"]
 [connection signal="ok_pressed" from="GroupText" to="." method="_on_GroupText_ok_pressed"]
-[connection signal="confirmed" from="Confirm" to="." method="_on_Confirm_confirmed"]
+[connection signal="confirmed" from="GroupDelete" to="." method="_on_GroupDelete_confirmed"]
+[connection signal="ok_pressed" from="KeyEntry" to="." method="_on_KeyEntry_ok_pressed"]
+[connection signal="confirmed" from="KeyDelete" to="." method="_on_KeyDelete_confirmed"]
