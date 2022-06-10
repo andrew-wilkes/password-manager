@@ -19,56 +19,56 @@ highlight_color = Color( 0.752941, 0.756863, 0.141176, 1 )
 
 [node name="Groups" type="HBoxContainer" parent="."]
 margin_right = 1022.0
-margin_bottom = 23.0
+margin_bottom = 25.0
 custom_constants/separation = 20
 
 [node name="Margin" type="Control" parent="Groups"]
-margin_bottom = 23.0
+margin_bottom = 25.0
 
 [node name="Label" type="Label" parent="Groups"]
 margin_left = 20.0
-margin_top = 3.0
+margin_top = 4.0
 margin_right = 58.0
-margin_bottom = 20.0
+margin_bottom = 21.0
 text = "Group:"
 
 [node name="GroupButton" parent="Groups" instance=ExtResource( 2 )]
 margin_left = 78.0
 margin_right = 104.0
-margin_bottom = 23.0
+margin_bottom = 25.0
 
 [node name="SB" type="HBoxContainer" parent="."]
-margin_top = 33.0
+margin_top = 35.0
 margin_right = 1022.0
 margin_bottom = 60.0
 custom_constants/separation = 20
 
 [node name="Margin" type="Control" parent="SB"]
-margin_bottom = 27.0
+margin_bottom = 25.0
 
 [node name="SearchBox" type="LineEdit" parent="SB"]
 margin_left = 20.0
 margin_right = 493.0
-margin_bottom = 27.0
+margin_bottom = 25.0
 size_flags_horizontal = 3
 placeholder_text = "Search text"
 
 [node name="C" type="CenterContainer" parent="SB"]
 margin_left = 513.0
 margin_right = 529.0
-margin_bottom = 27.0
+margin_bottom = 25.0
 
 [node name="Add" type="TextureButton" parent="SB/C"]
-margin_top = 5.0
+margin_top = 4.0
 margin_right = 16.0
-margin_bottom = 21.0
+margin_bottom = 20.0
 hint_tooltip = "Add a new entry"
 texture_normal = ExtResource( 3 )
 
 [node name="Spacer" type="Control" parent="SB"]
 margin_left = 549.0
 margin_right = 1022.0
-margin_bottom = 27.0
+margin_bottom = 25.0
 size_flags_horizontal = 3
 
 [node name="SC" type="ScrollContainer" parent="."]

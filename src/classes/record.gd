@@ -10,7 +10,7 @@ var data = {
 	"reveal": false,
 	"notes": "",
 	"url": "",
-	"group": 0,
+	"groups": [],
 	"created": 0,
 	"modified": 0,
 	"remind": 0,

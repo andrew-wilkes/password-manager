@@ -45,7 +45,7 @@ func state_handler(action, data):
 				ENTER_PRESSED:
 					password = data.sha256_text()
 					state = ACCESS_DATA
-					show_content(form_map[state])
+					show_content(form_map[state], settings)
 				PASSWORD_TEXT_CHANGED:
 					# Evaluate the password strength
 					pass
@@ -55,7 +55,7 @@ func state_handler(action, data):
 					# Try to open the database
 					# If error, display alert
 					state = ACCESS_DATA
-					show_content(form_map[state])
+					show_content(form_map[state], settings)
 				BROWSE_PRESSED:
 					menu_action = OPEN
 					do_action()
@@ -247,3 +247,7 @@ func _on_Content_resized():
 func viewport_size_changed():
 	# Prevent the scroll area from being clamped to a minimum size
 	$Content/DataForm.rect_min_size = Vector2.ZERO
+
+
+func _on_Settings_group_removed(group_id):
+	$Content/DataForm.remove_group(group_id)

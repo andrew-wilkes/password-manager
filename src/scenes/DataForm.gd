@@ -38,7 +38,7 @@ func populate_grid(db: Database, key, reverse, group):
 	for idx in range(grid.columns, grid.get_child_count()):
 		grid.get_child(idx).queue_free()
 	for item in db.items:
-		if group > 0 and item.group != group:
+		if group > 0 and not group in item.groups:
 			continue
 		var vb = view_button.instance()
 		var _e = vb.connect("view_button_pressed", self, "show_item_details", [item])
@@ -47,6 +47,15 @@ func populate_grid(db: Database, key, reverse, group):
 			var cell = cell_scene.instance()
 			cell.set_text(get_cell_content(item, key), key == "url")
 			grid.add_child(cell)
+
+
+func remove_group(group_id):
+	for item in database.items:
+		item.groups.erase(group_id)
+	if current_group == group_id:
+		current_group = 0
+		populate_grid(database, "", false, 0)
+	update_group_buttons()
 
 
 func show_item_details(item):
@@ -91,7 +100,6 @@ func get_cell_content(data, key):
 func test():
 	settings = Settings.new()
 	database = Database.new()
-	add_groups()
 	var r1 = Record.new()
 	r1.data.title = "Title of entry"
 	r1.data.username = "User1"
@@ -123,15 +131,27 @@ func _ready():
 	test()
 
 
-func init(_data):
+func init(_settings):
 	visible = true
+	settings = _settings
+	update_group_buttons()
 
 
-func add_groups():
-	for group in settings.groups:
+func update_group_buttons():
+	var existing_buttons = []
+	for node in $Groups.get_children():
+		if node is Button:
+			node.pressed = true if node.id == 0 else false
+			if node.id == 0 or node.id in settings.groups:
+				existing_buttons.append(node.id)
+			else:
+				node.queue_free()
+	for group_id in settings.groups:
+		if group_id in existing_buttons:
+			continue
 		var gb = group_button.instance()
-		gb.id = group
-		gb.text = settings.groups[group]
+		gb.id = group_id
+		gb.text = settings.groups[group_id]
 		var _e = gb.connect("group_button_pressed", self, "set_group")
 		$Groups.add_child(gb)
 

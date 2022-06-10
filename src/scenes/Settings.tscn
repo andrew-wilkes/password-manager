@@ -1,9 +1,10 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://scenes/Settings.gd" type="Script" id=1]
+[ext_resource path="res://scenes/TextEntryPopup.tscn" type="PackedScene" id=2]
+[ext_resource path="res://style/Theme.tres" type="Theme" id=3]
 
 [node name="Settings" type="WindowDialog"]
-visible = true
 margin_left = 7.0
 margin_top = 9.0
 margin_right = 648.0
@@ -107,9 +108,15 @@ margin_right = 72.0
 margin_bottom = 25.0
 text = "Add Group"
 
-[node name="DeleteGroup" type="Button" parent="M/VB/HB2"]
+[node name="EditGroup" type="Button" parent="M/VB/HB2"]
 margin_left = 92.0
-margin_right = 230.0
+margin_right = 214.0
+margin_bottom = 25.0
+text = "Edit Selected Group"
+
+[node name="DeleteGroup" type="Button" parent="M/VB/HB2"]
+margin_left = 234.0
+margin_right = 372.0
 margin_bottom = 25.0
 text = "Delete Selected Group"
 
@@ -118,5 +125,18 @@ margin_top = 406.0
 margin_right = 619.0
 margin_bottom = 429.0
 
+[node name="GroupText" parent="." instance=ExtResource( 2 )]
+
+[node name="Confirm" type="ConfirmationDialog" parent="."]
+margin_right = 200.0
+margin_bottom = 70.0
+theme = ExtResource( 3 )
+dialog_text = "Delete group?"
+
 [connection signal="text_changed" from="M/VB/DateFormat" to="." method="_on_DateFormat_text_changed"]
 [connection signal="text_entered" from="M/VB/DateFormat" to="." method="_on_DateFormat_text_entered"]
+[connection signal="pressed" from="M/VB/HB2/AddGroup" to="." method="_on_AddGroup_pressed"]
+[connection signal="pressed" from="M/VB/HB2/EditGroup" to="." method="_on_EditGroup_pressed"]
+[connection signal="pressed" from="M/VB/HB2/DeleteGroup" to="." method="_on_DeleteGroup_pressed"]
+[connection signal="ok_pressed" from="GroupText" to="." method="_on_GroupText_ok_pressed"]
+[connection signal="confirmed" from="Confirm" to="." method="_on_Confirm_confirmed"]
