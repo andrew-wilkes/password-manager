@@ -16,19 +16,15 @@ func open(_settings):
 	date_format.text = settings.date_format
 	popup_centered()
 	call_deferred("set_panel_size")
-	test()
+	set_group_button_visibility()
 	var idx = 0
 	for group_id in settings.groups:
 		groups.add_item(settings.groups[group_id])
 		groups.set_item_id(idx, group_id)
 		idx += 1
-
-
-func test():
-	for n in 4:
-		var key = str(n).md5_text()
+	for key in settings.keys:
 		keys.add_item(key)
-		settings.keys.append(key)
+	keys.select(settings.key_idx)
 
 
 func get_date(time_secs):
@@ -82,6 +78,7 @@ func add_group(group_name):
 		var idx = groups.get_item_count() - 1
 		groups.select(idx)
 		groups.set_item_id(idx, group_id)
+		set_group_button_visibility()
 
 
 func edit_group(txt):
@@ -104,6 +101,9 @@ func _on_GroupDelete_confirmed():
 	groups.remove_item(groups.selected)
 	if groups.get_item_count() > 0:
 		select_next_option(groups)
+	else:
+		groups.clear()
+	set_group_button_visibility()
 	emit_signal("group_removed", group_id)
 
 
@@ -113,7 +113,7 @@ func _on_EnterKey_pressed():
 
 func _on_KeyEntry_ok_pressed(key_text, _adding):
 	if key_text.length() < MIN_KEY_LENGTH:
-		emit_signal("error", "Key must be longer than " + str(MIN_KEY_LENGTH) + " characters")
+		emit_signal("error", "Key length must be at least " + str(MIN_KEY_LENGTH) + " characters long")
 	else:
 		if key_text in settings.keys:
 			emit_signal("error", "Key already in the list")
@@ -131,7 +131,7 @@ func _on_DeleteKey_pressed():
 func _on_KeyDelete_confirmed():
 	var _e = settings.keys.remove(keys.selected)
 	if keys.get_item_count() == 1:
-		keys.add_item("new")
+		keys.add_item(settings.generate_salt(false))
 	keys.remove_item(keys.selected)
 	select_next_option(keys)
 
@@ -146,3 +146,29 @@ func select_next_option(ob: OptionButton):
 	ob.select(1)
 	ob.remove_item(0)
 	ob.select(0)
+
+
+func set_group_button_visibility():
+	var visible = settings.groups.size() > 0
+	$M/VB/HB2/EditGroup.visible = visible
+	$M/VB/HB2/DeleteGroup.visible = visible
+
+
+func _on_GenerateShortKey_pressed():
+	var key = settings.generate_salt(true)
+	keys.add_item(key)
+	var idx = keys.get_item_count() - 1
+	keys.select(idx)
+	settings.keys.append(key)
+
+
+func _on_GenerateLongKey_pressed():
+	var key = settings.generate_salt(false)
+	keys.add_item(key)
+	var idx = keys.get_item_count() - 1
+	keys.select(idx)
+	settings.keys.append(key)
+
+
+func _on_Settings_popup_hide():
+	settings.key_idx = keys.selected

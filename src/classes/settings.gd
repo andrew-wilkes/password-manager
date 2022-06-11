@@ -10,6 +10,7 @@ export var last_dir = ""
 export var date_format = "YYYY-MM-DD"
 export var groups = {}
 export var keys = []
+export var key_idx = 0
 
 func save_data():
 	var _result = ResourceSaver.save(FILE_NAME, self)
@@ -24,7 +25,7 @@ func load_data():
 		return self
 
 
-func generate_salt(short = true):
+func generate_salt(short = false):
 	# In the UI it is called a Key
 	if short:
 		# Using a-z0-9 characters so that a user may copy them easily to another device

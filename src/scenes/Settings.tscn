@@ -5,6 +5,7 @@
 [ext_resource path="res://style/Theme.tres" type="Theme" id=3]
 
 [node name="Settings" type="WindowDialog"]
+visible = true
 margin_left = 7.0
 margin_top = 9.0
 margin_right = 648.0
@@ -141,9 +142,12 @@ margin_bottom = 70.0
 theme = ExtResource( 3 )
 dialog_text = "Delete key?"
 
+[connection signal="popup_hide" from="." to="." method="_on_Settings_popup_hide"]
 [connection signal="text_changed" from="M/VB/DateFormat" to="." method="_on_DateFormat_text_changed"]
 [connection signal="text_entered" from="M/VB/DateFormat" to="." method="_on_DateFormat_text_entered"]
 [connection signal="pressed" from="M/VB/HB/EnterKey" to="." method="_on_EnterKey_pressed"]
+[connection signal="pressed" from="M/VB/HB/GenerateShortKey" to="." method="_on_GenerateShortKey_pressed"]
+[connection signal="pressed" from="M/VB/HB/GenerateLongKey" to="." method="_on_GenerateLongKey_pressed"]
 [connection signal="pressed" from="M/VB/HB/DeleteKey" to="." method="_on_DeleteKey_pressed"]
 [connection signal="pressed" from="M/VB/HB2/AddGroup" to="." method="_on_AddGroup_pressed"]
 [connection signal="pressed" from="M/VB/HB2/EditGroup" to="." method="_on_EditGroup_pressed"]

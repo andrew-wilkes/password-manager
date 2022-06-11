@@ -11,7 +11,7 @@ func test_get_char():
 func test_generate_salt():
 	# Short user-friendly
 	for n in 10:
-		var salt = settings.generate_salt()
+		var salt = settings.generate_salt(true)
 		if n == 0:
 			assert_typeof(salt, TYPE_STRING)
 		assert_true(salt.length() < 13, "Length <= 12")
