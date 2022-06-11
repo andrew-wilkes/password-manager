@@ -1,7 +1,6 @@
 extends WindowDialog
 
 signal group_removed(group_id)
-signal error(msg)
 
 const MIN_KEY_LENGTH = 8
 
@@ -59,7 +58,7 @@ func _on_AddGroup_pressed():
 
 func _on_GroupText_ok_pressed(txt, adding):
 	if txt.empty():
-		emit_signal("error", "Ignoring empty entry")
+		show_alert("Ignoring empty entry")
 	else:
 		if adding:
 			add_group(txt)
@@ -69,7 +68,7 @@ func _on_GroupText_ok_pressed(txt, adding):
 
 func add_group(group_name):
 	if group_name in settings.groups.values():
-		emit_signal("error", "Group already in the list")
+		show_alert("Group already in the list")
 	else:
 		var max_id = settings.groups.keys().max()
 		var group_id = 1 if max_id == null else max_id + 1
@@ -113,16 +112,20 @@ func _on_EnterKey_pressed():
 
 func _on_KeyEntry_ok_pressed(key_text, _adding):
 	if key_text.length() < MIN_KEY_LENGTH:
-		emit_signal("error", "Key length must be at least " + str(MIN_KEY_LENGTH) + " characters long")
+		show_alert("Key length must be at least " + str(MIN_KEY_LENGTH) + " characters long")
 	else:
 		if key_text in settings.keys:
-			emit_signal("error", "Key already in the list")
+			show_alert("Key already in the list")
 		else:
 			settings.keys.append(key_text)
 			keys.add_item(key_text)
 			var idx = keys.get_item_count() - 1
 			keys.select(idx)
 
+
+func show_alert(msg):
+	$Alert.dialog_text = msg
+	$Alert.popup_centered()
 
 func _on_DeleteKey_pressed():
 	$KeyDelete.popup_centered()

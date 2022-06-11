@@ -142,6 +142,11 @@ margin_bottom = 70.0
 theme = ExtResource( 3 )
 dialog_text = "Delete key?"
 
+[node name="Alert" type="AcceptDialog" parent="."]
+margin_right = 78.0
+margin_bottom = 66.0
+theme = ExtResource( 3 )
+
 [connection signal="popup_hide" from="." to="." method="_on_Settings_popup_hide"]
 [connection signal="text_changed" from="M/VB/DateFormat" to="." method="_on_DateFormat_text_changed"]
 [connection signal="text_entered" from="M/VB/DateFormat" to="." method="_on_DateFormat_text_entered"]
