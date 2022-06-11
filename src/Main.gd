@@ -28,6 +28,7 @@ var password = ""
 var locked: bool
 
 func _ready():
+	get_tree().set_auto_accept_quit(false)
 	var _e = get_tree().get_root().connect("size_changed", self, "viewport_size_changed")
 	settings = Settings.new()
 	settings = settings.load_data()
@@ -134,7 +135,7 @@ func _on_FileMenu_id_pressed(id):
 	menu_action = id
 	match id:
 		NEW:
-			passwords.save_data(settings)
+			save_passwords()
 			settings.current_file = ""
 			load_passwords()
 		OPEN:
@@ -150,6 +151,11 @@ func _on_FileMenu_id_pressed(id):
 			pass
 		QUIT:
 			save_and_quit()
+
+
+func save_passwords():
+	if passwords.save_data(settings):
+		alert.show_message("Failed to save passwords to file")
 
 
 func _on_ToolsMenu_id_pressed(id):
@@ -208,8 +214,13 @@ func save_and_quit():
 
 func save_data():
 	settings.save_data()
-	if not locked:
-		passwords.save_data(settings)
+	if locked:
+		get_tree().quit()
+	else:
+		if passwords.save_data(settings):
+			$Popups/ConfirmQuit.popup_centered()
+		else:
+			get_tree().quit()
 
 
 func _on_File_pressed():
@@ -235,7 +246,7 @@ func _on_FileDialog_file_selected(path):
 	settings.current_file = path.get_file()
 	settings.last_dir = path.get_base_dir()
 	if menu_action == SAVE:
-		passwords.save_data(settings)
+		save_passwords()
 	else:
 		load_passwords()
 
@@ -251,3 +262,7 @@ func viewport_size_changed():
 
 func _on_Settings_group_removed(group_id):
 	$Content/DataForm.remove_group(group_id)
+
+
+func _on_ConfirmQuit_confirmed():
+	get_tree().quit()

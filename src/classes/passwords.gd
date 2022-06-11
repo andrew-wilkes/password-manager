@@ -9,6 +9,7 @@ export(PoolByteArray) var data
 export var iv := PoolByteArray()
 
 var aes = AESContext.new()
+var decrypted_data
 
 func set_iv():
 	iv.resize(IV_SIZE)
@@ -33,16 +34,15 @@ func post_encode_data(key, settings):
 
 func pre_decode_data(key, settings):
 	aes.start(AESContext.MODE_CBC_DECRYPT, salted_key(settings, key), iv)
-	data = aes.update(data)
+	decrypted_data = aes.update(data)
 	aes.finish()
 
 
 func post_decode_data(settings):
 	aes.start(AESContext.MODE_ECB_DECRYPT, settings.salt.sha256_buffer())
-	var decrypted = aes.update(data)
+	decrypted_data = aes.update(decrypted_data)
 	aes.finish()
-	decrypted.resize(decrypted.size() - decrypted[-1])
-	return decrypted
+	decrypted_data.resize(decrypted_data.size() - decrypted_data[-1])
 
 
 func pad_data(d: PoolByteArray):
@@ -56,12 +56,15 @@ func pad_data(d: PoolByteArray):
 
 
 func save_data(settings):
+	var failed = true
 	var bytes = iv
 	bytes.append_array(data)
 	var file = File.new()
 	if file.open(password_filename(settings), File.WRITE) == OK:
 		file.store_buffer(bytes)
 		file.close()
+		failed = false
+	return failed
 
 
 func load_data(settings):

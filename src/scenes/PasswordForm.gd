@@ -11,6 +11,7 @@ func _ready():
 func init(txt):
 	set_text(txt)
 	visible = true
+	$VBox/HBox/Password.grab_focus()
 
 
 func set_text(txt):

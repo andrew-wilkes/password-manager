@@ -32,9 +32,9 @@ func test_encryption():
 	passwords.post_encode_data(key, settings)
 	assert_true(passwords.data is PoolByteArray, "Data is a PoolByteArray")
 	passwords.pre_decode_data(key, settings)
-	assert_true(passwords.data is PoolByteArray, "Data is a PoolByteArray")
-	var decoded_data = passwords.post_decode_data(settings)
-	assert_eq(decoded_data.get_string_from_utf8(), "mydata")
+	assert_true(passwords.decrypted_data is PoolByteArray, "Data is a PoolByteArray")
+	passwords.post_decode_data(settings)
+	assert_eq(passwords.decrypted_data.get_string_from_utf8(), "mydata")
 
 func test_save_load():
 	var settings = { "last_dir": "./test", "current_file": "test.pwd" }
@@ -43,7 +43,8 @@ func test_save_load():
 	passwords.set_iv()
 	var iv = passwords.iv
 	passwords.data = passwords.iv
-	passwords.save_data(settings)
+	var failed = passwords.save_data(settings)
+	assert_false(failed)
 	assert_file_exists(fname)
 	passwords.iv.invert()
 	passwords.data = passwords.iv

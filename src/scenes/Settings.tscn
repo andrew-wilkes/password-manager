@@ -5,7 +5,6 @@
 [ext_resource path="res://style/Theme.tres" type="Theme" id=3]
 
 [node name="Settings" type="WindowDialog"]
-visible = true
 margin_left = 7.0
 margin_top = 9.0
 margin_right = 648.0
@@ -146,6 +145,7 @@ dialog_text = "Delete key?"
 margin_right = 78.0
 margin_bottom = 66.0
 theme = ExtResource( 3 )
+window_title = "Notice"
 
 [connection signal="popup_hide" from="." to="." method="_on_Settings_popup_hide"]
 [connection signal="text_changed" from="M/VB/DateFormat" to="." method="_on_DateFormat_text_changed"]

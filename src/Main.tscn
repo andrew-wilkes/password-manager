@@ -153,6 +153,13 @@ dialog_text = "Created by Andrew Wilkes 2022"
 
 [node name="Settings" parent="Popups" instance=ExtResource( 8 )]
 
+[node name="ConfirmQuit" type="ConfirmationDialog" parent="Popups"]
+margin_right = 200.0
+margin_bottom = 70.0
+theme = ExtResource( 7 )
+window_title = "Quit before saving"
+dialog_text = "The passwords haven't been saved yet."
+
 [connection signal="pressed" from="M/Menu/File" to="." method="_on_File_pressed"]
 [connection signal="pressed" from="M/Menu/Tools" to="." method="_on_Tools_pressed"]
 [connection signal="pressed" from="M/Menu/Settings" to="." method="_on_Settings_pressed"]
@@ -160,3 +167,4 @@ dialog_text = "Created by Andrew Wilkes 2022"
 [connection signal="resized" from="Content" to="." method="_on_Content_resized"]
 [connection signal="file_selected" from="Popups/FileDialog" to="." method="_on_FileDialog_file_selected"]
 [connection signal="group_removed" from="Popups/Settings" to="." method="_on_Settings_group_removed"]
+[connection signal="confirmed" from="Popups/ConfirmQuit" to="." method="_on_ConfirmQuit_confirmed"]
