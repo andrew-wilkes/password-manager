@@ -127,6 +127,7 @@ func show_alert(msg):
 	$Alert.dialog_text = msg
 	$Alert.popup_centered()
 
+
 func _on_DeleteKey_pressed():
 	$KeyDelete.popup_centered()
 
@@ -158,19 +159,20 @@ func set_group_button_visibility():
 
 
 func _on_GenerateShortKey_pressed():
-	var key = settings.generate_salt(true)
-	keys.add_item(key)
-	var idx = keys.get_item_count() - 1
-	keys.select(idx)
-	settings.keys.append(key)
+	add_new_key(true)
 
 
 func _on_GenerateLongKey_pressed():
-	var key = settings.generate_salt(false)
+	add_new_key(false)
+
+
+func add_new_key(short: bool):
+	var key = settings.generate_salt(short)
 	keys.add_item(key)
 	var idx = keys.get_item_count() - 1
 	keys.select(idx)
 	settings.keys.append(key)
+	settings.key_idx = keys.selected
 
 
 func _on_Settings_popup_hide():
