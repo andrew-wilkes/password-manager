@@ -66,6 +66,7 @@ func state_handler(action, data):
 							db.items = parse_obj.result
 						show_content(form_map[state],\
 						 { settings = settings, database = db })
+						set_locked(false)
 					else:
 						alert.show_message("Invalid password or key")
 				BROWSE_PRESSED:
