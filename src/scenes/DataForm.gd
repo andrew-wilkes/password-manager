@@ -97,9 +97,7 @@ func get_cell_content(data, key):
 	return data[key]
 
 
-func test():
-	settings = Settings.new()
-	database = Database.new()
+func add_dummy_data():
 	var r1 = Record.new()
 	r1.data.title = "Title of entry"
 	r1.data.username = "User1"
@@ -115,7 +113,6 @@ func test():
 		r.data.modified = OS.get_unix_time_from_datetime(OS.get_datetime_from_unix_time(randi()))
 		r.data.notes = str(randi()).md5_text()
 		database.items.append(r.data)
-	populate_grid(database, "", false, 0)
 
 
 func _ready():
@@ -128,12 +125,14 @@ func _ready():
 		heading.connect("clicked", self, "heading_clicked")
 		grid.add_child(heading)
 	emit_signal("action", "hello", null)
-	test()
 
 
-func init(_settings):
+func init(data):
 	visible = true
-	settings = _settings
+	settings = data.settings
+	database = data.database
+	#add_dummy_data()
+	populate_grid(database, "", false, 0)
 	update_group_buttons()
 
 

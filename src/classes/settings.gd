@@ -4,7 +4,6 @@ class_name Settings
 
 const FILE_NAME = "user://settings.tres"
 
-export(String) var salt
 export var current_file = "pw1.pwd"
 export var last_dir = ""
 export var date_format = "YYYY-MM-DD"
@@ -17,11 +16,11 @@ func save_data():
 
 
 func load_data():
-	salt = generate_salt()
 	if ResourceLoader.exists(FILE_NAME):
 		return ResourceLoader.load(FILE_NAME)
 	else:
 		last_dir = OS.get_system_dir(OS.SYSTEM_DIR_DOCUMENTS)
+		keys.append(generate_salt())
 		return self
 
 

@@ -24,16 +24,16 @@ func test_salted_key():
 	assert_ne_shallow(key, key2)
 
 func test_encryption():
-	var settings = { "salt": "asalt"}
+	var salt = "asalt"
 	var key = "akey"
 	passwords.set_iv()
-	passwords.pre_encode_data("mydata", settings)
+	passwords.pre_encode_data("mydata".to_utf8(), salt)
 	assert_true(passwords.data is PoolByteArray, "Data is a PoolByteArray")
-	passwords.post_encode_data(key, settings)
+	passwords.post_encode_data(salt, key)
 	assert_true(passwords.data is PoolByteArray, "Data is a PoolByteArray")
-	passwords.pre_decode_data(key, settings)
+	passwords.pre_decode_data(salt, key)
 	assert_true(passwords.decrypted_data is PoolByteArray, "Data is a PoolByteArray")
-	passwords.post_decode_data(settings)
+	passwords.post_decode_data(salt)
 	assert_eq(passwords.decrypted_data.get_string_from_utf8(), "mydata")
 
 func test_save_load():
@@ -63,6 +63,11 @@ func test_verify_data():
 	# Get a PoolByteArray of the text data
 	var byte_data = txt.to_utf8()
 	var the_data = txt.sha256_buffer()
+	var bytes = txt.sha256_text().to_utf8()
+	print(the_data)
+	print(bytes)
 	the_data.append_array(byte_data)
 	var result = passwords.verify_data(the_data)
-	assert_true(result.verified)
+	assert_true(result)
+	result = passwords.verify_data(the_data.subarray(8,-1))
+	assert_false(result)
