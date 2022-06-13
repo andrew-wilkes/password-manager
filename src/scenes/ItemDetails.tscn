@@ -263,12 +263,13 @@ margin_right = 41.0
 margin_bottom = 17.0
 text = "Groups"
 
-[node name="Groups" type="ItemList" parent="M/VB/HB4/VB"]
+[node name="Groups" type="GridContainer" parent="M/VB/HB4/VB"]
 margin_top = 27.0
 margin_right = 41.0
 margin_bottom = 27.0
 custom_constants/vseparation = 5
-auto_height = true
+custom_constants/hseparation = 10
+columns = 3
 
 [node name="Spacer" type="Control" parent="M/VB/HB4"]
 margin_left = 406.0

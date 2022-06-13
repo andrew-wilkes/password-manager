@@ -4,7 +4,8 @@ signal delete_item(item)
 
 var settings
 var item
-onready var groups: ItemList = $M/VB/HB4/VB/Groups
+onready var groups = $M/VB/HB4/VB/Groups
+var id_check_box = preload("res://scenes/IDCheckBox.tscn")
 
 func open(_item, _settings):
 	settings = _settings
@@ -60,14 +61,24 @@ func set_secret(reveal):
 
 
 func add_groups():
-	groups.clear()
-	var idx = 0
+	for node in groups.get_children():
+		node.queue_free()
 	for group_id in settings.groups:
-		groups.add_item(settings.groups[group_id])
-		groups.set_item_metadata(idx, group_id)
-		groups.set_item_selectable(idx, true)
+		var cb = id_check_box.instance()
+		cb.id = group_id
+		cb.text = settings.groups[group_id]
 		if group_id in item.groups:
-			groups.select(idx, false)
+			cb.pressed = true
+		cb.connect("toggled", self, "update_groups", [group_id])
+		groups.add_child(cb)
+
+
+func update_groups(selected, id):
+	# JSON conversion turns the id into a float value after saving
+	if selected:
+		item.groups.append(float(id))
+	else:
+		item.groups.erase(float(id))
 
 
 func _on_Title_text_changed(new_text):
