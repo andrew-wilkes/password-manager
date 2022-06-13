@@ -4,11 +4,12 @@ signal delete_item(item)
 
 var settings
 var item
+onready var groups: ItemList = $M/VB/HB4/VB/Groups
 
 func open(_item, _settings):
 	settings = _settings
 	item = _item
-	popup_centered()
+	add_groups()
 	call_deferred("set_panel_size")
 	$M/VB/HB/Title.text = item.title
 	$M/VB/Username.text = item.username
@@ -37,6 +38,9 @@ func update_modified():
 
 func set_panel_size():
 	rect_size = $M.rect_size
+	popup_centered()
+	yield(get_tree(), "idle_frame")
+	rect_size = $M.rect_size
 
 
 func _on_Show_pressed():
@@ -53,6 +57,17 @@ func set_secret(reveal):
 	$M/VB/HB2/Password.secret = not reveal
 	$M/VB/HB2/C1/Show.visible = not reveal
 	$M/VB/HB2/C1/Hide.visible = reveal
+
+
+func add_groups():
+	groups.clear()
+	var idx = 0
+	for group_id in settings.groups:
+		groups.add_item(settings.groups[group_id])
+		groups.set_item_metadata(idx, group_id)
+		groups.set_item_selectable(idx, true)
+		if group_id in item.groups:
+			groups.select(idx, false)
 
 
 func _on_Title_text_changed(new_text):

@@ -74,7 +74,7 @@ size_flags_horizontal = 3
 [node name="SC" type="ScrollContainer" parent="."]
 margin_top = 70.0
 margin_right = 1022.0
-margin_bottom = 600.0
+margin_bottom = 589.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
@@ -97,6 +97,10 @@ visible = false
 custom_constants/separation = 0
 
 [node name="ItemDetails" parent="." instance=ExtResource( 4 )]
+margin_left = 0.0
+margin_top = 599.0
+margin_right = 1022.0
+margin_bottom = 600.0
 
 [connection signal="visibility_changed" from="." to="." method="_on_DataForm_visibility_changed"]
 [connection signal="group_button_pressed" from="Groups/GroupButton" to="." method="set_group"]
