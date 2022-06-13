@@ -72,11 +72,14 @@ func _on_Password_text_changed(new_text):
 	update_modified()
 
 
-func _on_URL_text_changed(new_text):
+func _on_URL_text_changed(url: String):
 	# May want to add some kind of filtering to the URL here to strip out tracking IDs etc.
 	# The user may copy and paste a URL for example
 	# Could have a settings option for the level of filtering
-	item.url = new_text
+	url = url.to_lower()
+	if not url.begins_with("http"):
+		url = "https://" + url
+	item.url = url.replace("fbclid=", "")
 	update_modified()
 
 
@@ -96,3 +99,7 @@ func _on_Confirm_confirmed():
 
 func _on_WWW_pressed():
 	var _e = OS.shell_open($M/VB/HB3/URL.text)
+
+
+func _on_OK_pressed():
+	hide()

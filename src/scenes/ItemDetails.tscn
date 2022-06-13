@@ -11,6 +11,7 @@
 [ext_resource path="res://style/Theme.tres" type="Theme" id=9]
 
 [node name="ItemDetails" type="WindowDialog"]
+visible = true
 margin_left = 9.0
 margin_top = 9.0
 margin_right = 783.0
@@ -268,6 +269,28 @@ margin_top = 27.0
 margin_right = 41.0
 margin_bottom = 27.0
 
+[node name="Spacer" type="Control" parent="M/VB/HB4"]
+margin_left = 406.0
+margin_right = 683.0
+margin_bottom = 71.0
+size_flags_horizontal = 3
+
+[node name="VB2" type="VBoxContainer" parent="M/VB/HB4"]
+margin_left = 723.0
+margin_right = 751.0
+margin_bottom = 71.0
+
+[node name="Spacer" type="Control" parent="M/VB/HB4/VB2"]
+margin_right = 28.0
+margin_bottom = 42.0
+size_flags_vertical = 3
+
+[node name="OK" type="Button" parent="M/VB/HB4/VB2"]
+margin_top = 46.0
+margin_right = 28.0
+margin_bottom = 71.0
+text = "OK"
+
 [node name="Confirm" type="ConfirmationDialog" parent="."]
 margin_right = 200.0
 margin_bottom = 70.0
@@ -283,4 +306,5 @@ dialog_text = "Delete?"
 [connection signal="text_changed" from="M/VB/HB3/URL" to="." method="_on_URL_text_changed"]
 [connection signal="text_changed" from="M/VB/Notes" to="." method="_on_Notes_text_changed"]
 [connection signal="pressed" from="M/VB/HB4/Time/Delete" to="." method="_on_Delete_pressed"]
+[connection signal="pressed" from="M/VB/HB4/VB2/OK" to="." method="_on_OK_pressed"]
 [connection signal="confirmed" from="Confirm" to="." method="_on_Confirm_confirmed"]
