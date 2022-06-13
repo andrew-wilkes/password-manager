@@ -1,6 +1,6 @@
 extends Control
 
-enum { NO_ACTION, NEW, OPEN, SAVE, SAVE_AS, SAVE_INC, QUIT, ABOUT, LICENCES, PWD_GEN, CHG_PW, SETTINGS }
+enum { NO_ACTION, NEW, OPEN, SAVE, SAVE_AS, SAVE_INC, QUIT, ABOUT, LICENCES, PWD_GEN, CHG_PW }
 enum { UNLOCKED, LOCKED }
 enum { SET_PASSWORD, ENTER_PASSWORD, ACCESS_DATA }
 enum { ENTER_PRESSED, PASSWORD_TEXT_CHANGED, BROWSE_PRESSED }
@@ -47,6 +47,7 @@ func state_handler(action, data):
 					state = ACCESS_DATA
 					show_content(form_map[state],\
 						 {settings = settings, database = Database.new()})
+					set_locked(false)
 				PASSWORD_TEXT_CHANGED:
 					# Evaluate the password strength
 					pass
@@ -87,16 +88,15 @@ func set_title():
 
 
 func load_passwords():
+	set_locked(true)
 	passwords = Passwords.new()
 	if passwords.load_data(settings):
 		state = ENTER_PASSWORD
-		set_locked(true)
 		show_content(form_map[state], settings.current_file)
 	else:
 		passwords.set_iv()
 		state = SET_PASSWORD
 		show_content(form_map[state], "")
-		set_locked(false)
 
 
 func show_content(target_name, data = null):
@@ -144,9 +144,9 @@ func _on_FileMenu_id_pressed(id):
 	menu_action = id
 	match id:
 		NEW:
-			save_passwords()
-			settings.current_file = ""
-			load_passwords()
+			if not password.empty() and save_passwords():
+				settings.current_file = ""
+				load_passwords()
 		OPEN:
 			do_action()
 		SAVE:
@@ -163,8 +163,11 @@ func _on_FileMenu_id_pressed(id):
 
 
 func save_passwords():
+	var result = true
 	if passwords.save_data(settings):
 		alert.show_message("Failed to save passwords to file")
+		result = false
+	return result
 
 
 func _on_ToolsMenu_id_pressed(id):
@@ -174,8 +177,6 @@ func _on_ToolsMenu_id_pressed(id):
 		CHG_PW:
 			state = SET_PASSWORD
 			show_content(form_map[state], "")
-		SETTINGS:
-			pass
 
 
 func _on_HelpMenu_id_pressed(id):
@@ -220,7 +221,7 @@ func _notification(what):
 
 func save_and_quit():
 	settings.save_data()
-	if locked:
+	if locked or data_form.database == null:
 		get_tree().quit()
 	else:
 		update_password_data()
@@ -261,7 +262,7 @@ func _on_FileDialog_file_selected(path):
 	settings.current_file = path.get_file()
 	settings.last_dir = path.get_base_dir()
 	if menu_action == SAVE:
-		save_passwords()
+		var _e = save_passwords()
 	else:
 		load_passwords()
 
