@@ -43,7 +43,7 @@ func state_handler(action, data):
 		SET_PASSWORD:
 			match action:
 				ENTER_PRESSED:
-					password = data.sha256_text()
+					password = data
 					state = ACCESS_DATA
 					show_content(form_map[state],\
 						 {settings = settings, database = Database.new()})
@@ -55,7 +55,7 @@ func state_handler(action, data):
 			match action:
 				ENTER_PRESSED:
 					# Try to open the database
-					password = data.sha256_text()
+					password = data
 					passwords.pre_decode_data(settings.keys[settings.key_idx], password)
 					passwords.post_decode_data(settings.keys[settings.key_idx])
 					# If error, display alert

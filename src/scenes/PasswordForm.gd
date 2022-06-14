@@ -50,4 +50,4 @@ func _on_Enter_pressed():
 
 func emit_text(txt):
 	password_field.text = ""
-	emit_signal("action", ENTER_PRESSED, txt)
+	emit_signal("action", ENTER_PRESSED, txt.sha256_text())
