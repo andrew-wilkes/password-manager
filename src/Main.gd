@@ -49,7 +49,7 @@ func state_handler(action, data):
 						 {settings = settings, database = Database.new()})
 					set_locked(false)
 				PASSWORD_TEXT_CHANGED:
-					# Evaluate the password strength
+					# Decided not to evaluate the main password strength since a key is also applied
 					pass
 		ENTER_PASSWORD:
 			match action:
@@ -65,16 +65,13 @@ func state_handler(action, data):
 						var db = Database.new()
 						if typeof(parse_obj.result) == TYPE_ARRAY:
 							db.items = parse_obj.result
-						show_content(form_map[state],\
-						 { settings = settings, database = db })
+						show_content(form_map[state], { "settings": settings, "database": db })
 						set_locked(false)
 					else:
 						alert.show_message("Invalid password or key")
 				BROWSE_PRESSED:
 					menu_action = OPEN
 					do_action()
-		ACCESS_DATA:
-			pass
 
 
 func set_title():

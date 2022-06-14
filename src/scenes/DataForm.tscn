@@ -46,16 +46,9 @@ custom_constants/separation = 20
 [node name="Margin" type="Control" parent="SB"]
 margin_bottom = 25.0
 
-[node name="SearchBox" type="LineEdit" parent="SB"]
-margin_left = 20.0
-margin_right = 493.0
-margin_bottom = 25.0
-size_flags_horizontal = 3
-placeholder_text = "Search text"
-
 [node name="C" type="CenterContainer" parent="SB"]
-margin_left = 513.0
-margin_right = 529.0
+margin_left = 20.0
+margin_right = 36.0
 margin_bottom = 25.0
 
 [node name="Add" type="TextureButton" parent="SB/C"]
@@ -64,6 +57,13 @@ margin_right = 16.0
 margin_bottom = 20.0
 hint_tooltip = "Add a new entry"
 texture_normal = ExtResource( 3 )
+
+[node name="SearchBox" type="LineEdit" parent="SB"]
+margin_left = 56.0
+margin_right = 529.0
+margin_bottom = 25.0
+size_flags_horizontal = 3
+placeholder_text = "Search text"
 
 [node name="Spacer" type="Control" parent="SB"]
 margin_left = 549.0
@@ -74,7 +74,7 @@ size_flags_horizontal = 3
 [node name="SC" type="ScrollContainer" parent="."]
 margin_top = 70.0
 margin_right = 1022.0
-margin_bottom = 589.0
+margin_bottom = 600.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
@@ -97,6 +97,7 @@ visible = false
 custom_constants/separation = 0
 
 [node name="ItemDetails" parent="." instance=ExtResource( 4 )]
+visible = false
 margin_left = 0.0
 margin_top = 599.0
 margin_right = 1022.0

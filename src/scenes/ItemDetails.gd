@@ -88,7 +88,7 @@ func update_groups(selected, id):
 
 func set_password_score_status():
 	var good = true if item.strength >= GOOD_PASSWORD_SCORE else false
-	$M/VB/HB2/C2/Warn.visible = not good
+	$M/VB/HB2/C2/Warn.visible = not good and not item.password.empty()
 	$M/VB/HB2/C2/OK.visible = good
 
 
