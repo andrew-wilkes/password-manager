@@ -106,8 +106,8 @@ enabled=PoolStringArray( "res://addons/gut/plugin.cfg" )
 
 [gui]
 
-theme/custom="res://style/Theme.tres"
-theme/custom_font="res://style/type/TypeRegularNormal.tres"
+theme/custom="res://style/theme.tres"
+theme/custom_font="res://style/type/type_regular_normal.tres"
 
 [physics]
 
