@@ -124,6 +124,7 @@ margin_bottom = 25.0
 margin_top = 4.0
 margin_right = 16.0
 margin_bottom = 20.0
+hint_tooltip = "Open URL in browser"
 texture_normal = ExtResource( 6 )
 
 [node name="URL" type="LineEdit" parent="M/VB/HB3"]

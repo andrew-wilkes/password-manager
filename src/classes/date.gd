@@ -3,9 +3,9 @@ class_name Date
 enum Month { JAN = 1, FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, DEC }
 
 const MONTH_NAME = [ 
-		"Jan", "Feb", "Mar", "Apr", 
-		"May", "Jun", "Jul", "Aug", 
-		"Sep", "Oct", "Nov", "Dec" ]
+		"January", "February", "March", "April", 
+		"May", "June", "July", "August", 
+		"September", "October", "November", "December" ]
 
 const WEEKDAY_NAME = [ 
 		"Sunday", "Monday", "Tuesday", "Wednesday", 

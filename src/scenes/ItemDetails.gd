@@ -134,7 +134,8 @@ func _on_Confirm_confirmed():
 
 
 func _on_WWW_pressed():
-	var _e = OS.shell_open($M/VB/HB3/URL.text)
+	if not item.url.empty():
+		var _e = OS.shell_open(item.url)
 
 
 func _on_OK_pressed():
