@@ -2,10 +2,14 @@ extends WindowDialog
 
 signal delete_item(item)
 
+const GOOD_PASSWORD_SCORE = 3
+
 var settings
 var item
 onready var groups = $M/VB/HB4/VB/Groups
 var id_check_box = preload("res://scenes/IDCheckBox.tscn")
+var password_check_result = {}
+
 
 func open(_item, _settings):
 	settings = _settings
@@ -17,6 +21,7 @@ func open(_item, _settings):
 	$M/VB/HB3/URL.text = item.url
 	set_secret(item.reveal)
 	$M/VB/HB2/Password.text = item.password
+	set_password_score_status()
 	$M/VB/Notes.text = item.notes
 	$M/VB/HB4/Time/Created.text = get_date(item.created)
 	$M/VB/HB4/Time/Modified.text = get_date(item.modified)
@@ -81,6 +86,12 @@ func update_groups(selected, id):
 		item.groups.erase(float(id))
 
 
+func set_password_score_status():
+	var good = true if item.strength >= GOOD_PASSWORD_SCORE else false
+	$M/VB/HB2/C2/Warn.visible = not good
+	$M/VB/HB2/C2/OK.visible = good
+
+
 func _on_Title_text_changed(new_text):
 	item.title = new_text
 	update_modified()
@@ -93,8 +104,7 @@ func _on_Username_text_changed(new_text):
 
 func _on_Password_text_changed(new_text):
 	item.password = new_text
-	# Check password strength and show alerts
-	# Update the tick etc.
+	$PasswordCheckTimer.start()
 	update_modified()
 
 
@@ -129,3 +139,37 @@ func _on_WWW_pressed():
 
 func _on_OK_pressed():
 	hide()
+
+
+func _on_PasswordCheckTimer_timeout():
+	check_password()
+
+
+func check_password():
+	if not item.password.empty():
+		password_check_result = ZXCVBN.zxcvbn(item.password)
+		item.strength = password_check_result["score"]
+		set_password_score_status()
+
+
+func show_feedback():
+	if password_check_result.empty():
+		check_password()
+	
+	var txt = ""
+	if not password_check_result["feedback"]["warning"].empty():
+		txt = "Warning: " + password_check_result["feedback"]["warning"] + "\n\n"
+	
+	var sugs = password_check_result["feedback"]["suggestions"]
+	if sugs.size() > 0:
+		txt += "Suggestions\n\n"
+		txt += PoolStringArray(sugs).join("\n")
+	
+	if txt.empty():
+		if item.strength == GOOD_PASSWORD_SCORE:
+			txt = "This is a good password."
+		else:
+			txt = "This is a great password!"
+
+	$Feedback.dialog_text = txt
+	$Feedback.popup_centered()
