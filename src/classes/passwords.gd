@@ -20,26 +20,27 @@ func set_iv():
 # This step is to obscure the data, so even if a cracker brute-forces the
 # correct salted key they will not see recognizable data, and hence not
 # know that they identified the key (hopefully).
-func pre_encode_data(pdata, settings):
-	aes.start(AESContext.MODE_ECB_ENCRYPT, settings.salt.sha256_buffer())
-	data = aes.update(pad_data(pdata.to_utf8()))
+func pre_encode_data(pdata, salt):
+	aes.start(AESContext.MODE_ECB_ENCRYPT, salt.sha256_buffer())
+	var byte_data = pad_data(pdata)
+	data = aes.update(byte_data)
 	aes.finish()
 
 
-func post_encode_data(key, settings):
-	aes.start(AESContext.MODE_CBC_ENCRYPT, salted_key(settings, key), iv)
+func post_encode_data(salt, key):
+	aes.start(AESContext.MODE_CBC_ENCRYPT, salted_key(salt, key), iv)
 	data = aes.update(data)
 	aes.finish()
 
 
-func pre_decode_data(key, settings):
-	aes.start(AESContext.MODE_CBC_DECRYPT, salted_key(settings, key), iv)
+func pre_decode_data(salt, key):
+	aes.start(AESContext.MODE_CBC_DECRYPT, salted_key(salt, key), iv)
 	decrypted_data = aes.update(data)
 	aes.finish()
 
 
-func post_decode_data(settings):
-	aes.start(AESContext.MODE_ECB_DECRYPT, settings.salt.sha256_buffer())
+func post_decode_data(salt):
+	aes.start(AESContext.MODE_ECB_DECRYPT, salt.sha256_buffer())
 	decrypted_data = aes.update(decrypted_data)
 	aes.finish()
 	decrypted_data.resize(decrypted_data.size() - decrypted_data[-1])
@@ -80,9 +81,9 @@ func load_data(settings):
 	return loaded
 
 
-func salted_key(settings, key):
+func salted_key(salt, key):
 	# This function allows us to change how we may apply the salt
-	return (settings.salt + key).sha256_buffer()
+	return (salt + key).sha256_buffer()
 
 
 func password_filename(settings):
@@ -91,14 +92,14 @@ func password_filename(settings):
 
 # This function will be used to verify if the decrypted data is comprehensible or not.
 func verify_data(decoded_data: PoolByteArray):
-	var result = { "verified": false, "data": null }
+	var verified = false
 	if decoded_data.size() > HASH_SIZE:
 		var hash_bytes = decoded_data.subarray(0, HASH_SIZE - 1)
-		result.data = decoded_data.subarray(HASH_SIZE, -1)
-		var db_hash = hash_bytes(result.data)
+		decrypted_data = decoded_data.subarray(HASH_SIZE, -1)
+		var db_hash = hash_bytes(decrypted_data)
 		if [db_hash].hash() == [hash_bytes].hash():
-			result.verified = true
-	return result
+			verified = true
+	return verified
 
 
 func hash_bytes(b: PoolByteArray):

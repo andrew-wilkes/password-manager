@@ -416,11 +416,11 @@ func l33t_variations(_match):
 
 	var variations = 1
 
-	for subbed in _match['sub'].items().keys():
-		var unsubbed = _match['sub'].items()[subbed]
+	for subbed in _match['sub'].keys():
+		var unsubbed = _match['sub'][subbed]
 		# lower-case _match.token before calculating: capitalization shouldn't
 		# affect l33t calc.
-		var chrs = _match['token'].lower()
+		var chrs = _match['token'].to_lower()
 		var S = 0
 		var U = 0
 		for c in chrs:

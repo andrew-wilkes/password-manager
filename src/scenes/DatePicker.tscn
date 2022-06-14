@@ -1,0 +1,165 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://style/type/TypeRegularNormal.tres" type="DynamicFont" id=1]
+[ext_resource path="res://scenes/DatePicker.gd" type="Script" id=2]
+[ext_resource path="res://assets/ArrowLeft.svg" type="Texture" id=3]
+[ext_resource path="res://assets/ArrowRight.svg" type="Texture" id=4]
+[ext_resource path="res://style/type/TypeBoldSmall.tres" type="DynamicFont" id=5]
+[ext_resource path="res://style/type/TypeBoldNormal.tres" type="DynamicFont" id=6]
+[ext_resource path="res://style/type/TypeBoldLarge.tres" type="DynamicFont" id=7]
+
+[sub_resource type="ButtonGroup" id=1]
+resource_name = "Day"
+
+[node name="DatePicker" type="WindowDialog"]
+margin_right = 269.0
+margin_bottom = 321.0
+window_title = "Date Picker"
+script = ExtResource( 2 )
+
+[node name="VB" type="VBoxContainer" parent="."]
+margin_left = 14.0
+margin_top = 17.0
+margin_right = 222.0
+margin_bottom = 146.0
+
+[node name="Day" type="Label" parent="VB"]
+margin_right = 208.0
+margin_bottom = 20.0
+custom_fonts/font = ExtResource( 7 )
+text = "Tuesday"
+align = 1
+
+[node name="Date" type="Label" parent="VB"]
+margin_top = 24.0
+margin_right = 208.0
+margin_bottom = 41.0
+custom_fonts/font = ExtResource( 6 )
+text = "June 14, 2022"
+align = 1
+
+[node name="Navigation" type="HBoxContainer" parent="VB"]
+margin_top = 45.0
+margin_right = 208.0
+margin_bottom = 61.0
+
+[node name="MonthLeft" type="TextureButton" parent="VB/Navigation"]
+margin_right = 16.0
+margin_bottom = 16.0
+texture_normal = ExtResource( 3 )
+
+[node name="Month" type="Label" parent="VB/Navigation"]
+margin_left = 20.0
+margin_top = 1.0
+margin_right = 82.0
+margin_bottom = 15.0
+size_flags_horizontal = 3
+custom_fonts/font = ExtResource( 5 )
+text = "June"
+align = 1
+
+[node name="MonthRight" type="TextureButton" parent="VB/Navigation"]
+margin_left = 86.0
+margin_right = 102.0
+margin_bottom = 16.0
+texture_normal = ExtResource( 4 )
+
+[node name="YearLeft" type="TextureButton" parent="VB/Navigation"]
+margin_left = 106.0
+margin_right = 122.0
+margin_bottom = 16.0
+texture_normal = ExtResource( 3 )
+
+[node name="Year" type="Label" parent="VB/Navigation"]
+margin_left = 126.0
+margin_top = 1.0
+margin_right = 188.0
+margin_bottom = 15.0
+size_flags_horizontal = 3
+custom_fonts/font = ExtResource( 5 )
+text = "2022"
+align = 1
+
+[node name="YearRight" type="TextureButton" parent="VB/Navigation"]
+margin_left = 192.0
+margin_right = 208.0
+margin_bottom = 16.0
+texture_normal = ExtResource( 4 )
+
+[node name="Grid" type="GridContainer" parent="VB"]
+margin_top = 65.0
+margin_right = 208.0
+margin_bottom = 117.0
+custom_constants/vseparation = 10
+custom_constants/hseparation = 10
+columns = 7
+
+[node name="Sun" type="Label" parent="VB/Grid"]
+margin_right = 23.0
+margin_bottom = 17.0
+custom_fonts/font = ExtResource( 6 )
+text = "Sun"
+align = 1
+
+[node name="Mon" type="Label" parent="VB/Grid"]
+margin_left = 33.0
+margin_right = 58.0
+margin_bottom = 17.0
+custom_fonts/font = ExtResource( 1 )
+text = "Mon"
+align = 1
+
+[node name="Tue" type="Label" parent="VB/Grid"]
+margin_left = 68.0
+margin_right = 89.0
+margin_bottom = 17.0
+custom_fonts/font = ExtResource( 1 )
+text = "Tue"
+align = 1
+
+[node name="Wed" type="Label" parent="VB/Grid"]
+margin_left = 99.0
+margin_right = 124.0
+margin_bottom = 17.0
+custom_fonts/font = ExtResource( 1 )
+text = "Wed"
+align = 1
+
+[node name="Thu" type="Label" parent="VB/Grid"]
+margin_left = 134.0
+margin_right = 155.0
+margin_bottom = 17.0
+custom_fonts/font = ExtResource( 1 )
+text = "Thu"
+align = 1
+
+[node name="Fri" type="Label" parent="VB/Grid"]
+margin_left = 165.0
+margin_right = 179.0
+margin_bottom = 17.0
+custom_fonts/font = ExtResource( 1 )
+text = "Fri"
+align = 1
+
+[node name="Sat" type="Label" parent="VB/Grid"]
+margin_left = 189.0
+margin_right = 208.0
+margin_bottom = 17.0
+custom_fonts/font = ExtResource( 6 )
+text = "Sat"
+align = 1
+
+[node name="Day1" type="Button" parent="VB/Grid"]
+margin_top = 27.0
+margin_right = 23.0
+margin_bottom = 52.0
+custom_fonts/font = ExtResource( 1 )
+toggle_mode = true
+group = SubResource( 1 )
+text = "1"
+
+[connection signal="popup_hide" from="." to="." method="_on_DatePicker_popup_hide"]
+[connection signal="pressed" from="VB/Navigation/MonthLeft" to="." method="_on_MonthLeft_pressed"]
+[connection signal="pressed" from="VB/Navigation/MonthRight" to="." method="_on_MonthRight_pressed"]
+[connection signal="pressed" from="VB/Navigation/YearLeft" to="." method="_on_YearLeft_pressed"]
+[connection signal="pressed" from="VB/Navigation/YearRight" to="." method="_on_YearRight_pressed"]

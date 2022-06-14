@@ -28,7 +28,6 @@ var update_bars = false
 var current_group = 0
 var current_key = ""
 var current_reverse_state = false
-var refresh_grid = false
 
 func populate_grid(db: Database, key, reverse, group):
 	current_key = key
@@ -97,9 +96,7 @@ func get_cell_content(data, key):
 	return data[key]
 
 
-func test():
-	settings = Settings.new()
-	database = Database.new()
+func add_dummy_data():
 	var r1 = Record.new()
 	r1.data.title = "Title of entry"
 	r1.data.username = "User1"
@@ -115,7 +112,6 @@ func test():
 		r.data.modified = OS.get_unix_time_from_datetime(OS.get_datetime_from_unix_time(randi()))
 		r.data.notes = str(randi()).md5_text()
 		database.items.append(r.data)
-	populate_grid(database, "", false, 0)
 
 
 func _ready():
@@ -128,12 +124,14 @@ func _ready():
 		heading.connect("clicked", self, "heading_clicked")
 		grid.add_child(heading)
 	emit_signal("action", "hello", null)
-	test()
 
 
-func init(_settings):
+func init(data):
 	visible = true
-	settings = _settings
+	settings = data.settings
+	database = data.database
+	#add_dummy_data()
+	populate_grid(database, "", false, 0)
 	update_group_buttons()
 
 
@@ -201,10 +199,7 @@ func _on_Add_pressed():
 	item.created = OS.get_unix_time()
 	database.items.push_front(item)
 	show_item_details(item)
-	refresh_grid = true
 
 
 func _on_ItemDetails_popup_hide():
-	if refresh_grid:
-		refresh_grid = false
-		populate_grid(database, "", false, 0)
+	populate_grid(database, current_key, current_reverse_state, current_group)

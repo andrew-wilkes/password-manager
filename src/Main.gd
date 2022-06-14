@@ -1,6 +1,6 @@
 extends Control
 
-enum { NO_ACTION, NEW, OPEN, SAVE, SAVE_AS, SAVE_INC, QUIT, ABOUT, LICENCES, PWD_GEN, CHG_PW, SETTINGS }
+enum { NO_ACTION, NEW, OPEN, SAVE, SAVE_AS, SAVE_INC, QUIT, ABOUT, LICENCES, PWD_GEN, CHG_PW }
 enum { UNLOCKED, LOCKED }
 enum { SET_PASSWORD, ENTER_PASSWORD, ACCESS_DATA }
 enum { ENTER_PRESSED, PASSWORD_TEXT_CHANGED, BROWSE_PRESSED }
@@ -13,7 +13,6 @@ const form_map = {
 
 var settings: Settings
 var passwords: Passwords
-var database: Database
 
 onready var file_menu = find_node("File").get_popup()
 onready var file_dialog = find_node("FileDialog")
@@ -21,6 +20,7 @@ onready var tools_menu = find_node("Tools").get_popup()
 onready var help_menu = find_node("Help").get_popup()
 onready var content_node = find_node("Content")
 onready var alert = find_node("Alert")
+onready var data_form = find_node("DataForm")
 
 var menu_action = NO_ACTION
 var state = NO_ACTION
@@ -32,7 +32,6 @@ func _ready():
 	var _e = get_tree().get_root().connect("size_changed", self, "viewport_size_changed")
 	settings = Settings.new()
 	settings = settings.load_data()
-	database = Database.new()
 	configure_menu()
 	load_passwords()
 	for child in content_node.get_children():
@@ -44,9 +43,11 @@ func state_handler(action, data):
 		SET_PASSWORD:
 			match action:
 				ENTER_PRESSED:
-					password = data.sha256_text()
+					password = data
 					state = ACCESS_DATA
-					show_content(form_map[state], settings)
+					show_content(form_map[state],\
+						 {settings = settings, database = Database.new()})
+					set_locked(false)
 				PASSWORD_TEXT_CHANGED:
 					# Evaluate the password strength
 					pass
@@ -54,9 +55,21 @@ func state_handler(action, data):
 			match action:
 				ENTER_PRESSED:
 					# Try to open the database
+					password = data
+					passwords.pre_decode_data(settings.keys[settings.key_idx], password)
+					passwords.post_decode_data(settings.keys[settings.key_idx])
 					# If error, display alert
-					state = ACCESS_DATA
-					show_content(form_map[state], settings)
+					if passwords.verify_data(passwords.decrypted_data):
+						state = ACCESS_DATA
+						var parse_obj = JSON.parse(passwords.decrypted_data.get_string_from_utf8())
+						var db = Database.new()
+						if typeof(parse_obj.result) == TYPE_ARRAY:
+							db.items = parse_obj.result
+						show_content(form_map[state],\
+						 { settings = settings, database = db })
+						set_locked(false)
+					else:
+						alert.show_message("Invalid password or key")
 				BROWSE_PRESSED:
 					menu_action = OPEN
 					do_action()
@@ -75,19 +88,15 @@ func set_title():
 
 
 func load_passwords():
+	set_locked(true)
 	passwords = Passwords.new()
-	if settings.current_file.empty():
+	if passwords.load_data(settings):
+		state = ENTER_PASSWORD
+		show_content(form_map[state], settings.current_file)
+	else:
 		passwords.set_iv()
 		state = SET_PASSWORD
 		show_content(form_map[state], "")
-		set_locked(false)
-	else:
-		state = ENTER_PASSWORD
-		set_locked(true)
-		if passwords.load_data(settings):
-			show_content(form_map[state], settings.current_file)
-		else:
-			alert.show_message("Error opening password data file")
 
 
 func show_content(target_name, data = null):
@@ -135,9 +144,9 @@ func _on_FileMenu_id_pressed(id):
 	menu_action = id
 	match id:
 		NEW:
-			save_passwords()
-			settings.current_file = ""
-			load_passwords()
+			if not password.empty() and save_passwords():
+				settings.current_file = ""
+				load_passwords()
 		OPEN:
 			do_action()
 		SAVE:
@@ -154,8 +163,11 @@ func _on_FileMenu_id_pressed(id):
 
 
 func save_passwords():
+	var result = true
 	if passwords.save_data(settings):
 		alert.show_message("Failed to save passwords to file")
+		result = false
+	return result
 
 
 func _on_ToolsMenu_id_pressed(id):
@@ -165,8 +177,6 @@ func _on_ToolsMenu_id_pressed(id):
 		CHG_PW:
 			state = SET_PASSWORD
 			show_content(form_map[state], "")
-		SETTINGS:
-			pass
 
 
 func _on_HelpMenu_id_pressed(id):
@@ -192,35 +202,41 @@ func do_action():
 				file_dialog.mode = FileDialog.MODE_SAVE_FILE
 				file_dialog.popup_centered()
 			else:
-				save_data()
+				update_password_data()
+				if passwords.save_data(settings):
+					alert.show_message("Error saving file")
 
 
 func _unhandled_input(event):
 	if event is InputEventKey:
 		if event.pressed and event.scancode == KEY_ESCAPE:
-			save_data()
+			save_and_quit()
 
 
 # Handle shutdown of App
 func _notification(what):
 	if what == MainLoop.NOTIFICATION_WM_QUIT_REQUEST:
-		save_data()
+		save_and_quit()
 
 
 func save_and_quit():
-	save_data()
-	get_tree().quit()
-
-
-func save_data():
 	settings.save_data()
-	if locked:
+	if locked or data_form.database == null:
 		get_tree().quit()
 	else:
+		update_password_data()
 		if passwords.save_data(settings):
 			$Popups/ConfirmQuit.popup_centered()
 		else:
 			get_tree().quit()
+
+
+func update_password_data():
+	var serialized_data =  JSON.print(data_form.database.items)
+	var the_data = serialized_data.sha256_buffer()
+	the_data.append_array(serialized_data.to_utf8())
+	passwords.pre_encode_data(the_data, settings.keys[settings.key_idx])
+	passwords.post_encode_data(settings.keys[settings.key_idx], password)
 
 
 func _on_File_pressed():
@@ -246,7 +262,7 @@ func _on_FileDialog_file_selected(path):
 	settings.current_file = path.get_file()
 	settings.last_dir = path.get_base_dir()
 	if menu_action == SAVE:
-		save_passwords()
+		var _e = save_passwords()
 	else:
 		load_passwords()
 
