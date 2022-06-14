@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=2]
 
-[ext_resource path="res://style/Theme.tres" type="Theme" id=1]
+[ext_resource path="res://style/theme.tres" type="Theme" id=1]
 
 [sub_resource type="StyleBoxFlat" id=3]
 bg_color = Color( 0, 0, 0, 1 )
@@ -104,7 +104,7 @@ func type_resize(value :float) -> void:
 	for type in array_type:
 		match type.resource_name:
 			\"extra_small\":
-				type.set(\"size\", value + (type_size_dif / 2))
+				type.set(\"size\", value - (type_size_dif * 2))
 			\"small\":
 				type.set(\"size\", value - type_size_dif)
 			\"normal\":
@@ -200,9 +200,8 @@ margin_bottom = 20.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 min_value = 8.0
-max_value = 24.0
+max_value = 18.0
 value = 14.0
-rounded = true
 
 [node name="Value" type="Label" parent="Container/Configuration/Container/TypeSize"]
 margin_left = 228.0
