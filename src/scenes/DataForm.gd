@@ -28,8 +28,21 @@ var update_bars = false
 var current_group = 0
 var current_key = ""
 var current_reverse_state = false
+var searchtext = ""
 
-func populate_grid(db: Database, key, reverse, group):
+func _ready():
+	grid = $SC/Grid
+	emit_signal("action", null)
+	for key in headings:
+		var heading = heading_scene.instance()
+		heading.set_sort_mode(heading.NONE)
+		heading.find_node("Label").text = headings[key]
+		heading.db_key = key
+		heading.connect("clicked", self, "heading_clicked")
+		grid.add_child(heading)
+
+
+func populate_grid(db: Database, key, reverse, group, filter = ""):
 	current_key = key
 	current_reverse_state = reverse
 	if not key.empty():
@@ -39,6 +52,9 @@ func populate_grid(db: Database, key, reverse, group):
 	for item in db.items:
 		if group > 0 and not group in item.groups:
 			continue
+		if not filter.empty():
+			if not filter.is_subsequence_ofi(item.title + item.username + item.url):
+				continue
 		var vb = view_button.instance()
 		var _e = vb.connect("view_button_pressed", self, "show_item_details", [item])
 		grid.add_child(vb)
@@ -114,18 +130,6 @@ func add_dummy_data():
 		database.items.append(r.data)
 
 
-func _ready():
-	grid = $SC/Grid
-	for key in headings:
-		var heading = heading_scene.instance()
-		heading.set_sort_mode(heading.NONE)
-		heading.find_node("Label").text = headings[key]
-		heading.db_key = key
-		heading.connect("clicked", self, "heading_clicked")
-		grid.add_child(heading)
-	emit_signal("action", "hello", null)
-
-
 func init(data):
 	visible = true
 	settings = data.settings
@@ -133,6 +137,7 @@ func init(data):
 	#add_dummy_data()
 	populate_grid(database, "", false, 0)
 	update_group_buttons()
+	$SB/SearchBox.grab_focus()
 
 
 func update_group_buttons():
@@ -203,3 +208,12 @@ func _on_Add_pressed():
 
 func _on_ItemDetails_popup_hide():
 	populate_grid(database, current_key, current_reverse_state, current_group)
+
+
+func _on_SearchBox_text_changed(new_text):
+	searchtext = new_text
+	$SearchTimer.start()
+
+
+func _on_SearchTimer_timeout():
+	populate_grid(database, "", false, 0, searchtext)
