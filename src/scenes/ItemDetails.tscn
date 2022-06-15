@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://assets/icon_GUI_visibility_hidden.svg" type="Texture" id=1]
 [ext_resource path="res://assets/icon_GUI_visibility_visible.svg" type="Texture" id=2]
@@ -11,6 +11,7 @@
 [ext_resource path="res://style/Theme.tres" type="Theme" id=9]
 [ext_resource path="res://assets/CopyToClip.png" type="Texture" id=10]
 [ext_resource path="res://assets/CopyToClipPressed.png" type="Texture" id=11]
+[ext_resource path="res://scenes/DatePicker.tscn" type="PackedScene" id=12]
 
 [node name="ItemDetails" type="WindowDialog"]
 margin_left = 9.0
@@ -345,6 +346,8 @@ margin_bottom = 206.0
 theme = ExtResource( 9 )
 window_title = "Feedback"
 
+[node name="DatePicker" parent="." instance=ExtResource( 12 )]
+
 [connection signal="text_changed" from="M/VB/HB/Title" to="." method="_on_Title_text_changed"]
 [connection signal="pressed" from="M/VB/HB5/C4/CopyUser" to="." method="_on_CopyUser_pressed"]
 [connection signal="text_changed" from="M/VB/HB5/Username" to="." method="_on_Username_text_changed"]
@@ -357,7 +360,10 @@ window_title = "Feedback"
 [connection signal="pressed" from="M/VB/HB3/C/WWW" to="." method="_on_WWW_pressed"]
 [connection signal="text_changed" from="M/VB/HB3/URL" to="." method="_on_URL_text_changed"]
 [connection signal="text_changed" from="M/VB/Notes" to="." method="_on_Notes_text_changed"]
+[connection signal="pressed" from="M/VB/HB4/Time/EditExpire" to="." method="_on_EditExpire_pressed"]
+[connection signal="pressed" from="M/VB/HB4/Time/EditRemind" to="." method="_on_EditRemind_pressed"]
 [connection signal="pressed" from="M/VB/HB4/Time/Delete" to="." method="_on_Delete_pressed"]
 [connection signal="pressed" from="M/VB/HB4/VB2/OK" to="." method="_on_OK_pressed"]
 [connection signal="confirmed" from="Confirm" to="." method="_on_Confirm_confirmed"]
 [connection signal="timeout" from="PasswordCheckTimer" to="." method="_on_PasswordCheckTimer_timeout"]
+[connection signal="date_changed" from="DatePicker" to="." method="_on_DatePicker_date_changed"]

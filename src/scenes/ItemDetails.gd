@@ -4,6 +4,8 @@ signal delete_item(item)
 
 const GOOD_PASSWORD_SCORE = 3
 
+enum { EXPIRE, REMIND }
+
 var settings
 var item
 onready var groups = $M/VB/HB4/VB/Groups
@@ -185,3 +187,33 @@ func _on_CopyUser_pressed():
 
 func _on_CopyPwd_pressed():
 	OS.set_clipboard(item.password)
+
+
+func _on_EditExpire_pressed():
+	$DatePicker.open(get_date_from_int(item.expire), EXPIRE, "Pick expiration date")
+
+
+func _on_EditRemind_pressed():
+	$DatePicker.open(get_date_from_int(item.remind), REMIND, "Pick reminder date")
+
+
+func get_date_from_int(time_secs):
+	if time_secs == 0:
+		return OS.get_date()
+	else:
+		return OS.get_datetime_from_unix_time(time_secs)
+
+
+func _on_DatePicker_date_changed(new_date, caller_id):
+	var new_time = OS.get_unix_time_from_datetime(new_date)
+	var time_now = OS.get_unix_time()
+	# A way to remove the expire or remind time
+	if new_time < time_now:
+		new_time = 0
+	match caller_id:
+		EXPIRE:
+			item.expire = new_time
+			$M/VB/HB4/Time/Expire.text = get_date(item.expire)
+		REMIND:
+			item.remind = new_time
+			$M/VB/HB4/Time/Remind.text = get_date(item.remind)

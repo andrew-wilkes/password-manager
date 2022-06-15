@@ -1,6 +1,6 @@
 extends WindowDialog
 
-signal date_changed(new_date)
+signal date_changed(new_date, caller_id)
 
 export(Color) var light_color = Color(1.0, 1.0, 1.0)
 export(Color) var dark_color = Color(0.5, 0.5, 0.5)
@@ -9,6 +9,7 @@ var current_date
 var original_date
 var current_month_idx_start
 var current_month_idx_end
+var caller_id
 
 func _ready():
 	for n in 41:
@@ -24,10 +25,11 @@ func set_panel_size():
 	rect_size = $VB.rect_size
 
 
-func open(date, title = ""):
+func open(date, id = 0, title = ""):
+	caller_id = id
 	if not title.empty():
 		window_title = title
-	original_date = date
+	original_date = date.duplicate()
 	current_date = date
 	set_date(date)
 	set_digits(date)
@@ -129,4 +131,4 @@ func _on_day_button_pressed(button, idx):
 
 func _on_DatePicker_popup_hide():
 	if current_date != original_date:
-		emit_signal("date_changed", current_date)
+		emit_signal("date_changed", current_date, caller_id)
