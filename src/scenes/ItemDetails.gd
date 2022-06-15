@@ -148,7 +148,10 @@ func _on_PasswordCheckTimer_timeout():
 
 func check_password():
 	if not item.password.empty():
-		password_check_result = ZXCVBN.zxcvbn(item.password)
+		var user_inputs = []
+		if not item.username.empty():
+			user_inputs.append(item.username)
+		password_check_result = ZXCVBN.zxcvbn(item.password, user_inputs)
 		item.strength = password_check_result["score"]
 		set_password_score_status()
 
@@ -161,10 +164,10 @@ func show_feedback():
 	if not password_check_result["feedback"]["warning"].empty():
 		txt = "Warning: " + password_check_result["feedback"]["warning"] + "\n\n"
 	
-	var sugs = password_check_result["feedback"]["suggestions"]
-	if sugs.size() > 0:
+	var suggestions = password_check_result["feedback"]["suggestions"]
+	if suggestions.size() > 0:
 		txt += "Suggestions\n\n"
-		txt += PoolStringArray(sugs).join("\n")
+		txt += PoolStringArray(suggestions).join("\n")
 	
 	if txt.empty():
 		if item.strength == GOOD_PASSWORD_SCORE:

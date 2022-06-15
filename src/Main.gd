@@ -154,7 +154,10 @@ func _on_FileMenu_id_pressed(id):
 			do_action()
 		SAVE_INC:
 			# Append an increment number to the file name and save
-			pass
+			settings.current_file = Utility.increment_filename(settings.current_file)
+			set_title()
+			menu_action = SAVE
+			do_action()
 		QUIT:
 			save_and_quit()
 

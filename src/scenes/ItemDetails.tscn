@@ -11,7 +11,6 @@
 [ext_resource path="res://style/Theme.tres" type="Theme" id=9]
 
 [node name="ItemDetails" type="WindowDialog"]
-visible = true
 margin_left = 9.0
 margin_top = 9.0
 margin_right = 783.0

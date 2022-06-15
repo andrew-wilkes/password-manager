@@ -68,6 +68,11 @@ _global_script_classes=[ {
 "class": "TimeEstimates",
 "language": "GDScript",
 "path": "res://zxcvbn/time_estimates.gd"
+}, {
+"base": "Reference",
+"class": "Utility",
+"language": "GDScript",
+"path": "res://classes/utility.gd"
 } ]
 _global_script_class_icons={
 "AdjacencyGraphs": "",
@@ -81,7 +86,8 @@ _global_script_class_icons={
 "Passwords": "",
 "Record": "",
 "Settings": "",
-"TimeEstimates": ""
+"TimeEstimates": "",
+"Utility": ""
 }
 
 [application]
