@@ -3,6 +3,5 @@
 [ext_resource path="res://thirdparty/fonts/NotoSansUI_Bold.ttf" type="DynamicFontData" id=1]
 
 [resource]
-resource_name = "Large"
-size = 14
+resource_name = "large"
 font_data = ExtResource( 1 )

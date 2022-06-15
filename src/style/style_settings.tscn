@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=2]
 
-[ext_resource path="res://style/Theme.tres" type="Theme" id=1]
+[ext_resource path="res://style/theme.tres" type="Theme" id=1]
 
 [sub_resource type="StyleBoxFlat" id=3]
 bg_color = Color( 0, 0, 0, 1 )
@@ -8,16 +8,18 @@ bg_color = Color( 0, 0, 0, 1 )
 [sub_resource type="GDScript" id=1]
 script/source = "extends PanelContainer
 
+# base
 onready var container := $Container
 onready var container_config := $Container/Configuration
 
-
 # Box
 onready var button_box_color := $Container/Configuration/Container/BoxAccent/ColorPicker
+
 # Type
 onready var slider_type_size := $Container/Configuration/Container/TypeSize/HSlider
 onready var label_type_size := $Container/Configuration/Container/TypeSize/Value
 var type_size_dif :int = 2
+
 # Extras
 onready var button_main := $Container/Configuration/Container/Main
 
@@ -101,13 +103,16 @@ func box_accent(value :Color) -> void:
 func type_resize(value :float) -> void:
 	for type in array_type:
 		match type.resource_name:
-			\"Small\":
+			\"extra_small\":
+				type.set(\"size\", value - (type_size_dif * 2))
+			\"small\":
 				type.set(\"size\", value - type_size_dif)
-			\"Normal\":
+			\"normal\":
 				type.set(\"size\", value)
-			\"Large\":
+			\"large\":
 				type.set(\"size\", value + type_size_dif)
-	
+			\"extra_large\":
+				type.set(\"size\", value + (type_size_dif * 2))
 	label_type_size.text = str(value)
 
 
@@ -137,16 +142,17 @@ custom_styles/panel = SubResource( 3 )
 script = SubResource( 1 )
 
 [node name="Container" type="VBoxContainer" parent="."]
-margin_left = 384.0
-margin_top = 260.0
-margin_right = 640.0
-margin_bottom = 339.0
+margin_left = 512.0
+margin_top = 300.0
+margin_right = 512.0
+margin_bottom = 300.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
 
 [node name="Configuration" type="PanelContainer" parent="Container"]
+visible = false
 margin_right = 256.0
-margin_bottom = 79.0
+margin_bottom = 88.0
 rect_min_size = Vector2( 256, 0 )
 size_flags_vertical = 0
 
@@ -154,60 +160,59 @@ size_flags_vertical = 0
 margin_left = 6.0
 margin_top = 6.0
 margin_right = 250.0
-margin_bottom = 73.0
+margin_bottom = 82.0
 
 [node name="BoxAccent" type="HBoxContainer" parent="Container/Configuration/Container"]
 margin_right = 244.0
-margin_bottom = 17.0
+margin_bottom = 20.0
 
 [node name="Label" type="Label" parent="Container/Configuration/Container/BoxAccent"]
 margin_right = 64.0
-margin_bottom = 17.0
+margin_bottom = 20.0
 rect_min_size = Vector2( 64, 0 )
 text = "Accent"
 
 [node name="ColorPicker" type="ColorPickerButton" parent="Container/Configuration/Container/BoxAccent"]
 margin_left = 68.0
 margin_right = 244.0
-margin_bottom = 17.0
+margin_bottom = 20.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_styles/normal = SubResource( 4 )
 color = Color( 0, 0.384314, 1, 1 )
 
 [node name="TypeSize" type="HBoxContainer" parent="Container/Configuration/Container"]
-margin_top = 21.0
+margin_top = 24.0
 margin_right = 244.0
-margin_bottom = 38.0
+margin_bottom = 44.0
 
 [node name="Label" type="Label" parent="Container/Configuration/Container/TypeSize"]
 margin_right = 64.0
-margin_bottom = 17.0
+margin_bottom = 20.0
 rect_min_size = Vector2( 64, 0 )
 text = "Type Size"
 valign = 1
 
 [node name="HSlider" type="HSlider" parent="Container/Configuration/Container/TypeSize"]
 margin_left = 68.0
-margin_right = 226.0
-margin_bottom = 17.0
+margin_right = 224.0
+margin_bottom = 20.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 min_value = 8.0
-max_value = 24.0
-value = 12.0
-rounded = true
+max_value = 18.0
+value = 14.0
 
 [node name="Value" type="Label" parent="Container/Configuration/Container/TypeSize"]
-margin_left = 230.0
+margin_left = 228.0
 margin_right = 244.0
-margin_bottom = 17.0
+margin_bottom = 20.0
 text = "13"
 align = 1
 valign = 1
 
 [node name="Main" type="Button" parent="Container/Configuration/Container"]
-margin_top = 42.0
+margin_top = 48.0
 margin_right = 244.0
-margin_bottom = 67.0
+margin_bottom = 76.0
 text = "To Main"
