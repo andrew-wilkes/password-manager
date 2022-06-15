@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=2]
 
-[ext_resource path="res://assets/icon_GUI_visibility_visible.svg" type="Texture" id=2]
+[ext_resource path="res://assets/GuiVisibilityVisible.svg" type="Texture" id=2]
 [ext_resource path="res://scenes/ViewButton.gd" type="Script" id=3]
 
 [node name="ViewButton" type="CenterContainer"]
