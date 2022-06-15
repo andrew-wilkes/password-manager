@@ -17,7 +17,7 @@ func open(_item, _settings):
 	add_groups()
 	call_deferred("set_panel_size")
 	$M/VB/HB/Title.text = item.title
-	$M/VB/Username.text = item.username
+	$M/VB/HB5/Username.text = item.username
 	$M/VB/HB3/URL.text = item.url
 	set_secret(item.reveal)
 	$M/VB/HB2/Password.text = item.password
@@ -177,3 +177,11 @@ func show_feedback():
 
 	$Feedback.dialog_text = txt
 	$Feedback.popup_centered()
+
+
+func _on_CopyUser_pressed():
+	OS.set_clipboard(item.username)
+
+
+func _on_CopyPwd_pressed():
+	OS.set_clipboard(item.password)

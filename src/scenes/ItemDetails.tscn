@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://assets/icon_GUI_visibility_hidden.svg" type="Texture" id=1]
 [ext_resource path="res://assets/icon_GUI_visibility_visible.svg" type="Texture" id=2]
@@ -9,6 +9,8 @@
 [ext_resource path="res://assets/Edit.svg" type="Texture" id=7]
 [ext_resource path="res://scenes/ItemDetails.gd" type="Script" id=8]
 [ext_resource path="res://style/Theme.tres" type="Theme" id=9]
+[ext_resource path="res://assets/CopyToClip.png" type="Texture" id=10]
+[ext_resource path="res://assets/CopyToClipPressed.png" type="Texture" id=11]
 
 [node name="ItemDetails" type="WindowDialog"]
 margin_left = 9.0
@@ -45,10 +47,28 @@ hint_tooltip = "Title"
 size_flags_horizontal = 3
 placeholder_text = "Title"
 
-[node name="Username" type="LineEdit" parent="M/VB"]
+[node name="HB5" type="HBoxContainer" parent="M/VB"]
 margin_top = 35.0
 margin_right = 751.0
 margin_bottom = 60.0
+custom_constants/separation = 10
+
+[node name="C4" type="CenterContainer" parent="M/VB/HB5"]
+margin_right = 14.0
+margin_bottom = 25.0
+
+[node name="CopyUser" type="TextureButton" parent="M/VB/HB5/C4"]
+margin_top = 4.0
+margin_right = 14.0
+margin_bottom = 20.0
+hint_tooltip = "Copy to clipboard"
+texture_normal = ExtResource( 10 )
+texture_pressed = ExtResource( 11 )
+
+[node name="Username" type="LineEdit" parent="M/VB/HB5"]
+margin_left = 24.0
+margin_right = 72.0
+margin_bottom = 25.0
 hint_tooltip = "Username"
 placeholder_text = "Username"
 
@@ -58,15 +78,28 @@ margin_right = 751.0
 margin_bottom = 95.0
 custom_constants/separation = 10
 
-[node name="Label" type="Label" parent="M/VB/HB2"]
+[node name="C3" type="CenterContainer" parent="M/VB/HB2"]
+margin_right = 14.0
+margin_bottom = 25.0
+
+[node name="CopyPwd" type="TextureButton" parent="M/VB/HB2/C3"]
 margin_top = 4.0
-margin_right = 57.0
+margin_right = 14.0
+margin_bottom = 20.0
+hint_tooltip = "Copy to clipboard"
+texture_normal = ExtResource( 10 )
+texture_pressed = ExtResource( 11 )
+
+[node name="Label" type="Label" parent="M/VB/HB2"]
+margin_left = 24.0
+margin_top = 4.0
+margin_right = 81.0
 margin_bottom = 21.0
 text = "Password:"
 
 [node name="C1" type="CenterContainer" parent="M/VB/HB2"]
-margin_left = 67.0
-margin_right = 83.0
+margin_left = 91.0
+margin_right = 107.0
 margin_bottom = 25.0
 
 [node name="Show" type="TextureButton" parent="M/VB/HB2/C1"]
@@ -83,7 +116,7 @@ margin_bottom = 20.0
 texture_normal = ExtResource( 2 )
 
 [node name="Password" type="LineEdit" parent="M/VB/HB2"]
-margin_left = 93.0
+margin_left = 117.0
 margin_right = 725.0
 margin_bottom = 25.0
 size_flags_horizontal = 3
@@ -313,7 +346,9 @@ theme = ExtResource( 9 )
 window_title = "Feedback"
 
 [connection signal="text_changed" from="M/VB/HB/Title" to="." method="_on_Title_text_changed"]
-[connection signal="text_changed" from="M/VB/Username" to="." method="_on_Username_text_changed"]
+[connection signal="pressed" from="M/VB/HB5/C4/CopyUser" to="." method="_on_CopyUser_pressed"]
+[connection signal="text_changed" from="M/VB/HB5/Username" to="." method="_on_Username_text_changed"]
+[connection signal="pressed" from="M/VB/HB2/C3/CopyPwd" to="." method="_on_CopyPwd_pressed"]
 [connection signal="pressed" from="M/VB/HB2/C1/Show" to="." method="_on_Show_pressed"]
 [connection signal="pressed" from="M/VB/HB2/C1/Hide" to="." method="_on_Hide_pressed"]
 [connection signal="text_changed" from="M/VB/HB2/Password" to="." method="_on_Password_text_changed"]
