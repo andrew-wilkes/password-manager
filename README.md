@@ -14,6 +14,31 @@ The encrypted database is saved along with an IV vector.
 
 The integrity of the decoded data will be checked by the presence of a prefixed hash in the decoded data that equals a hash of the database data.
 
+
+## Branding
+
+**passwordvx**
+
+An alternative example: **password-vx**
+
+You saw it here first!
+
+
+
+A suggested interpretation of "vx" is: "version x"
+
+Case insensitive examples:
+
+password VX
+
+Password VX
+
+Password-VX
+
+PasswordVX
+
+We claim any combination of "password" and "vx" as prior art representing this brand.
+
 ## Features
 
 * Suggest easy to remember but hard to crack passwords
@@ -21,7 +46,6 @@ The integrity of the decoded data will be checked by the presence of a prefixed 
 * Store name, password, URL, creation date, last update date, notes
 * Search
 * List in order of usage frequency
-* List in order of updated passwords
 * Categories
 * Feature to create a copy of the file with incremented index value
 * Generate password salt value for each install and allow for display/modification of it
