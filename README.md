@@ -63,7 +63,9 @@ We claim any combination of "password" and "vx" as prior art representing this b
 
 [KeePass Database Decryption Tutorial](https://weekly-geekly.imtqy.com/articles/346820/index.html)
 
-Hey, support my work! [Buy me a coffee](https://buymeacoffee.com/gdscriptdude)
+[Annual Report](https://www.security.org/digital-safety/password-manager-annual-report/) about password managers.
+
+Support my hard work to benefit you and unemployed people like me: [Buy me a coffee](https://buymeacoffee.com/gdscriptdude)
 
 ## Testing
 
