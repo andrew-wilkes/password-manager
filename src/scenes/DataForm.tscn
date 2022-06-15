@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://scenes/DataForm.gd" type="Script" id=1]
 [ext_resource path="res://scenes/GroupButton.tscn" type="PackedScene" id=2]
 [ext_resource path="res://assets/Add.svg" type="Texture" id=3]
 [ext_resource path="res://scenes/ItemDetails.tscn" type="PackedScene" id=4]
+[ext_resource path="res://style/Theme.tres" type="Theme" id=5]
 
 [node name="DataForm" type="VBoxContainer"]
 anchor_right = 1.0
@@ -11,6 +12,7 @@ anchor_bottom = 1.0
 margin_right = -2.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme = ExtResource( 5 )
 custom_constants/separation = 10
 script = ExtResource( 1 )
 light_color = Color( 0.52549, 0.52549, 0.52549, 1 )
@@ -19,60 +21,60 @@ highlight_color = Color( 0.752941, 0.756863, 0.141176, 1 )
 
 [node name="Groups" type="HBoxContainer" parent="."]
 margin_right = 1022.0
-margin_bottom = 25.0
+margin_bottom = 28.0
 custom_constants/separation = 20
 
 [node name="Margin" type="Control" parent="Groups"]
-margin_bottom = 25.0
+margin_bottom = 28.0
 
 [node name="Label" type="Label" parent="Groups"]
 margin_left = 20.0
 margin_top = 4.0
-margin_right = 58.0
-margin_bottom = 21.0
+margin_right = 66.0
+margin_bottom = 24.0
 text = "Group:"
 
 [node name="GroupButton" parent="Groups" instance=ExtResource( 2 )]
-margin_left = 78.0
-margin_right = 104.0
-margin_bottom = 25.0
+margin_left = 86.0
+margin_right = 115.0
+margin_bottom = 28.0
 
 [node name="SB" type="HBoxContainer" parent="."]
-margin_top = 35.0
+margin_top = 38.0
 margin_right = 1022.0
-margin_bottom = 60.0
+margin_bottom = 66.0
 custom_constants/separation = 20
 
 [node name="Margin" type="Control" parent="SB"]
-margin_bottom = 25.0
+margin_bottom = 28.0
 
 [node name="C" type="CenterContainer" parent="SB"]
 margin_left = 20.0
 margin_right = 36.0
-margin_bottom = 25.0
+margin_bottom = 28.0
 
 [node name="Add" type="TextureButton" parent="SB/C"]
-margin_top = 4.0
+margin_top = 6.0
 margin_right = 16.0
-margin_bottom = 20.0
+margin_bottom = 22.0
 hint_tooltip = "Add a new entry"
 texture_normal = ExtResource( 3 )
 
 [node name="SearchBox" type="LineEdit" parent="SB"]
 margin_left = 56.0
 margin_right = 529.0
-margin_bottom = 25.0
+margin_bottom = 28.0
 size_flags_horizontal = 3
 placeholder_text = "Search text"
 
 [node name="Spacer" type="Control" parent="SB"]
 margin_left = 549.0
 margin_right = 1022.0
-margin_bottom = 25.0
+margin_bottom = 28.0
 size_flags_horizontal = 3
 
 [node name="SC" type="ScrollContainer" parent="."]
-margin_top = 70.0
+margin_top = 76.0
 margin_right = 1022.0
 margin_bottom = 600.0
 size_flags_horizontal = 3

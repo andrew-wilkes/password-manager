@@ -33,7 +33,7 @@ custom_constants/margin_bottom = 9
 margin_left = 9.0
 margin_top = 9.0
 margin_right = 760.0
-margin_bottom = 365.0
+margin_bottom = 389.0
 custom_constants/separation = 10
 
 [node name="HB" type="HBoxContainer" parent="M/VB"]
@@ -71,6 +71,7 @@ margin_left = 24.0
 margin_right = 72.0
 margin_bottom = 25.0
 hint_tooltip = "Username"
+size_flags_horizontal = 3
 placeholder_text = "Username"
 
 [node name="HB2" type="HBoxContainer" parent="M/VB"]

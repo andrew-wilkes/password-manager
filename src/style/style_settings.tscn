@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=2]
 
-[ext_resource path="res://style/theme.tres" type="Theme" id=1]
+[ext_resource path="res://style/Theme.tres" type="Theme" id=1]
 
 [sub_resource type="StyleBoxFlat" id=3]
 bg_color = Color( 0, 0, 0, 1 )
