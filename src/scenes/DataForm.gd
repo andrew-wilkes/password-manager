@@ -18,7 +18,7 @@ var headings = {
 	"username": "Username",
 	"url": "URL",
 	"notes": "Notes",
-	"modified": "Modified",
+	"accessed": "Accessed",
 }
 var settings: Settings
 var database: Database
@@ -102,7 +102,7 @@ func add_bars():
 
 func get_cell_content(data, key):
 	match key:
-		"modified":
+		"accessed":
 			var date = OS.get_datetime_from_unix_time(data[key])
 			return Date.format(date, settings.date_format)
 		"notes":
