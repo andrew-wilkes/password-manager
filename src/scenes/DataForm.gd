@@ -60,7 +60,10 @@ func populate_grid(db: Database, key, reverse, group, filter = ""):
 		grid.add_child(vb)
 		for key in headings:
 			var cell = cell_scene.instance()
-			cell.set_text(get_cell_content(item, key), key == "url")
+			var font_color = Color.black
+			if item.expire < 0 and key == "title":
+				font_color = Color.red
+			cell.set_text(get_cell_content(item, key), key == "url", font_color)
 			grid.add_child(cell)
 
 
@@ -144,6 +147,8 @@ func init(data):
 func check_for_reminders():
 	var now = OS.get_unix_time()
 	for item in database.items:
+		if item.expire > 0 and item.expire < now:
+			item.expire = -1
 		if item.remind > 0 and item.remind < now:
 			item.remind = -1
 			show_item_details(item)

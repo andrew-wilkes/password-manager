@@ -29,13 +29,16 @@ func open(_item, _settings):
 	$M/VB/HB4/Time/Modified.text = get_date(item.modified)
 	$M/VB/HB4/Time/Accessed.text = get_date(item.accessed)
 	item.accessed = OS.get_unix_time()
-	$M/VB/HB4/Time/Expire.text = get_date(item.expire)
 	if item.remind < 0:
 		window_title = "REMINDER"
 		item.remind = 0
+	elif item.expire < 0:
+		window_title = "EXPIRED"
+		item.expire = 0
 	else:
 		window_title = "Password Record"
 	$M/VB/HB4/Time/Remind.text = get_date(item.remind)
+	$M/VB/HB4/Time/Expire.text = get_date(item.expire)
 
 
 func get_date(time_secs):

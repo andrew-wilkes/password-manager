@@ -4,7 +4,7 @@ signal clicked(this)
 
 export(int) var char_width = 12
 
-func set_text(txt, rich_text):
+func set_text(txt, rich_text, font_color):
 	if rich_text:
 		$RichTextLabel.bbcode_text = '[url=%s]%s[/url]' % [txt, txt]
 		$RichTextLabel.rect_min_size.x = txt.length() * char_width
@@ -12,6 +12,7 @@ func set_text(txt, rich_text):
 		$Label.hide()
 	else:
 		$Label.text = txt
+		$Label.set("custom_colors/font_color", font_color)
 
 
 func _on_Label_gui_input(event):
