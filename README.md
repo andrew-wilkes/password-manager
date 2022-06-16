@@ -15,30 +15,6 @@ The encrypted database is saved along with an IV vector.
 The integrity of the decoded data will be checked by the presence of a prefixed hash in the decoded data that equals a hash of the database data.
 
 
-## Branding
-
-**passwordvx**
-
-An alternative example: **password-vx**
-
-You saw it here first!
-
-
-
-A suggested interpretation of "vx" is: "version x"
-
-Case insensitive examples:
-
-password VX
-
-Password VX
-
-Password-VX
-
-PasswordVX
-
-We claim any combination of "password" and "vx" as prior art representing this brand.
-
 ## Features
 
 * Suggest easy to remember but hard to crack passwords
@@ -65,7 +41,7 @@ We claim any combination of "password" and "vx" as prior art representing this b
 
 [Annual Report](https://www.security.org/digital-safety/password-manager-annual-report/) about password managers.
 
-Support my hard work to benefit you and unemployed people like me: [Buy me a coffee](https://buymeacoffee.com/gdscriptdude)
+[Buy me a coffee](https://buymeacoffee.com/gdscriptdude)
 
 ## Testing
 
@@ -88,6 +64,26 @@ The file will be saved with a `.pwd` extension that means **password data**.
 Other uses for this file extension:
 
 ![pwd file extension](docs/pwd.png)
+
+## Branding
+
+**passwordvx**
+
+An alternative example: **password-vx**
+
+A suggested interpretation of "vx" is: "version x"
+
+Case insensitive examples:
+
+password VX
+
+Password VX
+
+Password-VX
+
+PasswordVX
+
+We claim any combination of "password" and "vx" as prior art representing this brand.
 
 ## ToDos
 

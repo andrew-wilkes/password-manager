@@ -138,6 +138,16 @@ func init(data):
 	populate_grid(database, "", false, 0)
 	update_group_buttons()
 	$SB/SearchBox.grab_focus()
+	check_for_reminders()
+
+
+func check_for_reminders():
+	var now = OS.get_unix_time()
+	for item in database.items:
+		if item.remind > 0 and item.remind < now:
+			item.remind = -1
+			show_item_details(item)
+			break
 
 
 func update_group_buttons():
@@ -208,6 +218,7 @@ func _on_Add_pressed():
 
 func _on_ItemDetails_popup_hide():
 	populate_grid(database, current_key, current_reverse_state, current_group)
+	check_for_reminders()
 
 
 func _on_SearchBox_text_changed(new_text):

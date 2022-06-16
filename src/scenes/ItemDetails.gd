@@ -29,8 +29,13 @@ func open(_item, _settings):
 	$M/VB/HB4/Time/Modified.text = get_date(item.modified)
 	$M/VB/HB4/Time/Accessed.text = get_date(item.accessed)
 	item.accessed = OS.get_unix_time()
-	$M/VB/HB4/Time/Remind.text = get_date(item.remind)
 	$M/VB/HB4/Time/Expire.text = get_date(item.expire)
+	if item.remind < 0:
+		window_title = "REMINDER"
+		item.remind = 0
+	else:
+		window_title = "Password Record"
+	$M/VB/HB4/Time/Remind.text = get_date(item.remind)
 
 
 func get_date(time_secs):
@@ -206,10 +211,6 @@ func get_date_from_int(time_secs):
 
 func _on_DatePicker_date_changed(new_date, caller_id):
 	var new_time = OS.get_unix_time_from_datetime(new_date)
-	var time_now = OS.get_unix_time()
-	# A way to remove the expire or remind time
-	if new_time < time_now:
-		new_time = 0
 	match caller_id:
 		EXPIRE:
 			item.expire = new_time
