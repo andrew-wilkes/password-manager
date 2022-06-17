@@ -1,6 +1,6 @@
 extends Node
 
-const COMPRESSED_LISTS = "res://zxcvbn/frequency_lists.gz"
+const COMPRESSED_LISTS = "res://data/frequency_lists.gz"
 
 var data  = {}
 
