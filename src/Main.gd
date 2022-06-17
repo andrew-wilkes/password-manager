@@ -173,7 +173,7 @@ func save_passwords():
 func _on_ToolsMenu_id_pressed(id):
 	match id:
 		PWD_GEN:
-			pass
+			$Popups/PasswordGenerator.popup_centered()
 		CHG_PW:
 			state = SET_PASSWORD
 			show_content(form_map[state], "")

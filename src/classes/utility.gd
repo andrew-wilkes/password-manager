@@ -11,3 +11,20 @@ static func increment_filename(fname):
 	else:
 		parts[0] += "1"
 	return parts.join(".")
+
+
+static func load_gzip_data(path, object):
+	var data
+	var file = File.new()
+	if file.file_exists(path):
+		var error = file.open(path, File.READ)
+		if error == OK:
+			var bytes = file.get_buffer(file.get_len())
+			var decompressed = bytes.decompress_dynamic(-1, File.COMPRESSION_GZIP)
+			var json = decompressed.get_string_from_utf8()
+			data = JSON.parse(json).result
+		file.close()
+	if typeof(data) == typeof(object):
+		return data
+	else:
+		return object

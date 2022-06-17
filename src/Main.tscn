@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://Main.gd" type="Script" id=1]
 [ext_resource path="res://scenes/Alert.tscn" type="PackedScene" id=2]
@@ -8,6 +8,7 @@
 [ext_resource path="res://scenes/DataForm.tscn" type="PackedScene" id=6]
 [ext_resource path="res://style/Theme.tres" type="Theme" id=7]
 [ext_resource path="res://scenes/Settings.tscn" type="PackedScene" id=8]
+[ext_resource path="res://scenes/PasswordGenerator.tscn" type="PackedScene" id=9]
 
 [node name="Main" type="VBoxContainer"]
 anchor_right = 1.0
@@ -96,8 +97,8 @@ rect_min_size = Vector2( 186, 65.1 )
 theme = ExtResource( 7 )
 access = 2
 filters = PoolStringArray( "*.pdb ; Password Database Files" )
-current_dir = "/mnt/windows/WData/dev/godot/git/andrew-wilkes/godot-password-manager/src"
-current_path = "/mnt/windows/WData/dev/godot/git/andrew-wilkes/godot-password-manager/src/"
+current_dir = "/mnt/files/dev/godot/git/andrew-wilkes/godot-password-manager/src"
+current_path = "/mnt/files/dev/godot/git/andrew-wilkes/godot-password-manager/src/"
 
 [node name="Licences" parent="Popups" instance=ExtResource( 3 )]
 margin_right = -163.0
@@ -159,6 +160,9 @@ margin_bottom = 70.0
 theme = ExtResource( 7 )
 window_title = "Quit before saving?"
 dialog_text = "The passwords haven't been saved yet."
+
+[node name="PasswordGenerator" parent="Popups" instance=ExtResource( 9 )]
+visible = false
 
 [connection signal="pressed" from="M/Menu/File" to="." method="_on_File_pressed"]
 [connection signal="pressed" from="M/Menu/Tools" to="." method="_on_Tools_pressed"]
