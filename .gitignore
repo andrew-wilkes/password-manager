@@ -19,3 +19,5 @@ src/BigFont*
 src/asset_lib*
 addons/
 test.p*
+
+.vscode/
