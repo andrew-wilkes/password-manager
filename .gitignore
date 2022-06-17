@@ -9,7 +9,7 @@ logs/
 .mono/
 data_*/
 
-data/
+/data/
 .fuse*
 tests
 

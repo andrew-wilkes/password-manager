@@ -104,7 +104,14 @@ current_path = "/mnt/files/dev/godot/git/andrew-wilkes/godot-password-manager/sr
 margin_right = -163.0
 margin_bottom = -99.0
 window_title = "Licence Information"
-dialogue_text = "This software uses Godot Engine, available under the following license:
+dialogue_text = "Copyright (c) 2022 Andrew Wilkes
+
+The above copyright notice and this notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED \\\"AS IS\\\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+--------
+This software uses Godot Engine, available under the following license:
 
 Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur. Copyright (c) 2014-2021 Godot Engine contributors.
 
@@ -150,7 +157,9 @@ margin_right = 253.0
 margin_bottom = 123.0
 theme = ExtResource( 7 )
 window_title = "About"
-dialog_text = "Created by Andrew Wilkes 2022"
+dialog_text = "This Password Manager software was created by Andrew Wilkes in 2022.
+
+Contributors: illlstr"
 
 [node name="Settings" parent="Popups" instance=ExtResource( 8 )]
 
@@ -162,7 +171,6 @@ window_title = "Quit before saving?"
 dialog_text = "The passwords haven't been saved yet."
 
 [node name="PasswordGenerator" parent="Popups" instance=ExtResource( 9 )]
-visible = false
 
 [connection signal="pressed" from="M/Menu/File" to="." method="_on_File_pressed"]
 [connection signal="pressed" from="M/Menu/Tools" to="." method="_on_Tools_pressed"]
