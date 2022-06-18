@@ -17,7 +17,11 @@ func _init():
 
 func _ready():
 	randomize()
+
+
+func open():
 	regenerate()
+	popup_centered()
 
 
 func regenerate():
@@ -27,6 +31,8 @@ func regenerate():
 		for _words in list:
 			items.append(_words)
 	display_list(items)
+	yield(get_tree(), "idle_frame")
+	rect_size = $M.rect_size
 
 
 func display_list(items):
