@@ -171,7 +171,6 @@ window_title = "Quit before saving?"
 dialog_text = "The passwords haven't been saved yet."
 
 [node name="PasswordGenerator" parent="Popups" instance=ExtResource( 9 )]
-visible = true
 
 [connection signal="pressed" from="M/Menu/File" to="." method="_on_File_pressed"]
 [connection signal="pressed" from="M/Menu/Tools" to="." method="_on_Tools_pressed"]
