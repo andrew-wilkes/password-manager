@@ -9,7 +9,7 @@ logs/
 .mono/
 data_*/
 
-data/
+/data/
 .fuse*
 tests
 
@@ -19,3 +19,5 @@ src/BigFont*
 src/asset_lib*
 addons/
 test.p*
+
+.vscode/

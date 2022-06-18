@@ -92,7 +92,7 @@ _global_script_class_icons={
 
 [application]
 
-config/name="Password Manager"
+config/name="Password VX"
 run/main_scene="res://Main.tscn"
 boot_splash/image="res://assets/app-icons/splash.png"
 boot_splash/fullsize=false
