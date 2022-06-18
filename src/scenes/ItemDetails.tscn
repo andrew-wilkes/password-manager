@@ -360,7 +360,6 @@ theme = ExtResource( 9 )
 window_title = "Feedback"
 
 [node name="DatePicker" parent="." instance=ExtResource( 12 )]
-visible = false
 
 [connection signal="text_changed" from="M/VB/HB/Title" to="." method="_on_Title_text_changed"]
 [connection signal="pressed" from="M/VB/HB5/C4/CopyUser" to="." method="_on_CopyUser_pressed"]

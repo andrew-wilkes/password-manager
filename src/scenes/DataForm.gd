@@ -101,6 +101,8 @@ func add_bars():
 	if to_add < 0:
 		for idx in range(num_bars_existing + to_add, num_bars_existing):
 			$BG/VBox.get_child(idx).queue_free()
+	for bar in $BG/VBox.get_children():
+		bar.rect_size.x = grid.rect_size.x
 
 
 func get_cell_content(data, key):
