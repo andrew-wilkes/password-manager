@@ -1,5 +1,6 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
+[ext_resource path="res://scenes/ModulatedTextureButton.gd" type="Script" id=1]
 [ext_resource path="res://assets/GuiVisibilityVisible.svg" type="Texture" id=2]
 [ext_resource path="res://scenes/ViewButton.gd" type="Script" id=3]
 
@@ -15,5 +16,6 @@ margin_right = 520.0
 margin_bottom = 308.0
 hint_tooltip = "View details"
 texture_normal = ExtResource( 2 )
+script = ExtResource( 1 )
 
 [connection signal="pressed" from="Show" to="." method="_on_Show_pressed"]

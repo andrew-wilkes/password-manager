@@ -21,15 +21,17 @@ func set_text(txt):
 
 
 func _on_Hidden_pressed():
-	$VBox/HBox/Hidden.hide()
-	$VBox/HBox/Visible.show()
+	$VBox/HBox/C/Hidden.hide()
+	$VBox/HBox/C/Visible.show()
 	password_field.secret = false
+	password_field.grab_focus()
 
 
 func _on_Visible_pressed():
-	$VBox/HBox/Hidden.show()
-	$VBox/HBox/Visible.hide()
+	$VBox/HBox/C/Hidden.show()
+	$VBox/HBox/C/Visible.hide()
 	password_field.secret = true
+	password_field.grab_focus()
 
 
 func _on_Password_text_changed(new_text):

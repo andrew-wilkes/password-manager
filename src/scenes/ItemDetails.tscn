@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://assets/GuiVisibilityHidden.svg" type="Texture" id=1]
 [ext_resource path="res://assets/GuiVisibilityVisible.svg" type="Texture" id=2]
@@ -12,6 +12,7 @@
 [ext_resource path="res://assets/CopyToClip.png" type="Texture" id=10]
 [ext_resource path="res://assets/CopyToClipPressed.png" type="Texture" id=11]
 [ext_resource path="res://scenes/DatePicker.tscn" type="PackedScene" id=12]
+[ext_resource path="res://scenes/ModulatedTextureButton.gd" type="Script" id=13]
 
 [node name="ItemDetails" type="WindowDialog"]
 margin_left = 9.0
@@ -65,6 +66,7 @@ margin_bottom = 22.0
 hint_tooltip = "Copy to clipboard"
 texture_normal = ExtResource( 10 )
 texture_pressed = ExtResource( 11 )
+script = ExtResource( 13 )
 
 [node name="Username" type="LineEdit" parent="M/VB/HB5"]
 margin_left = 24.0
@@ -91,6 +93,7 @@ margin_bottom = 22.0
 hint_tooltip = "Copy to clipboard"
 texture_normal = ExtResource( 10 )
 texture_pressed = ExtResource( 11 )
+script = ExtResource( 13 )
 
 [node name="Label" type="Label" parent="M/VB/HB2"]
 margin_left = 24.0
@@ -110,12 +113,14 @@ margin_top = 6.0
 margin_right = 16.0
 margin_bottom = 22.0
 texture_normal = ExtResource( 1 )
+script = ExtResource( 13 )
 
 [node name="Hide" type="TextureButton" parent="M/VB/HB2/C1"]
 margin_top = 6.0
 margin_right = 16.0
 margin_bottom = 22.0
 texture_normal = ExtResource( 2 )
+script = ExtResource( 13 )
 
 [node name="Password" type="LineEdit" parent="M/VB/HB2"]
 margin_left = 128.0
@@ -136,6 +141,7 @@ margin_right = 16.0
 margin_bottom = 22.0
 hint_tooltip = "Show feedback if any"
 texture_normal = ExtResource( 4 )
+script = ExtResource( 13 )
 
 [node name="OK" type="TextureButton" parent="M/VB/HB2/C2"]
 margin_top = 6.0
@@ -143,6 +149,7 @@ margin_right = 16.0
 margin_bottom = 22.0
 hint_tooltip = "Show feedback if any"
 texture_normal = ExtResource( 3 )
+script = ExtResource( 13 )
 
 [node name="HB3" type="HBoxContainer" parent="M/VB"]
 margin_top = 114.0
@@ -160,6 +167,7 @@ margin_right = 16.0
 margin_bottom = 22.0
 hint_tooltip = "Open URL in browser"
 texture_normal = ExtResource( 6 )
+script = ExtResource( 13 )
 
 [node name="URL" type="LineEdit" parent="M/VB/HB3"]
 margin_left = 26.0
@@ -223,6 +231,7 @@ margin_left = 310.0
 margin_right = 326.0
 margin_bottom = 20.0
 texture_normal = ExtResource( 7 )
+script = ExtResource( 13 )
 
 [node name="Label2" type="Label" parent="M/VB/HB4/Time"]
 margin_top = 30.0
@@ -257,6 +266,7 @@ margin_top = 30.0
 margin_right = 326.0
 margin_bottom = 50.0
 texture_normal = ExtResource( 7 )
+script = ExtResource( 13 )
 
 [node name="Label3" type="Label" parent="M/VB/HB4/Time"]
 margin_top = 60.0
@@ -290,6 +300,7 @@ margin_right = 326.0
 margin_bottom = 80.0
 hint_tooltip = "Delete this password record"
 texture_normal = ExtResource( 5 )
+script = ExtResource( 13 )
 
 [node name="VB" type="VBoxContainer" parent="M/VB/HB4"]
 margin_left = 366.0

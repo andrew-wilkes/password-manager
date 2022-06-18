@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://style/type/type_regular_normal.tres" type="DynamicFont" id=1]
 [ext_resource path="res://scenes/DatePicker.gd" type="Script" id=2]
@@ -8,12 +8,12 @@
 [ext_resource path="res://style/type/type_bold_normal.tres" type="DynamicFont" id=6]
 [ext_resource path="res://style/type/type_bold_large.tres" type="DynamicFont" id=7]
 [ext_resource path="res://style/Theme.tres" type="Theme" id=8]
+[ext_resource path="res://scenes/ModulatedTextureButton.gd" type="Script" id=9]
 
 [sub_resource type="ButtonGroup" id=1]
 resource_name = "Day"
 
 [node name="DatePicker" type="WindowDialog"]
-visible = true
 margin_right = 288.0
 margin_bottom = 350.0
 theme = ExtResource( 8 )
@@ -50,6 +50,7 @@ margin_bottom = 68.0
 margin_right = 16.0
 margin_bottom = 17.0
 texture_normal = ExtResource( 3 )
+script = ExtResource( 9 )
 
 [node name="Month" type="Label" parent="VB/Navigation"]
 margin_left = 20.0
@@ -65,12 +66,14 @@ margin_left = 100.0
 margin_right = 116.0
 margin_bottom = 17.0
 texture_normal = ExtResource( 4 )
+script = ExtResource( 9 )
 
 [node name="YearLeft" type="TextureButton" parent="VB/Navigation"]
 margin_left = 120.0
 margin_right = 136.0
 margin_bottom = 17.0
 texture_normal = ExtResource( 3 )
+script = ExtResource( 9 )
 
 [node name="Year" type="Label" parent="VB/Navigation"]
 margin_left = 140.0
@@ -86,6 +89,7 @@ margin_left = 220.0
 margin_right = 236.0
 margin_bottom = 17.0
 texture_normal = ExtResource( 4 )
+script = ExtResource( 9 )
 
 [node name="Grid" type="GridContainer" parent="VB"]
 margin_top = 72.0

@@ -20,11 +20,6 @@ func _ready():
 		open(OS.get_date(), window_title + " TEST")
 
 
-func set_panel_size():
-	yield(get_tree(), "idle_frame")
-	rect_size = $VB.rect_size
-
-
 func open(date, id = 0, title = ""):
 	caller_id = id
 	if not title.empty():
@@ -35,7 +30,7 @@ func open(date, id = 0, title = ""):
 	set_digits(date)
 	yield(get_tree(), "idle_frame")
 	popup_centered()
-	#call_deferred("set_panel_size")
+	rect_position.y += 50 # Avoid overlapping parent header
 
 
 func set_date(date):
