@@ -13,6 +13,7 @@ const form_map = {
 
 var settings: Settings
 var passwords: Passwords
+export(Texture) var menu_icon
 
 onready var file_menu = find_node("File").get_popup()
 onready var file_dialog = find_node("FileDialog")
@@ -119,7 +120,7 @@ func configure_menu():
 	tools_menu.add_item("Change Password", CHG_PW)
 	tools_menu.connect("id_pressed", self, "_on_ToolsMenu_id_pressed")
 
-	help_menu.add_item("About", ABOUT)
+	help_menu.add_icon_item(menu_icon, "About", ABOUT)
 	help_menu.add_separator()
 	help_menu.add_item("Licences", LICENCES)
 	help_menu.connect("id_pressed", self, "_on_HelpMenu_id_pressed")

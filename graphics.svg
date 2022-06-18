@@ -36,20 +36,20 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.24748737"
-     inkscape:cx="54.548238"
-     inkscape:cy="-398.00011"
+     inkscape:zoom="0.49497474"
+     inkscape:cx="-385.87828"
+     inkscape:cy="885.90379"
      inkscape:document-units="px"
-     inkscape:current-layer="layer1"
+     inkscape:current-layer="layer3"
      inkscape:document-rotation="0"
      showgrid="true"
      showborder="false"
      inkscape:pagecheckerboard="true"
-     inkscape:window-width="1553"
+     inkscape:window-width="1920"
      inkscape:window-height="1009"
-     inkscape:window-x="63"
-     inkscape:window-y="17"
-     inkscape:window-maximized="0"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
      inkscape:snap-object-midpoints="false"
      showguides="true"
      inkscape:guide-bbox="true">
@@ -57,13 +57,9 @@
        type="xygrid"
        id="grid1426" />
     <sodipodi:guide
-       position="-1420,1302.5197"
+       position="-960,1262.5197"
        orientation="0,-1"
        id="guide15211" />
-    <sodipodi:guide
-       position="-1480,1142.5197"
-       orientation="0,-1"
-       id="guide15213" />
     <sodipodi:guide
        position="-1040,1782.5197"
        orientation="1,0"
@@ -97,7 +93,7 @@
        x="-1280"
        y="-760"
        ry="120"
-       inkscape:export-filename="/home/andrew/dev/godot/git/andrew-wilkes/godot-password-manager/src/icon.png"
+       inkscape:export-filename="/home/andrew/dev/godot/git/andrew-wilkes/godot-password-manager/src/assets/app-icons/icon64.png"
        inkscape:export-xdpi="6.4000001"
        inkscape:export-ydpi="6.4000001" />
     <rect
@@ -107,6 +103,17 @@
        height="1520"
        x="-140"
        y="-1120" />
+    <rect
+       style="fill:#44aa00;stroke-linecap:square;stroke-opacity:0.996404"
+       id="rect12148"
+       width="960.00006"
+       height="960"
+       x="-1240"
+       y="520"
+       ry="120"
+       inkscape:export-filename="/home/andrew/dev/godot/git/andrew-wilkes/godot-password-manager/src/assets/app-icons/icon16.png"
+       inkscape:export-xdpi="1.6"
+       inkscape:export-ydpi="1.6" />
   </g>
   <g
      inkscape:label="Main"
@@ -116,7 +123,7 @@
        id="path891"
        style="fill:#cccccc;stroke-linecap:square;stroke-opacity:0.996404"
        d="m -800,-680 a 280,280 0 0 0 -280,280 h 80 a 200,200 0 0 1 200,-200 200,200 0 0 1 200,200 h 80 a 280,280 0 0 0 -280,-280 z m -252.3496,400 A 280,280 0 0 0 -800,-120 280,280 0 0 0 -547.65039,-280 H -640.2832 A 200,200 0 0 1 -800,-200 200,200 0 0 1 -959.7168,-280 Z"
-       inkscape:export-filename="/home/andrew/dev/godot/git/andrew-wilkes/godot-password-manager/src/icon.png"
+       inkscape:export-filename="/home/andrew/dev/godot/git/andrew-wilkes/godot-password-manager/src/assets/app-icons/icon64.png"
        inkscape:export-xdpi="6.4000001"
        inkscape:export-ydpi="6.4000001" />
     <rect
@@ -127,7 +134,7 @@
        x="-1080"
        y="-400"
        ry="0"
-       inkscape:export-filename="/home/andrew/dev/godot/git/andrew-wilkes/godot-password-manager/src/icon.png"
+       inkscape:export-filename="/home/andrew/dev/godot/git/andrew-wilkes/godot-password-manager/src/assets/app-icons/icon64.png"
        inkscape:export-xdpi="6.4000001"
        inkscape:export-ydpi="6.4000001" />
     <rect
@@ -138,7 +145,7 @@
        x="-600"
        y="-400"
        ry="0"
-       inkscape:export-filename="/home/andrew/dev/godot/git/andrew-wilkes/godot-password-manager/src/icon.png"
+       inkscape:export-filename="/home/andrew/dev/godot/git/andrew-wilkes/godot-password-manager/src/assets/app-icons/icon64.png"
        inkscape:export-xdpi="6.4000001"
        inkscape:export-ydpi="6.4000001" />
     <rect
@@ -149,7 +156,7 @@
        x="-1160"
        y="-320"
        ry="40"
-       inkscape:export-filename="/home/andrew/dev/godot/git/andrew-wilkes/godot-password-manager/src/icon.png"
+       inkscape:export-filename="/home/andrew/dev/godot/git/andrew-wilkes/godot-password-manager/src/assets/app-icons/icon64.png"
        inkscape:export-xdpi="6.4000001"
        inkscape:export-ydpi="6.4000001" />
     <circle
@@ -158,7 +165,7 @@
        cx="-800"
        cy="-160"
        r="60"
-       inkscape:export-filename="/home/andrew/dev/godot/git/andrew-wilkes/godot-password-manager/src/icon.png"
+       inkscape:export-filename="/home/andrew/dev/godot/git/andrew-wilkes/godot-password-manager/src/assets/app-icons/icon64.png"
        inkscape:export-xdpi="6.4000001"
        inkscape:export-ydpi="6.4000001" />
     <rect
@@ -168,7 +175,7 @@
        height="140"
        x="-830"
        y="-120"
-       inkscape:export-filename="/home/andrew/dev/godot/git/andrew-wilkes/godot-password-manager/src/icon.png"
+       inkscape:export-filename="/home/andrew/dev/godot/git/andrew-wilkes/godot-password-manager/src/assets/app-icons/icon64.png"
        inkscape:export-xdpi="6.4000001"
        inkscape:export-ydpi="6.4000001" />
     <rect
@@ -307,6 +314,65 @@
        inkscape:export-filename="/home/andrew/dev/godot/git/andrew-wilkes/godot-password-manager/src/assets/CopyToClipPressed.png"
        inkscape:export-xdpi="2.4000001"
        inkscape:export-ydpi="2.4000001" />
+    <path
+       id="path12150"
+       style="fill:#cccccc;stroke-linecap:square;stroke-opacity:0.996404"
+       d="m -760,600 a 280,280 0 0 0 -280,280 h 80 a 200,200 0 0 1 200,-200 200,200 0 0 1 200,200 h 80 A 280,280 0 0 0 -760,600 Z m -252.3496,400 A 280,280 0 0 0 -760,1160 280,280 0 0 0 -507.65039,1000 H -600.2832 A 200,200 0 0 1 -760,1080 200,200 0 0 1 -919.7168,1000 Z"
+       inkscape:export-filename="/home/andrew/dev/godot/git/andrew-wilkes/godot-password-manager/src/assets/app-icons/icon16.png"
+       inkscape:export-xdpi="1.6"
+       inkscape:export-ydpi="1.6" />
+    <rect
+       style="fill:#cccccc;fill-opacity:1;stroke-linecap:square;stroke-opacity:0.996404"
+       id="rect12152"
+       width="80"
+       height="120"
+       x="-1040"
+       y="880"
+       ry="0"
+       inkscape:export-filename="/home/andrew/dev/godot/git/andrew-wilkes/godot-password-manager/src/assets/app-icons/icon16.png"
+       inkscape:export-xdpi="1.6"
+       inkscape:export-ydpi="1.6" />
+    <rect
+       style="fill:#cccccc;fill-opacity:1;stroke-linecap:square;stroke-opacity:0.996404"
+       id="rect12154"
+       width="80"
+       height="120"
+       x="-560"
+       y="880"
+       ry="0"
+       inkscape:export-filename="/home/andrew/dev/godot/git/andrew-wilkes/godot-password-manager/src/assets/app-icons/icon16.png"
+       inkscape:export-xdpi="1.6"
+       inkscape:export-ydpi="1.6" />
+    <rect
+       style="fill:#4d4d4d;stroke-linecap:square;stroke-opacity:0.996404"
+       id="rect12156"
+       width="720"
+       height="440"
+       x="-1120"
+       y="960"
+       ry="40"
+       inkscape:export-filename="/home/andrew/dev/godot/git/andrew-wilkes/godot-password-manager/src/assets/app-icons/icon16.png"
+       inkscape:export-xdpi="1.6"
+       inkscape:export-ydpi="1.6" />
+    <circle
+       style="fill:#ececec;fill-opacity:1;stroke-linecap:square;stroke-opacity:0.996404"
+       id="circle12158"
+       cx="-760"
+       cy="1120"
+       r="60"
+       inkscape:export-filename="/home/andrew/dev/godot/git/andrew-wilkes/godot-password-manager/src/assets/app-icons/icon16.png"
+       inkscape:export-xdpi="1.6"
+       inkscape:export-ydpi="1.6" />
+    <rect
+       style="fill:#ececec;fill-opacity:1;stroke-linecap:square;stroke-opacity:0.996404"
+       id="rect12160"
+       width="60"
+       height="140"
+       x="-790"
+       y="1160"
+       inkscape:export-filename="/home/andrew/dev/godot/git/andrew-wilkes/godot-password-manager/src/assets/app-icons/icon16.png"
+       inkscape:export-xdpi="1.6"
+       inkscape:export-ydpi="1.6" />
   </g>
   <g
      inkscape:groupmode="layer"
@@ -314,31 +380,31 @@
      inkscape:label="Text">
     <text
        xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:224.872px;line-height:1.25;font-family:'Noto Sans Mono';-inkscape-font-specification:'Noto Sans Mono Bold';fill:#00ff00;fill-opacity:1;stroke:none;stroke-width:2.34241"
-       x="-1108.3198"
-       y="-19.762526"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:135.538px;line-height:1.25;font-family:'Noto Sans Mono';-inkscape-font-specification:'Noto Sans Mono Bold';fill:#808080;fill-opacity:1;stroke:none;stroke-width:1.41185"
+       x="-1080.5958"
+       y="-43.133625"
        id="text6481"
-       inkscape:export-filename="/home/andrew/dev/godot/git/andrew-wilkes/godot-password-manager/src/icon.png"
+       inkscape:export-filename="/home/andrew/dev/godot/git/andrew-wilkes/godot-password-manager/src/assets/app-icons/icon64.png"
        inkscape:export-xdpi="6.4000001"
        inkscape:export-ydpi="6.4000001"><tspan
          sodipodi:role="line"
          id="tspan6479"
-         x="-1108.3198"
-         y="-19.762526"
-         style="fill:#00ff00;stroke-width:2.34241">V</tspan></text>
+         x="-1080.5958"
+         y="-43.133625"
+         style="fill:#808080;stroke-width:1.41185">V</tspan></text>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:224.872px;line-height:1.25;font-family:'Noto Sans Mono';-inkscape-font-specification:'Noto Sans Mono Bold';fill:#00ff00;fill-opacity:1;stroke:none;stroke-width:2.34241"
-       x="-627.72827"
-       y="-19.558634"
-       id="text15217"
-       inkscape:export-filename="/home/andrew/dev/godot/git/andrew-wilkes/godot-password-manager/src/icon.png"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:135.538px;line-height:1.25;font-family:'Noto Sans Mono';-inkscape-font-specification:'Noto Sans Mono Bold';fill:#808080;fill-opacity:1;stroke:none;stroke-width:1.41185"
+       x="-600.59314"
+       y="-43.488476"
+       id="text1173"
+       inkscape:export-filename="/home/andrew/dev/godot/git/andrew-wilkes/godot-password-manager/src/assets/app-icons/icon64.png"
        inkscape:export-xdpi="6.4000001"
        inkscape:export-ydpi="6.4000001"><tspan
          sodipodi:role="line"
-         id="tspan15215"
-         x="-627.72827"
-         y="-19.558634"
-         style="fill:#00ff00;stroke-width:2.34241">X</tspan></text>
+         id="tspan1171"
+         x="-600.59314"
+         y="-43.488476"
+         style="fill:#808080;stroke-width:1.41185">X</tspan></text>
   </g>
 </svg>

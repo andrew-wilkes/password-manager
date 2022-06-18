@@ -102,7 +102,7 @@ config/name="Password VX"
 run/main_scene="res://Main.tscn"
 boot_splash/image="res://assets/app-icons/splash.png"
 boot_splash/fullsize=false
-config/icon="res://icon.png"
+config/icon="res://assets/app-icons/icon64.png"
 config/windows_native_icon="res://assets/app-icons/icon.ico"
 
 [autoload]

@@ -1,4 +1,4 @@
-# Password Manager
+# Password Manager (Password VX)
 
 ![Icon](src/assets/app-icons/icon256.png)
 

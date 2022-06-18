@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://Main.gd" type="Script" id=1]
 [ext_resource path="res://scenes/Alert.tscn" type="PackedScene" id=2]
@@ -9,11 +9,13 @@
 [ext_resource path="res://style/Theme.tres" type="Theme" id=7]
 [ext_resource path="res://scenes/Settings.tscn" type="PackedScene" id=8]
 [ext_resource path="res://scenes/PasswordGenerator.tscn" type="PackedScene" id=9]
+[ext_resource path="res://assets/app-icons/icon16.png" type="Texture" id=10]
 
 [node name="Main" type="VBoxContainer"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource( 1 )
+menu_icon = ExtResource( 10 )
 
 [node name="M" type="MarginContainer" parent="."]
 margin_right = 1024.0
@@ -157,9 +159,11 @@ margin_right = 253.0
 margin_bottom = 123.0
 theme = ExtResource( 7 )
 window_title = "About"
-dialog_text = "This Password Manager software was created by Andrew Wilkes in 2022.
+dialog_text = "This Password Manager called Password VX (Version X) was created in 2022.
 
-Contributors: illlstr"
+Lead developer: Andrew Wilkes (https://github.com/andrew-wilkes)
+
+Styling contributor: illlstr (https://github.com/illlustr)"
 
 [node name="Settings" parent="Popups" instance=ExtResource( 8 )]
 
