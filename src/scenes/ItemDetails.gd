@@ -9,6 +9,7 @@ enum { EXPIRE, REMIND }
 var settings
 var item
 onready var groups = $M/VB/HB4/VB/Groups
+onready var password_field = $M/VB/HB2/Password
 var id_check_box = preload("res://scenes/IDCheckBox.tscn")
 var password_check_result = {}
 
@@ -22,7 +23,7 @@ func open(_item, _settings):
 	$M/VB/HB5/Username.text = item.username
 	$M/VB/HB3/URL.text = item.url
 	set_secret(item.reveal)
-	$M/VB/HB2/Password.text = item.password
+	password_field.text = item.password
 	set_password_score_status()
 	$M/VB/Notes.text = item.notes
 	$M/VB/HB4/Time/Created.text = get_date(item.created)
@@ -62,6 +63,8 @@ func set_panel_size():
 func _on_Show_pressed():
 	item.reveal = true
 	set_secret(item.reveal)
+	password_field.grab_focus()
+	password_field.set_cursor_position(password_field.text.length())
 
 
 func _on_Hide_pressed():
@@ -70,7 +73,7 @@ func _on_Hide_pressed():
 
 
 func set_secret(reveal):
-	$M/VB/HB2/Password.secret = not reveal
+	password_field.secret = not reveal
 	$M/VB/HB2/C1/Show.visible = not reveal
 	$M/VB/HB2/C1/Hide.visible = reveal
 
