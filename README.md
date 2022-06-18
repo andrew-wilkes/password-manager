@@ -73,22 +73,4 @@ An alternative example: **password-vx**
 
 A suggested interpretation of "vx" is: "version x"
 
-Case insensitive examples:
-
-password VX
-
-Password VX
-
-Password-VX
-
-PasswordVX
-
 We claim any combination of "password" and "vx" as prior art representing this brand.
-
-## ToDos
-
-* Debug how to unzip the KeePass Gzipped database given the master key
-* Extract passwords from example KeePass database given the algorithm
-* Consider minimizing the memory footprint of clear passwords on a device
-* Create password suggestion tool
-* Write article comparing this to alternative solutions
