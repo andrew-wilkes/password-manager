@@ -56,8 +56,12 @@ func update_modified():
 func set_panel_size():
 	rect_size = $M.rect_size
 	popup_centered()
+	var size = rect_size
 	yield(get_tree(), "idle_frame")
+	# After popping up it grows in size
+	# Long group names are a good test
 	rect_size = $M.rect_size
+	rect_position -= (rect_size - size) / 2
 
 
 func _on_Show_pressed():
