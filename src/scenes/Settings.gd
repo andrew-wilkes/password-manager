@@ -33,6 +33,7 @@ func get_date(time_secs):
 
 
 func set_panel_size():
+	rect_position.y += 20
 	rect_size = $M.rect_size
 
 

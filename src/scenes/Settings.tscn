@@ -1,14 +1,15 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://scenes/Settings.gd" type="Script" id=1]
 [ext_resource path="res://scenes/TextEntryPopup.tscn" type="PackedScene" id=2]
 [ext_resource path="res://style/Theme.tres" type="Theme" id=3]
+[ext_resource path="res://style/type/type_bold_normal.tres" type="DynamicFont" id=4]
 
 [node name="Settings" type="WindowDialog"]
 margin_left = 7.0
 margin_top = 9.0
-margin_right = 648.0
-margin_bottom = 529.0
+margin_right = 780.0
+margin_bottom = 586.0
 window_title = "Settings"
 script = ExtResource( 1 )
 
@@ -23,107 +24,131 @@ custom_constants/margin_bottom = 9
 [node name="VB" type="VBoxContainer" parent="M"]
 margin_left = 9.0
 margin_top = 9.0
-margin_right = 628.0
-margin_bottom = 438.0
+margin_right = 755.0
+margin_bottom = 521.0
 custom_constants/separation = 10
 
+[node name="Heading1" type="Label" parent="M/VB"]
+margin_right = 746.0
+margin_bottom = 20.0
+custom_fonts/font = ExtResource( 4 )
+text = "Date format"
+
 [node name="Label" type="Label" parent="M/VB"]
-margin_right = 619.0
-margin_bottom = 77.0
-text = "Date format
-Combinations of YMD- characters for year,month, and day digits.
+margin_top = 30.0
+margin_right = 746.0
+margin_bottom = 96.0
+text = "Combinations of YMD- characters for year,month, and day digits.
 Lower case text is converted to upper case.
 Customize to your preference."
 
 [node name="DateFormat" type="LineEdit" parent="M/VB"]
-margin_top = 87.0
-margin_right = 619.0
-margin_bottom = 112.0
+margin_top = 106.0
+margin_right = 746.0
+margin_bottom = 134.0
+
+[node name="Heading2" type="Label" parent="M/VB"]
+margin_top = 144.0
+margin_right = 746.0
+margin_bottom = 164.0
+custom_fonts/font = ExtResource( 4 )
+text = "Keys"
 
 [node name="Label2" type="Label" parent="M/VB"]
-margin_top = 122.0
-margin_right = 619.0
-margin_bottom = 199.0
-text = "Keys
-DO NOT THINK OF A KEY VALUE BY YOURSELF. IT MUST BE COMPUTER GENERATED FOR SECURITY REASONS.
+margin_top = 174.0
+margin_right = 746.0
+margin_bottom = 240.0
+text = "DO NOT THINK OF A KEY VALUE BY YOURSELF. IT MUST BE COMPUTER GENERATED FOR SECURITY REASONS.
 A shared key value is one that is easy to enter on another device to access the same password data file.
 Use your creativity to decide on your password (not this key), and take note of the password strength feedback."
 
 [node name="HB" type="HBoxContainer" parent="M/VB"]
-margin_top = 209.0
-margin_right = 619.0
-margin_bottom = 234.0
+margin_top = 250.0
+margin_right = 746.0
+margin_bottom = 278.0
 custom_constants/separation = 20
 
 [node name="EnterKey" type="Button" parent="M/VB/HB"]
-margin_right = 108.0
-margin_bottom = 25.0
+margin_right = 128.0
+margin_bottom = 28.0
 text = "Enter Shared Key"
 
 [node name="GenerateShortKey" type="Button" parent="M/VB/HB"]
-margin_left = 128.0
-margin_right = 276.0
-margin_bottom = 25.0
+margin_left = 148.0
+margin_right = 322.0
+margin_bottom = 28.0
 text = "Generate Shareable Key"
 
 [node name="GenerateLongKey" type="Button" parent="M/VB/HB"]
-margin_left = 296.0
-margin_right = 424.0
-margin_bottom = 25.0
+margin_left = 342.0
+margin_right = 493.0
+margin_bottom = 28.0
 text = "Generate Strong Key"
 
 [node name="DeleteKey" type="Button" parent="M/VB/HB"]
-margin_left = 444.0
-margin_right = 562.0
-margin_bottom = 25.0
+margin_left = 513.0
+margin_right = 652.0
+margin_bottom = 28.0
 text = "Delete Current Key"
 
+[node name="Heading3" type="Label" parent="M/VB"]
+margin_top = 288.0
+margin_right = 746.0
+margin_bottom = 308.0
+custom_fonts/font = ExtResource( 4 )
+text = "Current key"
+
 [node name="Label3" type="Label" parent="M/VB"]
-margin_top = 244.0
-margin_right = 619.0
-margin_bottom = 281.0
-text = "Current key
-This key value will be used to lock your currently loaded password data when it is saved."
+margin_top = 318.0
+margin_right = 746.0
+margin_bottom = 338.0
+text = "This key value will be used to lock your currently loaded password data when it is saved."
 
 [node name="Keys" type="OptionButton" parent="M/VB"]
-margin_top = 291.0
-margin_right = 619.0
-margin_bottom = 314.0
+margin_top = 348.0
+margin_right = 746.0
+margin_bottom = 376.0
+
+[node name="Heading4" type="Label" parent="M/VB"]
+margin_top = 386.0
+margin_right = 746.0
+margin_bottom = 406.0
+custom_fonts/font = ExtResource( 4 )
+text = "Groups"
 
 [node name="Label4" type="Label" parent="M/VB"]
-margin_top = 324.0
-margin_right = 619.0
-margin_bottom = 361.0
-text = "Groups
-Used to categorize your password records."
+margin_top = 416.0
+margin_right = 746.0
+margin_bottom = 436.0
+text = "Used to categorize your password records."
 
 [node name="HB2" type="HBoxContainer" parent="M/VB"]
-margin_top = 371.0
-margin_right = 619.0
-margin_bottom = 396.0
+margin_top = 446.0
+margin_right = 746.0
+margin_bottom = 474.0
 custom_constants/separation = 20
 
 [node name="AddGroup" type="Button" parent="M/VB/HB2"]
-margin_right = 72.0
-margin_bottom = 25.0
+margin_right = 85.0
+margin_bottom = 28.0
 text = "Add Group"
 
 [node name="EditGroup" type="Button" parent="M/VB/HB2"]
-margin_left = 92.0
-margin_right = 214.0
-margin_bottom = 25.0
+margin_left = 105.0
+margin_right = 250.0
+margin_bottom = 28.0
 text = "Edit Selected Group"
 
 [node name="DeleteGroup" type="Button" parent="M/VB/HB2"]
-margin_left = 234.0
-margin_right = 372.0
-margin_bottom = 25.0
+margin_left = 270.0
+margin_right = 432.0
+margin_bottom = 28.0
 text = "Delete Selected Group"
 
 [node name="Groups" type="OptionButton" parent="M/VB"]
-margin_top = 406.0
-margin_right = 619.0
-margin_bottom = 429.0
+margin_top = 484.0
+margin_right = 746.0
+margin_bottom = 512.0
 
 [node name="GroupText" parent="." instance=ExtResource( 2 )]
 
