@@ -141,11 +141,20 @@ func _on_FileMenu_id_pressed(id):
 	menu_action = id
 	match id:
 		NEW:
-			if not password.empty() and save_passwords():
+			if locked:
 				settings.current_file = ""
 				load_passwords()
+			else:
+				# Save before setting new data
+				if save_passwords():
+					settings.current_file = ""
+					load_passwords()
 		OPEN:
-			do_action()
+			if locked:
+				do_action()
+			else:
+				if save_passwords():
+					do_action()
 		SAVE:
 			do_action()
 		SAVE_AS:
@@ -261,6 +270,7 @@ func _on_FileDialog_file_selected(path):
 		return
 	settings.current_file = path.get_file()
 	settings.last_dir = path.get_base_dir()
+	set_title()
 	if menu_action == SAVE:
 		var _e = save_passwords()
 	else:
