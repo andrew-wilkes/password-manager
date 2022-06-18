@@ -16,14 +16,14 @@
 [node name="ItemDetails" type="WindowDialog"]
 margin_left = 9.0
 margin_top = 9.0
-margin_right = 783.0
-margin_bottom = 388.0
+margin_right = 556.0
+margin_bottom = 404.0
 window_title = "Password Record"
 script = ExtResource( 8 )
 
 [node name="M" type="MarginContainer" parent="."]
-margin_right = 769.0
-margin_bottom = 374.0
+margin_right = 545.0
+margin_bottom = 390.0
 custom_constants/margin_right = 9
 custom_constants/margin_top = 9
 custom_constants/margin_left = 9
@@ -32,17 +32,17 @@ custom_constants/margin_bottom = 9
 [node name="VB" type="VBoxContainer" parent="M"]
 margin_left = 9.0
 margin_top = 9.0
-margin_right = 760.0
+margin_right = 536.0
 margin_bottom = 381.0
 custom_constants/separation = 10
 
 [node name="HB" type="HBoxContainer" parent="M/VB"]
-margin_right = 751.0
+margin_right = 527.0
 margin_bottom = 28.0
 custom_constants/separation = 20
 
 [node name="Title" type="LineEdit" parent="M/VB/HB"]
-margin_right = 751.0
+margin_right = 527.0
 margin_bottom = 28.0
 hint_tooltip = "Title"
 size_flags_horizontal = 3
@@ -50,7 +50,7 @@ placeholder_text = "Title"
 
 [node name="HB5" type="HBoxContainer" parent="M/VB"]
 margin_top = 38.0
-margin_right = 751.0
+margin_right = 527.0
 margin_bottom = 66.0
 custom_constants/separation = 10
 
@@ -68,7 +68,7 @@ texture_pressed = ExtResource( 11 )
 
 [node name="Username" type="LineEdit" parent="M/VB/HB5"]
 margin_left = 24.0
-margin_right = 751.0
+margin_right = 527.0
 margin_bottom = 28.0
 hint_tooltip = "Username"
 size_flags_horizontal = 3
@@ -76,7 +76,7 @@ placeholder_text = "Username"
 
 [node name="HB2" type="HBoxContainer" parent="M/VB"]
 margin_top = 76.0
-margin_right = 751.0
+margin_right = 527.0
 margin_bottom = 104.0
 custom_constants/separation = 10
 
@@ -119,14 +119,14 @@ texture_normal = ExtResource( 2 )
 
 [node name="Password" type="LineEdit" parent="M/VB/HB2"]
 margin_left = 128.0
-margin_right = 725.0
+margin_right = 501.0
 margin_bottom = 28.0
 size_flags_horizontal = 3
 secret = true
 
 [node name="C2" type="CenterContainer" parent="M/VB/HB2"]
-margin_left = 735.0
-margin_right = 751.0
+margin_left = 511.0
+margin_right = 527.0
 margin_bottom = 28.0
 
 [node name="Warn" type="TextureButton" parent="M/VB/HB2/C2"]
@@ -146,7 +146,7 @@ texture_normal = ExtResource( 3 )
 
 [node name="HB3" type="HBoxContainer" parent="M/VB"]
 margin_top = 114.0
-margin_right = 751.0
+margin_right = 527.0
 margin_bottom = 142.0
 custom_constants/separation = 10
 
@@ -163,7 +163,7 @@ texture_normal = ExtResource( 6 )
 
 [node name="URL" type="LineEdit" parent="M/VB/HB3"]
 margin_left = 26.0
-margin_right = 751.0
+margin_right = 527.0
 margin_bottom = 28.0
 hint_tooltip = "Website link URL"
 size_flags_horizontal = 3
@@ -171,25 +171,25 @@ placeholder_text = "URL"
 
 [node name="Label" type="Label" parent="M/VB"]
 margin_top = 152.0
-margin_right = 751.0
+margin_right = 527.0
 margin_bottom = 172.0
 text = "Notes"
 
 [node name="Notes" type="TextEdit" parent="M/VB"]
 margin_top = 182.0
-margin_right = 751.0
+margin_right = 527.0
 margin_bottom = 282.0
 rect_min_size = Vector2( 0, 100 )
 wrap_enabled = true
 
 [node name="HB4" type="HBoxContainer" parent="M/VB"]
 margin_top = 292.0
-margin_right = 751.0
+margin_right = 527.0
 margin_bottom = 372.0
 custom_constants/separation = 40
 
 [node name="Time" type="GridContainer" parent="M/VB/HB4"]
-margin_right = 316.0
+margin_right = 326.0
 margin_bottom = 80.0
 custom_constants/vseparation = 10
 custom_constants/hseparation = 10
@@ -214,13 +214,13 @@ text = "Expire:"
 
 [node name="Expire" type="Label" parent="M/VB/HB4/Time"]
 margin_left = 226.0
-margin_right = 290.0
+margin_right = 300.0
 margin_bottom = 20.0
 rect_min_size = Vector2( 64, 0 )
 
 [node name="EditExpire" type="TextureButton" parent="M/VB/HB4/Time"]
-margin_left = 300.0
-margin_right = 316.0
+margin_left = 310.0
+margin_right = 326.0
 margin_bottom = 20.0
 texture_normal = ExtResource( 7 )
 
@@ -247,13 +247,14 @@ text = "Remind:"
 [node name="Remind" type="Label" parent="M/VB/HB4/Time"]
 margin_left = 226.0
 margin_top = 30.0
-margin_right = 290.0
+margin_right = 300.0
 margin_bottom = 50.0
+text = "2022-09-12"
 
 [node name="EditRemind" type="TextureButton" parent="M/VB/HB4/Time"]
-margin_left = 300.0
+margin_left = 310.0
 margin_top = 30.0
-margin_right = 316.0
+margin_right = 326.0
 margin_bottom = 50.0
 texture_normal = ExtResource( 7 )
 
@@ -279,20 +280,20 @@ margin_bottom = 80.0
 [node name="Blank2" type="Control" parent="M/VB/HB4/Time"]
 margin_left = 226.0
 margin_top = 60.0
-margin_right = 290.0
+margin_right = 300.0
 margin_bottom = 80.0
 
 [node name="Delete" type="TextureButton" parent="M/VB/HB4/Time"]
-margin_left = 300.0
+margin_left = 310.0
 margin_top = 60.0
-margin_right = 316.0
+margin_right = 326.0
 margin_bottom = 80.0
 hint_tooltip = "Delete this password record"
 texture_normal = ExtResource( 5 )
 
 [node name="VB" type="VBoxContainer" parent="M/VB/HB4"]
-margin_left = 356.0
-margin_right = 405.0
+margin_left = 366.0
+margin_right = 415.0
 margin_bottom = 80.0
 custom_constants/separation = 10
 
@@ -310,14 +311,14 @@ custom_constants/hseparation = 10
 columns = 3
 
 [node name="Spacer" type="Control" parent="M/VB/HB4"]
-margin_left = 445.0
-margin_right = 679.0
+margin_left = 455.0
+margin_right = 455.0
 margin_bottom = 80.0
 size_flags_horizontal = 3
 
 [node name="VB2" type="VBoxContainer" parent="M/VB/HB4"]
-margin_left = 719.0
-margin_right = 751.0
+margin_left = 495.0
+margin_right = 527.0
 margin_bottom = 80.0
 
 [node name="Spacer" type="Control" parent="M/VB/HB4/VB2"]

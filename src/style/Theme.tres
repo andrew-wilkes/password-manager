@@ -359,6 +359,7 @@ HSlider/styles/grabber_area = SubResource( 23 )
 HSlider/styles/grabber_area_highlight = SubResource( 24 )
 HSlider/styles/slider = SubResource( 25 )
 ItemList/styles/bg = null
+Label/colors/font_color = Color( 0.87451, 0.87451, 0.87451, 1 )
 LineEdit/styles/focus = SubResource( 3 )
 LineEdit/styles/normal = ExtResource( 1 )
 LineEdit/styles/read_only = ExtResource( 3 )
