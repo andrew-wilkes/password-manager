@@ -6,10 +6,11 @@
 [ext_resource path="res://style/type/type_bold_normal.tres" type="DynamicFont" id=4]
 
 [node name="Settings" type="WindowDialog"]
+visible = true
 margin_left = 7.0
 margin_top = 9.0
 margin_right = 780.0
-margin_bottom = 586.0
+margin_bottom = 648.0
 window_title = "Settings"
 script = ExtResource( 1 )
 
@@ -25,107 +26,103 @@ custom_constants/margin_bottom = 9
 margin_left = 9.0
 margin_top = 9.0
 margin_right = 755.0
-margin_bottom = 521.0
+margin_bottom = 566.0
 custom_constants/separation = 10
 
-[node name="Heading1" type="Label" parent="M/VB"]
+[node name="Heading2" type="Label" parent="M/VB"]
 margin_right = 746.0
 margin_bottom = 20.0
-custom_fonts/font = ExtResource( 4 )
-text = "Date format"
-
-[node name="Label" type="Label" parent="M/VB"]
-margin_top = 30.0
-margin_right = 746.0
-margin_bottom = 96.0
-text = "Combinations of YMD- characters for year,month, and day digits.
-Lower case text is converted to upper case.
-Customize to your preference."
-
-[node name="DateFormat" type="LineEdit" parent="M/VB"]
-margin_top = 106.0
-margin_right = 746.0
-margin_bottom = 134.0
-
-[node name="Heading2" type="Label" parent="M/VB"]
-margin_top = 144.0
-margin_right = 746.0
-margin_bottom = 164.0
 custom_fonts/font = ExtResource( 4 )
 text = "Keys"
 
 [node name="Label2" type="Label" parent="M/VB"]
-margin_top = 174.0
+margin_top = 30.0
 margin_right = 746.0
-margin_bottom = 240.0
+margin_bottom = 96.0
 text = "DO NOT THINK OF A KEY VALUE BY YOURSELF. IT MUST BE COMPUTER GENERATED FOR SECURITY REASONS.
 A shared key value is one that is easy to enter on another device to access the same password data file.
 Use your creativity to decide on your password (not this key), and take note of the password strength feedback."
 
 [node name="HB" type="HBoxContainer" parent="M/VB"]
-margin_top = 250.0
+margin_top = 106.0
 margin_right = 746.0
-margin_bottom = 278.0
+margin_bottom = 134.0
 custom_constants/separation = 20
 
 [node name="EnterKey" type="Button" parent="M/VB/HB"]
 margin_right = 128.0
 margin_bottom = 28.0
+custom_colors/font_color = Color( 1, 1, 0, 1 )
 text = "Enter Shared Key"
 
 [node name="GenerateShortKey" type="Button" parent="M/VB/HB"]
 margin_left = 148.0
 margin_right = 322.0
 margin_bottom = 28.0
+custom_colors/font_color = Color( 1, 0.501961, 0, 1 )
 text = "Generate Shareable Key"
 
 [node name="GenerateLongKey" type="Button" parent="M/VB/HB"]
 margin_left = 342.0
 margin_right = 493.0
 margin_bottom = 28.0
+custom_colors/font_color = Color( 0, 1, 0, 1 )
 text = "Generate Strong Key"
 
 [node name="DeleteKey" type="Button" parent="M/VB/HB"]
 margin_left = 513.0
 margin_right = 652.0
 margin_bottom = 28.0
+custom_colors/font_color = Color( 1, 0, 0, 1 )
 text = "Delete Current Key"
 
-[node name="Heading3" type="Label" parent="M/VB"]
-margin_top = 288.0
+[node name="VSpacer" type="Control" parent="M/VB"]
+margin_top = 144.0
 margin_right = 746.0
-margin_bottom = 308.0
+margin_bottom = 149.0
+rect_min_size = Vector2( 0, 5 )
+
+[node name="Heading3" type="Label" parent="M/VB"]
+margin_top = 159.0
+margin_right = 746.0
+margin_bottom = 179.0
 custom_fonts/font = ExtResource( 4 )
 text = "Current key"
 
 [node name="Label3" type="Label" parent="M/VB"]
-margin_top = 318.0
+margin_top = 189.0
 margin_right = 746.0
-margin_bottom = 338.0
+margin_bottom = 209.0
 text = "This key value will be used to lock your currently loaded password data when it is saved."
 
 [node name="Keys" type="OptionButton" parent="M/VB"]
-margin_top = 348.0
+margin_top = 219.0
 margin_right = 746.0
-margin_bottom = 376.0
+margin_bottom = 247.0
+
+[node name="VSpacer2" type="Control" parent="M/VB"]
+margin_top = 257.0
+margin_right = 746.0
+margin_bottom = 262.0
+rect_min_size = Vector2( 0, 5 )
 
 [node name="Heading4" type="Label" parent="M/VB"]
-margin_top = 386.0
+margin_top = 272.0
 margin_right = 746.0
-margin_bottom = 406.0
+margin_bottom = 292.0
 custom_fonts/font = ExtResource( 4 )
 text = "Groups"
 
 [node name="Label4" type="Label" parent="M/VB"]
-margin_top = 416.0
+margin_top = 302.0
 margin_right = 746.0
-margin_bottom = 436.0
+margin_bottom = 322.0
 text = "Used to categorize your password records."
 
 [node name="HB2" type="HBoxContainer" parent="M/VB"]
-margin_top = 446.0
+margin_top = 332.0
 margin_right = 746.0
-margin_bottom = 474.0
+margin_bottom = 360.0
 custom_constants/separation = 20
 
 [node name="AddGroup" type="Button" parent="M/VB/HB2"]
@@ -146,9 +143,35 @@ margin_bottom = 28.0
 text = "Delete Selected Group"
 
 [node name="Groups" type="OptionButton" parent="M/VB"]
-margin_top = 484.0
+margin_top = 370.0
 margin_right = 746.0
-margin_bottom = 512.0
+margin_bottom = 398.0
+
+[node name="VSpacer3" type="Control" parent="M/VB"]
+margin_top = 408.0
+margin_right = 746.0
+margin_bottom = 413.0
+rect_min_size = Vector2( 0, 5 )
+
+[node name="Heading1" type="Label" parent="M/VB"]
+margin_top = 423.0
+margin_right = 746.0
+margin_bottom = 443.0
+custom_fonts/font = ExtResource( 4 )
+text = "Date format"
+
+[node name="Label" type="Label" parent="M/VB"]
+margin_top = 453.0
+margin_right = 746.0
+margin_bottom = 519.0
+text = "Combinations of YMD- characters for year,month, and day digits.
+Lower case text is converted to upper case.
+Customize to your preference."
+
+[node name="DateFormat" type="LineEdit" parent="M/VB"]
+margin_top = 529.0
+margin_right = 746.0
+margin_bottom = 557.0
 
 [node name="GroupText" parent="." instance=ExtResource( 2 )]
 
@@ -173,8 +196,6 @@ theme = ExtResource( 3 )
 window_title = "Notice"
 
 [connection signal="popup_hide" from="." to="." method="_on_Settings_popup_hide"]
-[connection signal="text_changed" from="M/VB/DateFormat" to="." method="_on_DateFormat_text_changed"]
-[connection signal="text_entered" from="M/VB/DateFormat" to="." method="_on_DateFormat_text_entered"]
 [connection signal="pressed" from="M/VB/HB/EnterKey" to="." method="_on_EnterKey_pressed"]
 [connection signal="pressed" from="M/VB/HB/GenerateShortKey" to="." method="_on_GenerateShortKey_pressed"]
 [connection signal="pressed" from="M/VB/HB/GenerateLongKey" to="." method="_on_GenerateLongKey_pressed"]
@@ -182,6 +203,8 @@ window_title = "Notice"
 [connection signal="pressed" from="M/VB/HB2/AddGroup" to="." method="_on_AddGroup_pressed"]
 [connection signal="pressed" from="M/VB/HB2/EditGroup" to="." method="_on_EditGroup_pressed"]
 [connection signal="pressed" from="M/VB/HB2/DeleteGroup" to="." method="_on_DeleteGroup_pressed"]
+[connection signal="text_changed" from="M/VB/DateFormat" to="." method="_on_DateFormat_text_changed"]
+[connection signal="text_entered" from="M/VB/DateFormat" to="." method="_on_DateFormat_text_entered"]
 [connection signal="ok_pressed" from="GroupText" to="." method="_on_GroupText_ok_pressed"]
 [connection signal="confirmed" from="GroupDelete" to="." method="_on_GroupDelete_confirmed"]
 [connection signal="ok_pressed" from="KeyEntry" to="." method="_on_KeyEntry_ok_pressed"]

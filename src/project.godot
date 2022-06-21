@@ -112,6 +112,10 @@ Matching="*res://zxcvbn/matching.gd"
 Scoring="*res://zxcvbn/scoring.gd"
 ZXCVBN="*res://zxcvbn/zxcvbn.gd"
 
+[display]
+
+window/size/height=800
+
 [editor_plugins]
 
 enabled=PoolStringArray( "res://addons/gut/plugin.cfg" )
