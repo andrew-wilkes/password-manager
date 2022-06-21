@@ -78,13 +78,16 @@ func decode_data():
 	var start_bytes = db.subarray(0, 31)
 	var stream_start_bytes = header.get(FIELD_ID.StreamStartBytes)
 	if stream_start_bytes == null:
-		return "Missing StreamStartBytes field"
+		print("Missing StreamStartBytes field")
+		return
 	if stream_start_bytes != start_bytes:
-		return "Decoded data mismatch\nStreamStartBytes: " + String(stream_start_bytes) \
-		 + "\nStart bytes: " + String(start_bytes)
+		print("Decoded data mismatch\nStreamStartBytes: " + String(stream_start_bytes) \
+		 + "\nStart bytes: " + String(start_bytes))
+		return
 	prints("End bytes:", db.subarray(-16, -1))
 	# Remove start bytes and end padding
 	data_blocks = db.subarray(32, -db[-1] - 1)
+	# !!! Fails to unpack the GZIP data
 	var block = get_data_block(0)
 	block = get_data_block(block.idx)
 	pass
