@@ -8,6 +8,7 @@ enum { UP, DOWN, NONE }
 
 var db_key = ""
 var sort_mode = NONE
+var hover_color = Color(0, 0.384, 1)
 
 func set_sort_mode(mode):
 	match mode:
@@ -27,3 +28,11 @@ func _on_gui_input(event):
 		sort_mode = (sort_mode + 1) % 2
 		set_sort_mode(sort_mode)
 		emit_signal("clicked", self)
+
+
+func _on_Label_mouse_entered():
+	$HBox/Label.modulate = hover_color
+
+
+func _on_Label_mouse_exited():
+	$HBox/Label.modulate = Color.white
