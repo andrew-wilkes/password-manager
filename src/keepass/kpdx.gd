@@ -87,23 +87,28 @@ func decode_data():
 	prints("End bytes:", db.subarray(-16, -1))
 	# Remove start bytes and end padding
 	data_blocks = db.subarray(32, -db[-1] - 1)
-	# !!! Fails to unpack the GZIP data
+	var decrypted_blocks = PoolStringArray()
 	var block = get_data_block(0)
-	block = get_data_block(block.idx)
-	pass
+	while block.data:
+		if block.verified:
+			decrypted_blocks.append(block.data.get_string_from_utf8())
+		block = get_data_block(block.idx)
+	var xml = decrypted_blocks.join("")
 
 
 func get_data_block(idx):
 	var id = bytes_to_int(data_blocks.subarray(idx, idx + 3))
 	var data_hash = data_blocks.subarray(idx + 4, idx + 35)
 	var block_size = bytes_to_int(data_blocks.subarray(idx + 36, idx + 39))
-	var block_data = data_blocks.subarray(idx + 40, idx + block_size - 1)
+	if block_size == 0:
+		return { data = null }
+	var compressed_data = data_blocks.subarray(idx + 40, idx + 39 + block_size)
+	var hashed_data = hash_bytes(compressed_data)
 	# GZip file format: https://datatracker.ietf.org/doc/html/rfc1952
 	# Starts with 31, 139
-	block_data = block_data.decompress_dynamic(-1, File.COMPRESSION_GZIP)
-	var hashed_data = hash_bytes(block_data)
+	var block_data = compressed_data.decompress_dynamic(-1, File.COMPRESSION_GZIP)
 	var verified = true if data_hash == hashed_data else false
-	return { id = id, data = block_data, verified = verified, idx = idx + block_size }
+	return { id = id, data = block_data, verified = verified, idx = idx + block_size + 40 }
 
 
 func get_header_fields_and_database():
@@ -137,7 +142,15 @@ func load_file(path):
 	return data != null and data.size() > 0
 
 
+func save_data(_data):
+	var file = File.new()
+	file.open("res://cdata.gz", File.WRITE)
+	file.store_buffer(_data)
+	file.close()
+
+
 func bytes_to_int(bytes: PoolByteArray):
+	# LSB comes first so invert the order
 	bytes.invert()
 	var x = 0
 	for idx in bytes.size():
