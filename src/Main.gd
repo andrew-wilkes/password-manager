@@ -29,6 +29,7 @@ var password = ""
 var locked: bool
 
 func _ready():
+	randomize()
 	get_tree().set_auto_accept_quit(false)
 	var _e = get_tree().get_root().connect("size_changed", self, "viewport_size_changed")
 	settings = Settings.new()

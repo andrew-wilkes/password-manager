@@ -3,6 +3,7 @@ extends Resource
 class_name Settings
 
 const FILE_NAME = "user://settings.tres"
+const chars = "01234567890abcdefghijklmnopqrstuvwxyz"
 
 export var current_file = "pw1.pwd"
 export var last_dir = ""
@@ -31,8 +32,8 @@ func generate_salt(short = false):
 		# We will not store the salt value in the password db file, otherwise it defeats its purpose
 		var _salt = PoolStringArray()
 		for _n in 8 + randi() % 5: # 8 .. 12
-			var x = randi() % 36
-			_salt.append(get_char(x))
+			var x = randi() % chars.length()
+			_salt.append(chars[x])
 		return _salt.join("")
 	else:
 		var crypto = Crypto.new()
