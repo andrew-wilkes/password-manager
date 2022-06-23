@@ -15,7 +15,12 @@ func open(_settings):
 	date_format.text = settings.date_format
 	popup_centered()
 	call_deferred("set_panel_size")
-	set_group_button_visibility()
+	if keys.get_item_count() == 0:
+		populate_option_buttons()
+		set_group_button_visibility()
+
+
+func populate_option_buttons():
 	var idx = 0
 	for group_id in settings.groups:
 		groups.add_item(settings.groups[group_id])

@@ -166,6 +166,7 @@ Lead developer: Andrew Wilkes (https://github.com/andrew-wilkes)
 Styling contributor: illlstr (https://github.com/illlustr)"
 
 [node name="Settings" parent="Popups" instance=ExtResource( 8 )]
+visible = false
 
 [node name="ConfirmQuit" type="ConfirmationDialog" parent="Popups"]
 margin_right = 200.0

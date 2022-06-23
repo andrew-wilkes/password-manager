@@ -25,6 +25,7 @@ var encoded_db
 var key
 var composite_key
 var data_blocks: PoolByteArray
+var xml
 
 
 func set_password(pwd: String):
@@ -93,7 +94,7 @@ func decode_data():
 		if block.verified:
 			decrypted_blocks.append(block.data.get_string_from_utf8())
 		block = get_data_block(block.idx)
-	var xml = decrypted_blocks.join("")
+	xml = decrypted_blocks.join("")
 
 
 func get_data_block(idx):
@@ -123,6 +124,16 @@ func get_header_fields_and_database():
 	encoded_db = data.subarray(idx, -1)
 	print("Header length = ", idx)
 	print("Encoded database size = ", encoded_db.size())
+
+
+func decode_protected_elements():
+	if header.get(FIELD_ID.InnerRandomStreamID) == 2: # Salsa20 algorithm
+		var iv = PoolByteArray([0xE8, 0x30, 0x09, 0x4B, 0x97, 0x20, 0x5D, 0x2A])
+		var bytes = salsa20(hash_bytes(header.get(FIELD_ID.InnerRandomStreamKey)), iv)
+
+
+func salsa20(key, iv):
+	return PoolByteArray()
 
 
 func extract_hex_string(tname, start_index, end_index):

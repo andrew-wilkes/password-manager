@@ -6,7 +6,6 @@
 [ext_resource path="res://style/type/type_bold_normal.tres" type="DynamicFont" id=4]
 
 [node name="Settings" type="WindowDialog"]
-visible = true
 margin_left = 7.0
 margin_top = 9.0
 margin_right = 780.0

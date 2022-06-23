@@ -97,7 +97,8 @@ func verify_data(decoded_data: PoolByteArray):
 		var hash_bytes = decoded_data.subarray(0, HASH_SIZE - 1)
 		decrypted_data = decoded_data.subarray(HASH_SIZE, -1)
 		var db_hash = hash_bytes(decrypted_data)
-		if [db_hash].hash() == [hash_bytes].hash():
+		var crypto = Crypto.new()
+		if crypto.constant_time_compare(hash_bytes, db_hash):
 			verified = true
 	return verified
 

@@ -35,11 +35,8 @@ func generate_salt(short = false):
 			_salt.append(get_char(x))
 		return _salt.join("")
 	else:
-		# Convert a random number to a hash string and then trim the hash so
-		# that it is not the typical length of a hash
-		var h = str(randi()).sha256_text()
-		var i = randi() % 8 + 1
-		return h.substr(i)
+		var crypto = Crypto.new()
+		return crypto.generate_random_bytes(23 + randi() % 9).hex_encode()
 
 
 func get_char(x):
