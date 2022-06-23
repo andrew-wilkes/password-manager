@@ -88,13 +88,14 @@ func decode_data():
 	prints("End bytes:", db.subarray(-16, -1))
 	# Remove start bytes and end padding
 	data_blocks = db.subarray(32, -db[-1] - 1)
-	var decrypted_blocks = PoolStringArray()
+	var decrypted_blocks = PoolByteArray()
 	var block = get_data_block(0)
 	while block.data:
 		if block.verified:
-			decrypted_blocks.append(block.data.get_string_from_utf8())
+			decrypted_blocks.append_array(block.data)
 		block = get_data_block(block.idx)
-	xml = decrypted_blocks.join("")
+	xml = decrypted_blocks
+	# save_data(xml)
 
 
 func get_data_block(idx):
@@ -127,12 +128,29 @@ func get_header_fields_and_database():
 
 
 func decode_protected_elements():
-	if header.get(FIELD_ID.InnerRandomStreamID) == 2: # Salsa20 algorithm
+	var alg_id = bytes_to_int(header.get(FIELD_ID.InnerRandomStreamID))
+	if alg_id == 2: # Salsa20 algorithm
 		var iv = PoolByteArray([0xE8, 0x30, 0x09, 0x4B, 0x97, 0x20, 0x5D, 0x2A])
-		var bytes = salsa20(hash_bytes(header.get(FIELD_ID.InnerRandomStreamKey)), iv)
+		var _key = hash_bytes(header.get(FIELD_ID.InnerRandomStreamKey))
+		var bytes = salsa20(_key, iv)
+		var parser = XMLParser.new()
+		var error = parser.open_buffer(xml)
+		if error != OK:
+			print("Error opening XML data")
+			return
+		while true:
+			if parser.read() != OK:
+				return
+			if parser.get_node_type() == parser.NODE_ELEMENT and parser.get_node_name() == "Value":
+				if parser.get_named_attribute_value_safe("Protected") == "True":
+					parser.read()
+					var encoded_pass = parser.get_node_data()
+					var decoded_pass = Marshalls.base64_to_raw(encoded_pass)
+					pass
 
 
-func salsa20(key, iv):
+func salsa20(_key, iv):
+	# Return a 64 byte key stream
 	return PoolByteArray()
 
 
@@ -155,7 +173,7 @@ func load_file(path):
 
 func save_data(_data):
 	var file = File.new()
-	file.open("res://cdata.gz", File.WRITE)
+	file.open("../data/db.xml", File.WRITE)
 	file.store_buffer(_data)
 	file.close()
 

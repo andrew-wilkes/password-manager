@@ -22,6 +22,7 @@ func run():
 		keepass.transform_key()
 		keepass.set_composite_key()
 		keepass.decode_data()
+		keepass.decode_protected_elements()
 
 
 func _on_Go_pressed():
