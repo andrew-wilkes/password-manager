@@ -2,6 +2,7 @@ extends WindowDialog
 
 const ADJECTIVES = "res://data/adjectives.gz"
 const ANIMALS = "res://data/animal-words.gz"
+const spacers = ["", "-", "@"]
 
 export var color_a = "lime"
 export var color_b = "aqua"
@@ -9,6 +10,9 @@ export var color_b = "aqua"
 var words = { "adjectives": [], "animals": [] }
 var colors = [color_a, color_b]
 var suggestions = []
+var adjective
+var picks
+var spacer_idx = 0
 
 func _init():
 	words["adjectives"] = Utility.load_gzip_data(ADJECTIVES, [])
@@ -57,16 +61,23 @@ func add_rich_text(node: RichTextLabel, _words):
 	var txt = PoolStringArray()
 	var idx = 0
 	for word in _words:
-		txt.append("[color=%s]%s[/color]" % [colors[idx], word])
-		idx = wrapi(idx + 1, 0, 2)
-	node.bbcode_text = txt.join("")
+		if spacer_idx == 0:
+			txt.append("[color=%s]%s[/color]" % [colors[idx], word])
+			idx = wrapi(idx + 1, 0, 2)
+		else:
+			txt.append(word)
+	node.bbcode_text = txt.join(spacers[spacer_idx])
 
 
 func generate():
+	adjective = pick_adjective()
+	picks = pick_words(3)
+	populate_list()
+
+
+func populate_list():
 	suggestions.clear()
 	suggestions = [[], [], []]
-	var adjective = pick_adjective()
-	var picks = pick_words(3)
 	for i in 3:
 		var s1 = [adjective]
 		s1.append(picks[i])
@@ -104,3 +115,14 @@ func _on_Copy_pressed(idx):
 
 func _on_Regenerate_pressed():
 	regenerate()
+
+
+func _on_Pad_pressed():
+	spacer_idx = wrapi(spacer_idx + 1, 0, spacers.size())
+	var items = []
+	for list in suggestions:
+		for _words in list:
+			items.append(_words)
+	display_list(items)
+	yield(get_tree(), "idle_frame")
+	rect_size = $M.rect_size

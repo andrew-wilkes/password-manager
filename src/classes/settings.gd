@@ -27,9 +27,9 @@ func load_data():
 
 func generate_salt(short = false):
 	# In the UI it is called a Key
+	# We will not store the salt value in the password db file, otherwise it defeats its purpose
 	if short:
 		# Using a-z0-9 characters so that a user may copy them easily to another device
-		# We will not store the salt value in the password db file, otherwise it defeats its purpose
 		var _salt = PoolStringArray()
 		for _n in 8 + randi() % 5: # 8 .. 12
 			var x = randi() % CHARS.length()
