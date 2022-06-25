@@ -99,8 +99,8 @@ rect_min_size = Vector2( 186, 65.1 )
 theme = ExtResource( 7 )
 access = 2
 filters = PoolStringArray( "*.pdb ; Password Database Files" )
-current_dir = "/mnt/windows/WData/dev/godot/git/andrew-wilkes/godot-password-manager/src"
-current_path = "/mnt/windows/WData/dev/godot/git/andrew-wilkes/godot-password-manager/src/"
+current_dir = "/mnt/files/dev/godot/git/andrew-wilkes/godot-password-manager/src"
+current_path = "/mnt/files/dev/godot/git/andrew-wilkes/godot-password-manager/src/"
 
 [node name="Licences" parent="Popups" instance=ExtResource( 3 )]
 margin_right = -163.0

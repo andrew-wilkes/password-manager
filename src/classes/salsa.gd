@@ -5,7 +5,7 @@ class_name Salsa20
 # https://cr.yp.to/salsa20.html
 
 const mask = 0xffffffff # 32-bit mask
-const ascii = "expand 32-byte k"
+const ascii_constant = "expand 32-byte k"
 
 var state
 
@@ -14,18 +14,17 @@ func _init(key: PoolByteArray, iv: PoolByteArray, pos = [0, 0]):
 	var k = []
 	var n = []
 	for i in 8:
-		k.append(get_word_from_bytes(key.subarray(i * 4, i * 4 + 3)))
+		k.append(get_word_from_bytes(get_word_bytes(key, i)))
 	for i in 2:
-		n.append(get_word_from_bytes(iv.subarray(i * 4, i * 4 + 3)))
+		n.append(get_word_from_bytes(get_word_bytes(iv, i)))
 	var c = []
 	for i in 4:
-		c.append(get_word_from_bytes(ascii.to_ascii().subarray(i * 4, i * 4 + 3)))
+		c.append(get_word_from_bytes(get_word_bytes(ascii_constant.to_ascii(), i)))
 	#[0x61707865, 0x3320646e, 0x79622d32, 0x6b206574]
 	state = [c[0], k[0], k[1], k[2], 
 		 k[3], c[1], n[0], n[1],
 		 pos[0], pos[1], c[2], k[4],
 		 k[5], k[6], k[7], c[3]]
-	pass
 
 
 func generate_key_stream():
@@ -55,25 +54,6 @@ func salsa20_block():
 	return output
 
 
-func get_bytes_from_words(words):
-	var bytes = []
-	for word in words:
-		for i in 4:
-			bytes.append(word % 256)
-			word /= 256
-	return bytes
-
-
-func get_word_from_bytes(bytes: PoolByteArray):
-	# Convert 4 bytes to a 32 bit word in little endian format
-	bytes.invert()
-	var word = 0
-	for n in bytes.size():
-		word *= 256
-		word += bytes[n]
-	return word
-
-
 func rotate_left_32(word, n):
 	return ( ( ( word << n ) & mask) | ( word >> ( 32 - n ) ) )
 
@@ -83,3 +63,26 @@ func quarter_round(a, b, c, d, x):
 	x[c] ^= rotate_left_32((x[b] + x[a]) & mask, 9)
 	x[d] ^= rotate_left_32((x[c] + x[b]) & mask, 13)
 	x[a] ^= rotate_left_32((x[d] + x[c]) & mask, 18)
+
+
+func get_word_bytes(arr: PoolByteArray, i: int):
+	return arr.subarray(i * 4, i * 4 + 3)
+
+
+func get_word_from_bytes(bytes: PoolByteArray):
+	# Convert say 4 bytes to a 32 bit word in little endian format
+	bytes.invert()
+	var word = 0
+	for n in bytes.size():
+		word *= 256
+		word += bytes[n]
+	return word
+
+
+func get_bytes_from_words(words):
+	var bytes = []
+	for word in words:
+		for i in 4:
+			bytes.append(word % 256)
+			word /= 256
+	return bytes

@@ -15,6 +15,7 @@ func test_unicode_user_inputs():
 	var password = 'pÄssword junkiË'
 
 	ZXCVBN.zxcvbn(password, [input_])
+	assert_true(true)
 
 
 func test_invalid_user_inputs():
@@ -23,6 +24,7 @@ func test_invalid_user_inputs():
 	var password = 'pÄssword junkiË'
 
 	ZXCVBN.zxcvbn(password, [input_])
+	assert_true(true)
 
 
 func test_long_password():
@@ -30,6 +32,7 @@ func test_long_password():
 	var password = "weopiopdsjmkldjvoisdjfioejiojweopiopdsjmkldjvoisdjfioejiojweopiopdsjmkldjvoisdjfioejiojweopiopdsjmkldjvoisdjfioejiojweopiopdsjmkldjvoisdjfioejiojweopiopdsjmkldjvoisdjfioejiojweopiopdsjmkldjvoisdjfioejiojweopiopdsjmkldjvoisdjfioejiojweopiopdsjmkldjvoisdjfioejiojweopiopdsjmkldjvoisdjfioejiojweopiopdsjmkldjvoisdjfioej"
 
 	ZXCVBN.zxcvbn(password, [input_])
+	assert_true(true)
 
 
 func test_dictionary_password():

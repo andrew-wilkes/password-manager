@@ -48,12 +48,13 @@ text = "See the Editor Output window for messages.
 
 It takes around 10 seconds to produce an output."
 
-[node name="PathNote" type="Label" parent="."]
+[node name="PathNote" type="LineEdit" parent="."]
 margin_left = 529.0
 margin_top = 69.0
 margin_right = 778.0
 margin_bottom = 89.0
-text = "Add it to: ../data/xkdbx-file-path.txt"
+text = "Add it to: ../data/kdbx-file-path.txt"
+editable = false
 
 [node name="Processing" type="Label" parent="."]
 modulate = Color( 1, 0.329412, 0, 1 )

@@ -17,10 +17,10 @@ func test_pad_data():
 	assert_eq(padded_data[-1], 16)
 
 func test_salted_key():
-	var key = passwords.salted_key({ "salt": "asalt"}, "mykey")
+	var key = passwords.salted_key("asalt", "mykey")
 	assert_true(key is PoolByteArray, "Key is a PoolByteArray")
 	assert_true(key.size() > 10, "Key length > 10")
-	var key2 = passwords.salted_key({ "salt": "bsalt"}, "mykey")
+	var key2 = passwords.salted_key("bsalt", "mykey")
 	assert_ne_shallow(key, key2)
 
 func test_encryption():

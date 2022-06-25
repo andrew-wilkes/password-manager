@@ -132,7 +132,9 @@ func decode_protected_elements():
 	if alg_id == 2: # Salsa20 algorithm
 		var iv = PoolByteArray([0xE8, 0x30, 0x09, 0x4B, 0x97, 0x20, 0x5D, 0x2A])
 		var _key = hash_bytes(header.get(FIELD_ID.InnerRandomStreamKey))
-		var bytes = salsa20(_key, iv)
+		var salsa = Salsa20.new(_key, iv)
+		var stream_pointer = 0
+		var key_stream = salsa.generate_key_stream()
 		var parser = XMLParser.new()
 		var error = parser.open_buffer(xml)
 		if error != OK:
@@ -146,12 +148,13 @@ func decode_protected_elements():
 					parser.read()
 					var encoded_pass = parser.get_node_data()
 					var decoded_pass = Marshalls.base64_to_raw(encoded_pass)
-					pass
-
-
-func salsa20(_key, iv):
-	# Return a 64 byte key stream
-	return PoolByteArray()
+					for idx in decoded_pass.size():
+						decoded_pass[idx] = decoded_pass[idx] ^ key_stream[stream_pointer]
+						stream_pointer += 1
+						if stream_pointer >= 64:
+							key_stream = salsa.generate_key_stream()
+							stream_pointer = 0
+					print(decoded_pass.get_string_from_utf8())
 
 
 func extract_hex_string(tname, start_index, end_index):
