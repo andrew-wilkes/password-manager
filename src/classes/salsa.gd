@@ -1,7 +1,9 @@
 class_name Salsa20
 
-# https://github.com/Daeinar/salsa20/blob/master/salsa.py
+# Data Stream Cipher used by Keepass
+
 # https://en.wikipedia.org/wiki/Salsa20
+# https://github.com/Daeinar/salsa20/blob/master/salsa.py
 # https://cr.yp.to/salsa20.html
 
 const mask = 0xffffffff # 32-bit mask
@@ -17,10 +19,10 @@ func _init(key: PoolByteArray, iv: PoolByteArray, pos = [0, 0]):
 		k.append(get_word_from_bytes(get_word_bytes(key, i)))
 	for i in 2:
 		n.append(get_word_from_bytes(get_word_bytes(iv, i)))
-	var c = []
+	var c = [] # [0x61707865, 0x3320646e, 0x79622d32, 0x6b206574]
 	for i in 4:
 		c.append(get_word_from_bytes(get_word_bytes(ascii_constant.to_ascii(), i)))
-	#[0x61707865, 0x3320646e, 0x79622d32, 0x6b206574]
+
 	state = [c[0], k[0], k[1], k[2], 
 		 k[3], c[1], n[0], n[1],
 		 pos[0], pos[1], c[2], k[4],
@@ -54,15 +56,15 @@ func salsa20_block():
 	return output
 
 
-func rotate_left_32(word, n):
-	return ( ( ( word << n ) & mask) | ( word >> ( 32 - n ) ) )
-
-
 func quarter_round(a, b, c, d, x):
 	x[b] ^= rotate_left_32((x[a] + x[d]) & mask, 7)
 	x[c] ^= rotate_left_32((x[b] + x[a]) & mask, 9)
 	x[d] ^= rotate_left_32((x[c] + x[b]) & mask, 13)
 	x[a] ^= rotate_left_32((x[d] + x[c]) & mask, 18)
+
+
+func rotate_left_32(word, n):
+	return ( ( ( word << n ) & mask) | ( word >> ( 32 - n ) ) )
 
 
 func get_word_bytes(arr: PoolByteArray, i: int):
