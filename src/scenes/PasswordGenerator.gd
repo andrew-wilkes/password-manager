@@ -99,10 +99,10 @@ func pick_adjective():
 
 
 func pick_words(num_words):
-	var picks = []
+	var _picks = []
 	for idx in num_words:
-		picks.append(pick_word(idx))
-	return picks
+		_picks.append(pick_word(idx))
+	return _picks
 
 
 func pick_word(idx):

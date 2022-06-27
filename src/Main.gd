@@ -1,6 +1,7 @@
 extends Control
 
-enum { NO_ACTION, NEW, OPEN, SAVE, SAVE_AS, SAVE_INC, QUIT, ABOUT, LICENCES, PWD_GEN, CHG_PW }
+enum { NO_ACTION, NEW, OPEN, SAVE, SAVE_AS, SAVE_INC, IMPORT, QUIT, ABOUT, LICENCES, PWD_GEN, CHG_PW }
+enum { LOAD_CSV, LOAD_KP }
 enum { UNLOCKED, LOCKED }
 enum { SET_PASSWORD, ENTER_PASSWORD, ACCESS_DATA }
 enum { ENTER_PRESSED, PASSWORD_TEXT_CHANGED, BROWSE_PRESSED }
@@ -114,6 +115,8 @@ func configure_menu():
 	file_menu.add_item("Save As...", SAVE_AS, KEY_MASK_CTRL | KEY_MASK_SHIFT | KEY_S)
 	file_menu.add_item("Save Increment", SAVE_INC, KEY_MASK_CTRL | KEY_MASK_SHIFT | KEY_I)
 	file_menu.add_separator()
+	file_menu.add_submenu_item("Import", "../ImportMenu")
+	file_menu.add_separator()
 	file_menu.add_item("Quit", QUIT, KEY_MASK_CTRL | KEY_Q)
 	file_menu.connect("id_pressed", self, "_on_FileMenu_id_pressed")
 	
@@ -125,6 +128,9 @@ func configure_menu():
 	help_menu.add_separator()
 	help_menu.add_item("Licences", LICENCES)
 	help_menu.connect("id_pressed", self, "_on_HelpMenu_id_pressed")
+	
+	$M/Menu/File/ImportMenu.add_item("CSV File...", LOAD_CSV)
+	$M/Menu/File/ImportMenu.add_item("KeePass 2 Database...", LOAD_KP)
 	$M/Menu/Settings.show()
 
 
@@ -267,16 +273,22 @@ func _on_Help_pressed():
 
 
 func _on_FileDialog_file_selected(path):
+	if file_ok(path):
+		settings.current_file = path.get_file()
+		set_title()
+		if menu_action == SAVE:
+			var _e = save_passwords()
+		else:
+			load_passwords()
+
+
+func file_ok(path):
+	var ok = true
 	if path.rstrip("/") == path.get_base_dir():
 		alert.show_message("No filename was specified")
-		return
-	settings.current_file = path.get_file()
+		ok = false
 	settings.last_dir = path.get_base_dir()
-	set_title()
-	if menu_action == SAVE:
-		var _e = save_passwords()
-	else:
-		load_passwords()
+	return ok
 
 
 func _on_Content_resized():
@@ -294,3 +306,30 @@ func _on_Settings_group_removed(group_id):
 
 func _on_ConfirmQuit_confirmed():
 	get_tree().quit()
+
+
+func _on_LoadKeePassFile_file_selected(path):
+	pass # Replace with function body.
+
+
+func _on_LoadCSVFile_file_selected(path):
+	if file_ok(path):
+		var file = File.new()
+		if file.open(path, File.READ) == OK:
+			var csv = []
+			while true:
+				var csv_line = file.get_csv_line()
+				if csv_line[0].empty():
+					break
+				print(csv_line)
+			file.close()
+
+
+func _on_ImportMenu_id_pressed(id):
+	match id:
+		LOAD_CSV:
+			$Popups/LoadCSVFile.current_dir = settings.last_dir
+			$Popups/LoadCSVFile.popup_centered()
+		LOAD_KP:
+			$Popups/LoadKeePassFile.current_dir = settings.last_dir
+			$Popups/LoadKeePassFile.popup_centered()

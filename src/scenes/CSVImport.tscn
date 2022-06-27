@@ -1,0 +1,94 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://style/type/type_bold_normal.tres" type="DynamicFont" id=1]
+[ext_resource path="res://scenes/CSVImport.gd" type="Script" id=2]
+
+[node name="CSVImport" type="WindowDialog"]
+visible = true
+margin_left = 9.0
+margin_top = 9.0
+margin_right = 802.0
+margin_bottom = 326.0
+window_title = "CSV Data Import"
+script = ExtResource( 2 )
+
+[node name="M" type="MarginContainer" parent="."]
+margin_right = 495.0
+margin_bottom = 294.0
+custom_constants/margin_right = 9
+custom_constants/margin_top = 9
+custom_constants/margin_left = 9
+custom_constants/margin_bottom = 9
+
+[node name="VB" type="VBoxContainer" parent="M"]
+margin_left = 9.0
+margin_top = 9.0
+margin_right = 486.0
+margin_bottom = 285.0
+custom_constants/separation = 10
+
+[node name="HB" type="HBoxContainer" parent="M/VB"]
+margin_right = 477.0
+margin_bottom = 20.0
+custom_constants/separation = 20
+
+[node name="Path" type="Label" parent="M/VB/HB"]
+margin_right = 384.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
+text = "path"
+
+[node name="ColRow" type="Label" parent="M/VB/HB"]
+margin_left = 404.0
+margin_right = 477.0
+margin_bottom = 20.0
+text = "cols x rows"
+
+[node name="IgnoreFirstRow" type="CheckBox" parent="M/VB"]
+margin_top = 30.0
+margin_right = 477.0
+margin_bottom = 58.0
+pressed = true
+text = "Ignore first row?"
+
+[node name="Label" type="Label" parent="M/VB"]
+margin_top = 68.0
+margin_right = 477.0
+margin_bottom = 88.0
+custom_fonts/font = ExtResource( 1 )
+text = "Column Assignments"
+
+[node name="Grid" type="GridContainer" parent="M/VB"]
+margin_top = 98.0
+margin_right = 477.0
+margin_bottom = 98.0
+custom_constants/vseparation = 10
+custom_constants/hseparation = 20
+columns = 4
+
+[node name="Label2" type="Label" parent="M/VB"]
+margin_top = 108.0
+margin_right = 477.0
+margin_bottom = 128.0
+custom_fonts/font = ExtResource( 1 )
+text = "Preview"
+
+[node name="SC" type="ScrollContainer" parent="M/VB"]
+margin_top = 138.0
+margin_right = 477.0
+margin_bottom = 238.0
+rect_min_size = Vector2( 0, 100 )
+
+[node name="Grid" type="GridContainer" parent="M/VB/SC"]
+custom_constants/vseparation = 10
+custom_constants/hseparation = 10
+columns = 8
+
+[node name="OK" type="Button" parent="M/VB"]
+margin_top = 248.0
+margin_right = 477.0
+margin_bottom = 276.0
+text = "OK"
+
+[connection signal="pressed" from="M/VB/IgnoreFirstRow" to="." method="_on_IgnoreFirstRow_pressed"]
+[connection signal="pressed" from="M/VB/OK" to="." method="_on_OK_pressed"]
