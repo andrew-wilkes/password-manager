@@ -2,7 +2,7 @@ extends WindowDialog
 
 const ADJECTIVES = "res://data/adjectives.gz"
 const ANIMALS = "res://data/animal-words.gz"
-const spacers = ["", "-", "@"]
+const spacers = ["", " ", "-", "@", "+"]
 
 export var color_a = "lime"
 export var color_b = "aqua"

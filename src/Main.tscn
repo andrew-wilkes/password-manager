@@ -179,7 +179,6 @@ window_title = "Quit before saving?"
 dialog_text = "The passwords haven't been saved yet."
 
 [node name="PasswordGenerator" parent="Popups" instance=ExtResource( 9 )]
-visible = false
 
 [node name="LoadCSVFile" type="FileDialog" parent="Popups"]
 margin_right = 700.0
@@ -188,7 +187,7 @@ theme = ExtResource( 7 )
 window_title = "Open a File"
 mode = 0
 access = 2
-filters = PoolStringArray( "*.csv ; Comma seperated Files" )
+filters = PoolStringArray( "*.csv ; Comma separated Files" )
 current_dir = "/mnt/windows/WData/dev/godot/git/andrew-wilkes/godot-password-manager/src"
 current_path = "/mnt/windows/WData/dev/godot/git/andrew-wilkes/godot-password-manager/src/"
 

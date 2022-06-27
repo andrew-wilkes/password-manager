@@ -91,7 +91,7 @@ static func sanitize_date_format(txt: String):
 					date += last_chr
 					# Don't allow any more of last_chr
 					counts[last_chr] = 4
-			# Up to 2 seperated dashes are allowed
+			# Up to 2 separated dashes are allowed
 			if chr == "-" and counts[chr] < 2:
 					date += chr
 					counts[chr] += 1

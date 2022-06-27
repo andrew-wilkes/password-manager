@@ -23,6 +23,7 @@ func _ready():
 		var label = Label.new()
 		var label2 = label.duplicate()
 		label2.text = heading
+		label2.modulate = Color(0.7, 0.7, 0.7)
 		$M/VB/SC/Grid.add_child(label2)
 		label.text = heading + ":"
 		$M/VB/Grid.add_child(label)
@@ -74,11 +75,13 @@ func format_content(data, key):
 		"created", "modified":
 			if data.is_valid_integer():
 				var date = OS.get_datetime_from_unix_time(int(data))
-				return Date.format(date, settings.date_format)
+				data = Date.format(date, settings.date_format)
+			else:
+				data = ""
 		"notes":
 			var idx = data.find("\n")
 			if idx > -1:
-				return data.left(idx)
+				data = data.left(idx)
 	return data
 
 
@@ -88,6 +91,7 @@ func open(path, _csv, db, _settings):
 	settings = _settings
 	database = db
 	# Establish the number of data columns
+	num_cols = 0
 	for row in csv:
 		if row.size() > num_cols:
 			num_cols = row.size()
@@ -129,7 +133,7 @@ func _on_OK_pressed():
 	# Add to groups
 	var groups = {}
 	var group_column = column_assignments[0]
-	if group_column != null:
+	if group_column:
 		var rn = -1 if $M/VB/IgnoreFirstRow.pressed else 0
 		for row in csv:
 			if rn >= 0:
@@ -147,13 +151,17 @@ func _on_OK_pressed():
 			var idx = 0
 			for key in headings.keys():
 				var col = column_assignments[idx]
-				if col < row.size():
+				if col and col < row.size():
 					var data = row[col]
-					if key in ["created", "modified"]:
-						if data.is_valid_integer():
-							data = int(data)
-						else:
-							continue
+					match key:
+						"group":
+							# replace data with index value of the group
+							data = settings.groups.keys().find(data)
+						"created", "modified":
+							if data.is_valid_integer():
+								data = int(data)
+							else:
+								continue
 					record.data[key] = data
 				idx += 1
 			database.items.append(record.data)
