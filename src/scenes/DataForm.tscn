@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://scenes/DataForm.gd" type="Script" id=1]
 [ext_resource path="res://scenes/GroupButton.tscn" type="PackedScene" id=2]
@@ -6,6 +6,7 @@
 [ext_resource path="res://scenes/ItemDetails.tscn" type="PackedScene" id=4]
 [ext_resource path="res://style/Theme.tres" type="Theme" id=5]
 [ext_resource path="res://scenes/ModulatedTextureButton.gd" type="Script" id=6]
+[ext_resource path="res://scenes/CSVImport.tscn" type="PackedScene" id=7]
 
 [node name="DataForm" type="VBoxContainer"]
 anchor_right = 1.0
@@ -80,7 +81,7 @@ size_flags_horizontal = 3
 [node name="SC" type="ScrollContainer" parent="."]
 margin_top = 76.0
 margin_right = 1022.0
-margin_bottom = 600.0
+margin_bottom = 800.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
@@ -112,6 +113,13 @@ margin_bottom = 600.0
 wait_time = 0.25
 one_shot = true
 
+[node name="CSVImport" parent="." instance=ExtResource( 7 )]
+visible = false
+margin_left = 0.0
+margin_top = 799.0
+margin_right = 1022.0
+margin_bottom = 800.0
+
 [connection signal="visibility_changed" from="." to="." method="_on_DataForm_visibility_changed"]
 [connection signal="group_button_pressed" from="Groups/GroupButton" to="." method="set_group"]
 [connection signal="pressed" from="SB/C/Add" to="." method="_on_Add_pressed"]
@@ -120,3 +128,5 @@ one_shot = true
 [connection signal="delete_item" from="ItemDetails" to="." method="_on_ItemDetails_delete_item"]
 [connection signal="popup_hide" from="ItemDetails" to="." method="_on_ItemDetails_popup_hide"]
 [connection signal="timeout" from="SearchTimer" to="." method="_on_SearchTimer_timeout"]
+[connection signal="update_groups" from="CSVImport" to="." method="_on_CSVImport_update_groups"]
+[connection signal="update_item_list" from="CSVImport" to="." method="_on_CSVImport_update_item_list"]

@@ -137,7 +137,7 @@ func configure_menu():
 func set_locked(lock):
 	locked = lock
 	# Enable/disable Save menu items
-	for idx in [3, 4, 5]:
+	for idx in [3, 4, 5, 7]:
 		file_menu.set_item_disabled(idx, lock)
 		file_menu.set_item_shortcut_disabled(idx, lock)
 	tools_menu.set_item_disabled(1, lock)
@@ -321,8 +321,10 @@ func _on_LoadCSVFile_file_selected(path):
 				var csv_line = file.get_csv_line()
 				if csv_line[0].empty():
 					break
-				print(csv_line)
+				csv.append(csv_line)
 			file.close()
+			file_menu.hide()
+			$Content/DataForm.csv_import(path, csv)
 
 
 func _on_ImportMenu_id_pressed(id):

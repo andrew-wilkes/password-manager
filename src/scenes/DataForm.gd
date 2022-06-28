@@ -235,3 +235,15 @@ func _on_SearchBox_text_changed(new_text):
 
 func _on_SearchTimer_timeout():
 	populate_grid(database, "", false, 0, searchtext)
+
+
+func csv_import(path, csv_data):
+	$CSVImport.open(path, csv_data, database, settings)
+
+
+func _on_CSVImport_update_groups():
+	update_group_buttons()
+
+
+func _on_CSVImport_update_item_list():
+	populate_grid(database, current_key, current_reverse_state, current_group)

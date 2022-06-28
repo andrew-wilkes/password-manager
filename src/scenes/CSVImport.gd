@@ -1,5 +1,8 @@
 extends WindowDialog
 
+signal update_groups
+signal update_item_list
+
 var headings = {
 	"groups": "Groups",
 	"title": "Title",
@@ -133,15 +136,19 @@ func _on_OK_pressed():
 	# Add to groups
 	var groups = {}
 	var group_column = column_assignments[0]
-	if group_column:
+	if group_column != null:
 		var rn = -1 if $M/VB/IgnoreFirstRow.pressed else 0
+		var update_groups = false
 		for row in csv:
 			if rn >= 0:
 				if group_column < row.size() and not row[group_column].empty():
 					groups[row[group_column]] = true
+					update_groups = true
 			rn += 1
-	for group_name in groups.keys():
-		add_group(group_name)
+		for group_name in groups.keys():
+			add_group(group_name)
+		if update_groups:
+			emit_signal("update_groups")
 	
 	# Add to database
 	var rn = -1 if $M/VB/IgnoreFirstRow.pressed else 0
@@ -151,12 +158,15 @@ func _on_OK_pressed():
 			var idx = 0
 			for key in headings.keys():
 				var col = column_assignments[idx]
-				if col and col < row.size():
+				if col != null and col < row.size():
 					var data = row[col]
 					match key:
-						"group":
-							# replace data with index value of the group
-							data = settings.groups.keys().find(data)
+						"groups":
+							# replace value with id number of the group
+							for id in settings.groups:
+								if settings.groups[id] == data:
+									data = [id]
+									break
 						"created", "modified":
 							if data.is_valid_integer():
 								data = int(data)
@@ -166,6 +176,8 @@ func _on_OK_pressed():
 				idx += 1
 			database.items.append(record.data)
 		rn += 1
+	if rn >= 0:
+		emit_signal("update_item_list")
 	hide()
 
 
