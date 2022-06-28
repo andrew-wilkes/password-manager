@@ -257,3 +257,7 @@ func bytes_to_int(bytes: PoolByteArray):
 		x *= 256
 		x += bytes[idx]
 	return x
+
+
+func _on_Password_text_entered(_new_text):
+	_on_Start_pressed()

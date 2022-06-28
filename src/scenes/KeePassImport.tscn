@@ -99,5 +99,6 @@ text = "Cancel"
 
 [connection signal="pressed" from="M/VB/HB2/C1/Show" to="." method="_on_Show_pressed"]
 [connection signal="pressed" from="M/VB/HB2/C1/Hide" to="." method="_on_Hide_pressed"]
+[connection signal="text_entered" from="M/VB/HB2/Password" to="." method="_on_Password_text_entered"]
 [connection signal="pressed" from="M/VB/HB2/Start" to="." method="_on_Start_pressed"]
 [connection signal="pressed" from="M/VB/Cancel" to="." method="_on_Cancel_pressed"]

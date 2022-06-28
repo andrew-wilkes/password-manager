@@ -129,8 +129,8 @@ func configure_menu():
 	help_menu.add_item("Licences", LICENCES)
 	help_menu.connect("id_pressed", self, "_on_HelpMenu_id_pressed")
 	
-	$M/Menu/File/ImportMenu.add_item("CSV File...", LOAD_CSV)
 	$M/Menu/File/ImportMenu.add_item("KeePass 2 Database...", LOAD_KP)
+	$M/Menu/File/ImportMenu.add_item("CSV File...", LOAD_CSV)
 	$M/Menu/Settings.show()
 
 
