@@ -103,7 +103,7 @@ func verify_data(decoded_data: PoolByteArray):
 	return verified
 
 
-func hash_bytes(b: PoolByteArray):
+static func hash_bytes(b: PoolByteArray):
 	var ctx = HashingContext.new()
 	ctx.start(HashingContext.HASH_SHA256)
 	ctx.update(b)

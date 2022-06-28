@@ -309,7 +309,14 @@ func _on_ConfirmQuit_confirmed():
 
 
 func _on_LoadKeePassFile_file_selected(path):
-	pass # Replace with function body.
+	if file_ok(path):
+		var file = File.new()
+		if file.open(path, File.READ) == OK:
+			var data = file.get_buffer(file.get_len())
+			file.close()
+			file_menu.hide()
+			if data != null and data.size() > 0:
+				$Content/DataForm.keepass_import(path, data)
 
 
 func _on_LoadCSVFile_file_selected(path):
@@ -322,8 +329,6 @@ func _on_LoadCSVFile_file_selected(path):
 				if csv_line[0].empty():
 					break
 				csv.append(csv_line)
-			file.close()
-			file_menu.hide()
 			$Content/DataForm.csv_import(path, csv)
 
 
@@ -335,3 +340,11 @@ func _on_ImportMenu_id_pressed(id):
 		LOAD_KP:
 			$Popups/LoadKeePassFile.current_dir = settings.last_dir
 			$Popups/LoadKeePassFile.popup_centered()
+
+
+func _on_LoadCSVFile_popup_hide():
+	file_menu.hide()
+
+
+func _on_LoadKeePassFile_popup_hide():
+	file_menu.hide()

@@ -9,8 +9,8 @@
 margin_left = 9.0
 margin_top = 9.0
 margin_right = 556.0
-margin_bottom = 404.0
-window_title = "Password Record"
+margin_bottom = 201.0
+window_title = "Import KeePass Database"
 script = ExtResource( 3 )
 
 [node name="M" type="MarginContainer" parent="."]
@@ -28,38 +28,30 @@ margin_right = 536.0
 margin_bottom = 381.0
 custom_constants/separation = 10
 
-[node name="HB" type="HBoxContainer" parent="M/VB"]
+[node name="Path" type="Label" parent="M/VB"]
+modulate = Color( 1, 1, 0, 1 )
 margin_right = 527.0
-margin_bottom = 28.0
-custom_constants/separation = 20
-
-[node name="Title" type="LineEdit" parent="M/VB/HB"]
-margin_right = 527.0
-margin_bottom = 28.0
-hint_tooltip = "Title"
-size_flags_horizontal = 3
-placeholder_text = "Title"
+margin_bottom = 20.0
+text = "file-path.kdbx"
 
 [node name="HB2" type="HBoxContainer" parent="M/VB"]
-margin_top = 76.0
+margin_top = 30.0
 margin_right = 527.0
-margin_bottom = 104.0
+margin_bottom = 58.0
 custom_constants/separation = 10
 
 [node name="Label" type="Label" parent="M/VB/HB2"]
-margin_left = 24.0
 margin_top = 4.0
-margin_right = 92.0
+margin_right = 68.0
 margin_bottom = 24.0
 text = "Password:"
 
 [node name="C1" type="CenterContainer" parent="M/VB/HB2"]
-margin_left = 102.0
-margin_right = 118.0
+margin_left = 78.0
+margin_right = 94.0
 margin_bottom = 28.0
 
 [node name="Show" type="TextureButton" parent="M/VB/HB2/C1"]
-visible = false
 margin_top = 6.0
 margin_right = 16.0
 margin_bottom = 22.0
@@ -67,6 +59,7 @@ texture_normal = ExtResource( 1 )
 script = ExtResource( 13 )
 
 [node name="Hide" type="TextureButton" parent="M/VB/HB2/C1"]
+visible = false
 margin_top = 6.0
 margin_right = 16.0
 margin_bottom = 22.0
@@ -74,13 +67,37 @@ texture_normal = ExtResource( 2 )
 script = ExtResource( 13 )
 
 [node name="Password" type="LineEdit" parent="M/VB/HB2"]
-margin_left = 128.0
-margin_right = 501.0
+margin_left = 104.0
+margin_right = 473.0
 margin_bottom = 28.0
 size_flags_horizontal = 3
 secret = true
 
-[connection signal="text_changed" from="M/VB/HB/Title" to="." method="_on_Title_text_changed"]
+[node name="Start" type="Button" parent="M/VB/HB2"]
+margin_left = 483.0
+margin_right = 527.0
+margin_bottom = 28.0
+text = "Start"
+
+[node name="ProgressBar" type="ProgressBar" parent="M/VB"]
+margin_top = 68.0
+margin_right = 527.0
+margin_bottom = 88.0
+step = 1.0
+
+[node name="Message" type="Label" parent="M/VB"]
+margin_top = 98.0
+margin_right = 527.0
+margin_bottom = 118.0
+text = "Message"
+
+[node name="Cancel" type="Button" parent="M/VB"]
+margin_top = 128.0
+margin_right = 527.0
+margin_bottom = 156.0
+text = "Cancel"
+
 [connection signal="pressed" from="M/VB/HB2/C1/Show" to="." method="_on_Show_pressed"]
 [connection signal="pressed" from="M/VB/HB2/C1/Hide" to="." method="_on_Hide_pressed"]
-[connection signal="text_changed" from="M/VB/HB2/Password" to="." method="_on_Password_text_changed"]
+[connection signal="pressed" from="M/VB/HB2/Start" to="." method="_on_Start_pressed"]
+[connection signal="pressed" from="M/VB/Cancel" to="." method="_on_Cancel_pressed"]

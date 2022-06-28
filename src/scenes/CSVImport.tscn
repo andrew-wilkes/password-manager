@@ -4,7 +4,6 @@
 [ext_resource path="res://scenes/CSVImport.gd" type="Script" id=2]
 
 [node name="CSVImport" type="WindowDialog"]
-visible = true
 margin_left = 9.0
 margin_top = 9.0
 margin_right = 802.0
