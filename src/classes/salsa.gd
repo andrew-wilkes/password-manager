@@ -52,7 +52,13 @@ func salsa20_block():
 	var output = []
 	for i in 16:
 		output.append((x[i] + state[i]) & mask)
-	state = output
+
+	# Inc position counter
+	state[8] += 1
+	state[8] &= mask
+	if state[8] == 0:
+		state[9] += 1
+		state[9] &= mask
 	return output
 
 

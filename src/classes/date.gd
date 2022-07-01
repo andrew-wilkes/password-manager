@@ -102,3 +102,18 @@ static func sanitize_date_format(txt: String):
 					counts[chr] = 1
 		last_chr = chr
 	return date.rstrip("?-")
+
+
+static func get_unix_time_from_iso_string(iso: String):
+	# Only care about the date
+	var ymd = iso.split("T")[0].split("-")
+	var date = {}
+	for idx in ymd.size():
+		match idx:
+			0:
+				date["year"] = int(ymd[0])
+			1:
+				date["month"] = int(ymd[1])
+			2:
+				date["day"] = int(ymd[2])
+	return OS.get_unix_time_from_datetime(date)

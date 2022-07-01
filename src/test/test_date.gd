@@ -35,3 +35,18 @@ func test_sanitize_date_format():
 	assert_eq(date, "YYMMDD")
 	date = Date.sanitize_date_format("YY-MMDD-Y")
 	assert_eq(date, "YY-MMDD")
+
+func test_get_unix_time_from_iso_string():
+	var date = "2022-07-01T12:10:30Z"
+	var dt = OS.get_unix_time_from_datetime({ year = 2022, month = 7, day = 1 })
+	assert_eq(Date.get_unix_time_from_iso_string(date), dt)
+	date = "2022-07-01"
+	assert_eq(Date.get_unix_time_from_iso_string(date), dt)
+	dt = OS.get_unix_time_from_datetime({ year = 2022, month = 7 })
+	date = "2022-07"
+	assert_eq(Date.get_unix_time_from_iso_string(date), dt)
+	dt = OS.get_unix_time_from_datetime({ year = 2022 })
+	date = "2022"
+	assert_eq(Date.get_unix_time_from_iso_string(date), dt)
+	date = "2021"
+	assert_ne(Date.get_unix_time_from_iso_string(date), dt)

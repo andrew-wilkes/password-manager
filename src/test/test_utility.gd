@@ -15,3 +15,9 @@ func test_increment_filename():
 	fname = "xyz123.pwd"
 	fname = Utility.increment_filename(fname)
 	assert_eq(fname, "xyz124.pwd")
+
+
+func test_is_valid_base64_str():
+	assert_true(Utility.is_valid_base64_str("1234ABCDxyza+/=="))
+	assert_false(Utility.is_valid_base64_str("1234ABCDxyz+/=="))
+	assert_false(Utility.is_valid_base64_str("1234ABCDxyza+/=?"))

@@ -28,3 +28,13 @@ static func load_gzip_data(path, object):
 		return data
 	else:
 		return object
+
+
+static func is_valid_base64_str(txt):
+	var regex = RegEx.new()
+	regex.compile("^([-/\\+=A-Za-z0-9]{4})+$")
+	var result = regex.search(txt)
+	if result:
+		return true
+	else:
+		return false

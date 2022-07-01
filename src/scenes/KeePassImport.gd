@@ -124,7 +124,6 @@ func transform_key(key):
 	$M/VB/ProgressBar.max_value = rounds
 	var update_interval = rounds / 100
 	var update_counter = 0
-	var start_time = OS.get_ticks_msec()
 	var aes = AESContext.new()
 	aes.start(AESContext.MODE_ECB_ENCRYPT, tseed)
 	for n in rounds:
@@ -145,6 +144,7 @@ func transform_key(key):
 	key = Passwords.hash_bytes(master_seed + key)
 	# Now we have the Master Key
 	decode_data(key)
+	decode_protected_elements()
 
 
 func _on_Cancel_pressed():
@@ -215,6 +215,8 @@ func decode_protected_elements():
 				if parser.get_named_attribute_value_safe("Protected") == "True":
 					parser.read()
 					var encoded_pass = parser.get_node_data()
+					if not Utility.is_valid_base64_str(encoded_pass):
+						continue
 					var decoded_pass = Marshalls.base64_to_raw(encoded_pass)
 					for idx in decoded_pass.size():
 						decoded_pass[idx] = decoded_pass[idx] ^ key_stream[stream_pointer]
@@ -222,7 +224,8 @@ func decode_protected_elements():
 						if stream_pointer >= 64:
 							key_stream = salsa.generate_key_stream()
 							stream_pointer = 0
-					print(decoded_pass.get_string_from_utf8())
+					prints(decoded_pass.get_string_from_utf8(), decoded_pass.get_string_from_ascii(), decoded_pass.hex_encode())
+					pass
 
 
 func _on_Show_pressed():
