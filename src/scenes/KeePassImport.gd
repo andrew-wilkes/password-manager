@@ -162,6 +162,7 @@ func transform_key(key):
 	key = Passwords.hash_bytes(master_seed + key)
 	# Now we have the Master Key
 	decode_data(key)
+	$M/VB/ProgressBar.value = rounds
 	parse_xml()
 
 
@@ -213,7 +214,7 @@ func get_data_block(idx):
 
 func parse_xml():
 	var scan_stage = ROOT
-	var groups = []
+	var groups = {}
 	var group
 	var records = []
 	var record
@@ -241,12 +242,12 @@ func parse_xml():
 							"Name":
 								parser.read()
 								group = parser.get_node_data()
-								groups.append(group)
+								groups[group] = true
 							"Entry":
 								depth = 1
 								scan_stage = ENTRY
 								record = Record.new()
-								record.data["groups"] = [group]
+								record.data["groups"] = group
 					ENTRY:
 						match node_name:
 							"Entry":
@@ -286,7 +287,22 @@ func parse_xml():
 						if depth == 0:
 							records.append(record)
 							scan_stage = GROUP
-	print(records)
+	
+	# Add new groups to settings
+	var num_groups_before = settings.groups.size()
+	for group_name in groups.keys():
+		settings.add_group(group_name)
+	if num_groups_before < settings.groups.size():
+		emit_signal("update_groups")
+	
+	# Assign group IDs to the records and add to DB
+	for rec in records:
+		rec.data["groups"] = [settings.get_group_id(rec.data["groups"])]
+		database.items.append(rec.data)
+	msg.text += "\nAdded " + str(records.size()) + " new records to the database."
+	emit_signal("update_item_list")
+	yield(get_tree().create_timer(2.0), "timeout")
+	hide()
 
 
 func init_salsa():

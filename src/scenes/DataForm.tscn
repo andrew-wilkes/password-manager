@@ -136,3 +136,5 @@ margin_bottom = 800.0
 [connection signal="timeout" from="SearchTimer" to="." method="_on_SearchTimer_timeout"]
 [connection signal="update_groups" from="CSVImport" to="." method="_on_CSVImport_update_groups"]
 [connection signal="update_item_list" from="CSVImport" to="." method="_on_CSVImport_update_item_list"]
+[connection signal="update_groups" from="KeePassImport" to="." method="_on_KeePassImport_update_groups"]
+[connection signal="update_item_list" from="KeePassImport" to="." method="_on_KeePassImport_update_item_list"]

@@ -146,7 +146,7 @@ func _on_OK_pressed():
 					update_groups = true
 			rn += 1
 		for group_name in groups.keys():
-			add_group(group_name)
+			settings.add_group(group_name)
 		if update_groups:
 			emit_signal("update_groups")
 	
@@ -179,10 +179,3 @@ func _on_OK_pressed():
 	if rn >= 0:
 		emit_signal("update_item_list")
 	hide()
-
-
-func add_group(group_name):
-	if not group_name in settings.groups.values():
-		var max_id = settings.groups.keys().max()
-		var group_id = 1 if max_id == null else max_id + 1
-		settings.groups[group_id] = group_name

@@ -38,3 +38,19 @@ func generate_salt(short = false):
 	else:
 		var crypto = Crypto.new()
 		return crypto.generate_random_bytes(23 + randi() % 9).hex_encode()
+
+
+func add_group(group_name):
+	if not group_name in groups.values():
+		var max_id = groups.keys().max()
+		var group_id = 1 if max_id == null else max_id + 1
+		groups[group_id] = group_name
+
+
+func get_group_id(group_name):
+	var gid = 0
+	for id in groups:
+		if groups[id] == group_name:
+			gid = id
+			break
+	return gid

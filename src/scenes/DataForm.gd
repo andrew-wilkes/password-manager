@@ -251,3 +251,11 @@ func _on_CSVImport_update_item_list():
 
 func keepass_import(path, keepass_data):
 	$KeePassImport.open(path, keepass_data, database, settings)
+
+
+func _on_KeePassImport_update_item_list():
+	populate_grid(database, current_key, current_reverse_state, current_group)
+
+
+func _on_KeePassImport_update_groups():
+	update_group_buttons()
