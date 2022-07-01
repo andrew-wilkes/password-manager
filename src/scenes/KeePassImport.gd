@@ -19,8 +19,16 @@ enum FIELD_ID {
 	PublicCustomData = 12
 }
 
+enum { ROOT, GROUP, ENTRY }
+
 onready var password_field = $M/VB/HB2/Password
 onready var msg = $M/VB/Message
+
+const time_key_map = {
+	"CreationTime": "created",
+	"LastModificationTime": "modified",
+	"LastAccessTime": "accessed",
+}
 
 var settings
 var database
@@ -35,6 +43,10 @@ var encoded_db
 var cancel
 var update_progress = false
 var progress_value = 0
+var algorithm_id = 0
+var stream_pointer
+var key_stream
+var salsa
 
 func _ready():
 	if get_parent().name == "root":
@@ -47,6 +59,7 @@ func open(path, data, db, _settings):
 	data_bytes = data
 	data_idx = 0
 	data_size = data.size()
+	password_field.text = ""
 	msg.text = read_database_signature()
 	$M/VB/Path.text = path
 	$M/VB/Cancel.hide()
@@ -105,6 +118,11 @@ func _on_Start_pressed():
 	$M/VB/Cancel.show()
 	cancel = false
 	get_header_fields_and_database()
+	algorithm_id = bytes_to_int(header.get(FIELD_ID.InnerRandomStreamID))
+	if algorithm_id == 2:
+		init_salsa()
+	else:
+		msg.text += "\nUnsupported password decoder " + str(algorithm_id)
 	var key = Passwords.hash_bytes(password_field.text.sha256_buffer())
 	transform_key(key)
 
@@ -144,7 +162,7 @@ func transform_key(key):
 	key = Passwords.hash_bytes(master_seed + key)
 	# Now we have the Master Key
 	decode_data(key)
-	decode_protected_elements()
+	parse_xml()
 
 
 func _on_Cancel_pressed():
@@ -188,44 +206,109 @@ func get_data_block(idx):
 		return { data = null }
 	var compressed_data = data_blocks.subarray(idx + 40, idx + 39 + block_size)
 	var hashed_data = Passwords.hash_bytes(compressed_data)
-	# GZip file format: https://datatracker.ietf.org/doc/html/rfc1952
-	# Starts with 31, 139
 	var block_data = compressed_data.decompress_dynamic(-1, File.COMPRESSION_GZIP)
 	var verified = true if data_hash == hashed_data else false
 	return { id = id, data = block_data, verified = verified, idx = idx + block_size + 40 }
 
 
-func decode_protected_elements():
-	var alg_id = bytes_to_int(header.get(FIELD_ID.InnerRandomStreamID))
-	if alg_id == 2: # Salsa20 algorithm
-		var iv = PoolByteArray([0xE8, 0x30, 0x09, 0x4B, 0x97, 0x20, 0x5D, 0x2A])
-		var _key = Passwords.hash_bytes(header.get(FIELD_ID.InnerRandomStreamKey))
-		var salsa = Salsa20.new(_key, iv)
-		var stream_pointer = 0
-		var key_stream = salsa.generate_key_stream()
-		var parser = XMLParser.new()
-		var error = parser.open_buffer(xml)
-		if error != OK:
-			msg.text += "\nError opening XML data."
+func parse_xml():
+	var scan_stage = ROOT
+	var groups = []
+	var group
+	var records = []
+	var record
+	var key
+	var protected
+	var depth = 0
+	var parser = XMLParser.new()
+	var error = parser.open_buffer(xml)
+	if error != OK:
+		msg.text += "\nError opening XML data."
+		return
+	while true:
+		if parser.read() != OK:
 			return
-		while true:
-			if parser.read() != OK:
-				return
-			if parser.get_node_type() == parser.NODE_ELEMENT and parser.get_node_name() == "Value":
-				if parser.get_named_attribute_value_safe("Protected") == "True":
-					parser.read()
-					var encoded_pass = parser.get_node_data()
-					if not Utility.is_valid_base64_str(encoded_pass):
-						continue
-					var decoded_pass = Marshalls.base64_to_raw(encoded_pass)
-					for idx in decoded_pass.size():
-						decoded_pass[idx] = decoded_pass[idx] ^ key_stream[stream_pointer]
-						stream_pointer += 1
-						if stream_pointer >= 64:
-							key_stream = salsa.generate_key_stream()
-							stream_pointer = 0
-					prints(decoded_pass.get_string_from_utf8(), decoded_pass.get_string_from_ascii(), decoded_pass.hex_encode())
-					pass
+		match parser.get_node_type():
+			parser.NODE_ELEMENT:
+				var node_name = parser.get_node_name()
+				match scan_stage:
+					ROOT:
+						match node_name:
+							"Group":
+								scan_stage = GROUP
+					GROUP:
+						match node_name:
+							"Name":
+								parser.read()
+								group = parser.get_node_data()
+								groups.append(group)
+							"Entry":
+								depth = 1
+								scan_stage = ENTRY
+								record = Record.new()
+								record.data["groups"] = [group]
+					ENTRY:
+						match node_name:
+							"Entry":
+								depth += 1
+							"Key":
+								parser.read()
+								key = parser.get_node_data().to_lower()
+							"Value":
+								if not parser.is_empty():
+									if parser.get_named_attribute_value_safe("Protected") == "True":
+										protected = true
+									else:
+										protected = false
+									parser.read()
+									if parser.get_node_type() == parser.NODE_TEXT:
+										var value = parser.get_node_data()
+										if protected:
+											record.data[key] = decode_protected_value(value)
+										else:
+											record.data[key] = value
+										if key == "Notes":
+											breakpoint
+							"CreationTime", "LastModificationTime", "LastAccessTime":
+								parser.read()
+								record.data[time_key_map[node_name]] =\
+								 Date.get_unix_time_from_iso_string(parser.get_node_data())
+			parser.NODE_ELEMENT_END:
+				var node_name = parser.get_node_name()
+				match node_name:
+					"Root":
+						break
+					"Group":
+						scan_stage = ROOT
+					"Entry":
+						# History causes a nested entry
+						depth -= 1
+						if depth == 0:
+							records.append(record)
+							scan_stage = GROUP
+	print(records)
+
+
+func init_salsa():
+	var iv = PoolByteArray([0xE8, 0x30, 0x09, 0x4B, 0x97, 0x20, 0x5D, 0x2A])
+	var _key = Passwords.hash_bytes(header.get(FIELD_ID.InnerRandomStreamKey))
+	salsa = Salsa20.new(_key, iv)
+	stream_pointer = 0
+	key_stream = salsa.generate_key_stream()
+
+
+func decode_protected_value(protected_value):
+	if salsa and Utility.is_valid_base64_str(protected_value):
+		var value = Marshalls.base64_to_raw(protected_value)
+		for idx in value.size():
+			value[idx] = value[idx] ^ key_stream[stream_pointer]
+			stream_pointer += 1
+			if stream_pointer >= 64:
+				key_stream = salsa.generate_key_stream()
+				stream_pointer = 0
+		return value.get_string_from_utf8()
+	else:
+		return protected_value
 
 
 func _on_Show_pressed():
