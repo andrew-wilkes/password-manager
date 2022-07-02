@@ -17,7 +17,6 @@ var headings = {
 	"title": "Title",
 	"username": "Username",
 	"url": "URL",
-	"notes": "Notes",
 	"accessed": "Accessed",
 }
 var settings: Settings
@@ -106,15 +105,17 @@ func add_bars():
 
 
 func get_cell_content(data, key):
+	var txt = ""
 	match key:
 		"accessed":
 			var date = OS.get_datetime_from_unix_time(data[key])
-			return Date.format(date, settings.date_format)
+			txt = Date.format(date, settings.date_format)
 		"notes":
 			var idx = data[key].find("\n")
 			if idx > -1:
-				return data[key].left(idx)
-	return data[key]
+				txt = data[key].left(idx)
+		_: txt = data[key]
+	return txt
 
 
 func add_dummy_data():
@@ -159,13 +160,12 @@ func check_for_reminders():
 
 func update_group_buttons():
 	var existing_buttons = []
-	for node in $Groups.get_children():
-		if node is Button:
-			node.pressed = true if node.id == 0 else false
-			if node.id == 0 or node.id in settings.groups:
-				existing_buttons.append(node.id)
-			else:
-				node.queue_free()
+	for node in $Groups/Grid.get_children():
+		node.pressed = true if node.id == 0 else false
+		if node.id == 0 or node.id in settings.groups:
+			existing_buttons.append(node.id)
+		else:
+			node.queue_free()
 	for group_id in settings.groups:
 		if group_id in existing_buttons:
 			continue
@@ -173,7 +173,7 @@ func update_group_buttons():
 		gb.id = group_id
 		gb.text = settings.groups[group_id]
 		var _e = gb.connect("group_button_pressed", self, "set_group")
-		$Groups.add_child(gb)
+		$Groups/Grid.add_child(gb)
 
 
 func set_group(id):
@@ -199,12 +199,12 @@ func _on_Grid_item_rect_changed():
 	$BG/VBox.rect_position = grid.rect_global_position + Vector2(0, heading_height)
 	update_bars = true
 
-
+"""
 func _process(_delta):
 	if update_bars:
 		add_bars()
 		update_bars = false
-
+"""
 
 func _on_DataForm_visibility_changed():
 	$BG/VBox.visible = visible

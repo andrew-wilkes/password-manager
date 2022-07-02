@@ -27,12 +27,22 @@ visible = false
 margin_left = 9.0
 margin_top = 9.0
 margin_right = 37.0
-margin_bottom = 29.0
+margin_bottom = 51.0
 custom_colors/default_color = Color( 0, 0.0823529, 1, 1 )
 bbcode_enabled = true
 bbcode_text = "dsfsfd"
 text = "dsfsfd"
+fit_content_height = true
 scroll_active = false
 
+[node name="BG" type="ColorRect" parent="."]
+show_behind_parent = true
+margin_left = 9.0
+margin_top = 9.0
+margin_right = 37.0
+margin_bottom = 29.0
+color = Color( 0.631373, 0.705882, 0.564706, 1 )
+
+[connection signal="item_rect_changed" from="." to="." method="_on_Cell_item_rect_changed"]
 [connection signal="gui_input" from="Label" to="." method="_on_Label_gui_input"]
 [connection signal="meta_clicked" from="RichTextLabel" to="." method="_on_RichTextLabel_meta_clicked"]
