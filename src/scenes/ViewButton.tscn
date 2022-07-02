@@ -5,16 +5,18 @@
 [ext_resource path="res://scenes/ViewButton.gd" type="Script" id=3]
 
 [node name="ViewButton" type="CenterContainer"]
+modulate = Color( 0.258824, 0.647059, 0.815686, 1 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_right = -1008.0
 margin_bottom = -784.0
-size_flags_horizontal = 3
+rect_min_size = Vector2( 24, 0 )
 size_flags_vertical = 3
 script = ExtResource( 3 )
 
 [node name="Show" type="TextureButton" parent="."]
-margin_right = 16.0
+margin_left = 4.0
+margin_right = 20.0
 margin_bottom = 16.0
 hint_tooltip = "View details"
 texture_normal = ExtResource( 2 )

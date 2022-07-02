@@ -28,6 +28,7 @@ var current_key = ""
 var current_reverse_state = false
 var searchtext = ""
 var num_rows = 0
+var scrolling = false
 
 func _ready():
 	emit_signal("action", null)
@@ -65,6 +66,23 @@ func populate_grid(db: Database, key, reverse, group, filter = ""):
 				font_color = Color.red
 			cell.set_text(get_cell_content(item, key), key == "url", font_color)
 			grid.add_child(cell)
+	call_deferred("align_background")
+	yield(get_tree(), "idle_frame")
+	call_deferred("sync_heading_sizes")
+
+
+func sync_heading_sizes():
+	var idx = 0
+	for heading in header.get_children():
+		heading.rect_size.x = 0
+		heading.rect_min_size.x = grid.get_child(idx).rect_size.x
+		idx += 1
+
+
+func align_background():
+	$BG/SC.rect_position = $VB/SC.rect_global_position
+	$BG/SC.rect_size = $VB/SC.rect_size
+	add_or_update_bars()
 
 
 func remove_group(group_id):
@@ -80,7 +98,7 @@ func show_item_details(item):
 	$ItemDetails.open(item, settings)
 
 
-func add_bars():
+func add_or_update_bars():
 	var num_bars_existing = $BG/SC/VBox.get_child_count()
 	if num_bars_existing == 0:
 		var bar = ColorRect.new()
@@ -100,9 +118,15 @@ func add_bars():
 	if to_add < 0:
 		for idx in range(num_bars_existing + to_add, num_bars_existing):
 			$BG/SC/VBox.get_child(idx).queue_free()
+	call_deferred("resize_bars")
+
+
+func resize_bars():
+	yield(get_tree(), "idle_frame")
 	var idx = 0
 	for bar in $BG/SC/VBox.get_children():
 		bar.rect_min_size.y = grid.get_child(idx).rect_size.y
+		bar.rect_size.y = bar.rect_min_size.y
 		idx += 5
 
 
@@ -180,6 +204,7 @@ func update_group_buttons():
 
 func set_group(id):
 	current_group = id
+	$VB/SB/SearchBox.text = ""
 	populate_grid(database, current_key, current_reverse_state, current_group)
 
 
@@ -187,24 +212,28 @@ func heading_clicked(heading: Heading):
 	var idx = 1
 	for key in headings:
 		if key != heading.db_key:
-			grid.get_child(idx).set_sort_mode(heading.NONE)
+			header.get_child(idx).set_sort_mode(heading.NONE)
 		idx += 1
 	populate_grid(database, heading.db_key, bool(heading.sort_mode), current_group)
 
 
 func _on_Grid_item_rect_changed():
-	#$BG/SC.rect_position = grid.rect_global_position
+	#$BG/MC/SC.rect_position = grid.rect_global_position
 	#update_bars = true
 	pass
 
 func _process(_delta):
 	if update_bars:
-		add_bars()
+		add_or_update_bars()
 		update_bars = false
+	if scrolling:
+		$BG/SC.scroll_vertical = $VB/SC.scroll_vertical
+	if $BG/SC.scroll_vertical != $VB/SC.scroll_vertical:
+		$BG/SC.scroll_vertical = $VB/SC.scroll_vertical
 
 
 func _on_DataForm_visibility_changed():
-	$BG/MC.visible = visible
+	$BG/SC.visible = visible
 
 
 func _on_ItemDetails_delete_item(item):
@@ -256,3 +285,13 @@ func _on_KeePassImport_update_item_list():
 
 func _on_KeePassImport_update_groups():
 	update_group_buttons()
+
+
+# This doesn't get triggered
+func _on_SC_scroll_started():
+	scrolling = true
+	print("scroll started")
+
+
+func _on_SC_scroll_ended():
+	scrolling = false

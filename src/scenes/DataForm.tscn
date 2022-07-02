@@ -20,16 +20,18 @@ custom_constants/margin_top = 20
 custom_constants/margin_left = 20
 custom_constants/margin_bottom = 20
 script = ExtResource( 1 )
+light_color = Color( 0.811765, 0.811765, 0.811765, 1 )
+dark_color = Color( 0.941176, 0.941176, 0.941176, 1 )
+highlight_color = Color( 0.423529, 0.729412, 0.729412, 1 )
 
 [node name="VB" type="VBoxContainer" parent="."]
 margin_left = 20.0
 margin_top = 20.0
 margin_right = 1002.0
-margin_bottom = 106.0
+margin_bottom = 112.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = ExtResource( 5 )
-custom_constants/separation = 10
 
 [node name="Groups" type="HBoxContainer" parent="VB"]
 margin_right = 982.0
@@ -53,10 +55,16 @@ margin_right = 29.0
 margin_bottom = 28.0
 custom_styles/hover = SubResource( 1 )
 
-[node name="SB" type="HBoxContainer" parent="VB"]
-margin_top = 38.0
+[node name="Spacer" type="Control" parent="VB"]
+margin_top = 32.0
 margin_right = 982.0
-margin_bottom = 66.0
+margin_bottom = 52.0
+rect_min_size = Vector2( 0, 20 )
+
+[node name="SB" type="HBoxContainer" parent="VB"]
+margin_top = 56.0
+margin_right = 982.0
+margin_bottom = 84.0
 custom_constants/separation = 20
 
 [node name="C" type="CenterContainer" parent="VB/SB"]
@@ -87,9 +95,9 @@ margin_bottom = 28.0
 size_flags_horizontal = 3
 
 [node name="Header" type="HBoxContainer" parent="VB"]
-margin_top = 76.0
+margin_top = 88.0
 margin_right = 982.0
-margin_bottom = 76.0
+margin_bottom = 88.0
 size_flags_horizontal = 3
 custom_constants/separation = 0
 
@@ -98,13 +106,15 @@ margin_right = 32.0
 rect_min_size = Vector2( 32, 0 )
 
 [node name="SC" type="ScrollContainer" parent="VB"]
-margin_top = 86.0
+margin_top = 92.0
 margin_right = 982.0
-margin_bottom = 86.0
+margin_bottom = 92.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="Grid" type="GridContainer" parent="VB/SC"]
+margin_right = 982.0
+size_flags_horizontal = 3
 custom_constants/vseparation = 0
 custom_constants/hseparation = 0
 columns = 5
@@ -112,24 +122,16 @@ columns = 5
 [node name="BG" type="CanvasLayer" parent="."]
 layer = -1
 
-[node name="MC" type="MarginContainer" parent="BG"]
-visible = false
-margin_right = 625.0
-margin_bottom = 359.0
-custom_constants/margin_right = 20
-custom_constants/margin_top = 20
-custom_constants/margin_left = 20
-custom_constants/margin_bottom = 20
-
-[node name="SC" type="ScrollContainer" parent="BG/MC"]
+[node name="SC" type="ScrollContainer" parent="BG"]
 margin_left = 20.0
 margin_top = 20.0
 margin_right = 605.0
 margin_bottom = 339.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
+scroll_horizontal_enabled = false
 
-[node name="VBox" type="VBoxContainer" parent="BG/MC/SC"]
+[node name="VBox" type="VBoxContainer" parent="BG/SC"]
 margin_right = 585.0
 margin_bottom = 319.0
 size_flags_horizontal = 3
@@ -140,7 +142,7 @@ custom_constants/separation = 0
 margin_left = 20.0
 margin_top = 20.0
 margin_right = 1002.0
-margin_bottom = 106.0
+margin_bottom = 112.0
 
 [node name="SearchTimer" type="Timer" parent="."]
 wait_time = 0.25
@@ -150,23 +152,25 @@ one_shot = true
 margin_left = 20.0
 margin_top = 20.0
 margin_right = 1002.0
-margin_bottom = 106.0
+margin_bottom = 112.0
 
 [node name="KeePassImport" parent="." instance=ExtResource( 8 )]
 margin_left = 20.0
 margin_top = 20.0
 margin_right = 1002.0
-margin_bottom = 106.0
+margin_bottom = 112.0
 
 [connection signal="visibility_changed" from="." to="." method="_on_DataForm_visibility_changed"]
-[connection signal="group_button_pressed" from="VB/Groups/Grid/GroupButton" to="VB" method="set_group"]
-[connection signal="pressed" from="VB/SB/C/Add" to="VB" method="_on_Add_pressed"]
-[connection signal="text_changed" from="VB/SB/SearchBox" to="VB" method="_on_SearchBox_text_changed"]
+[connection signal="group_button_pressed" from="VB/Groups/Grid/GroupButton" to="." method="set_group"]
+[connection signal="pressed" from="VB/SB/C/Add" to="." method="_on_Add_pressed"]
+[connection signal="text_changed" from="VB/SB/SearchBox" to="." method="_on_SearchBox_text_changed"]
+[connection signal="scroll_ended" from="VB/SC" to="." method="_on_SC_scroll_ended"]
+[connection signal="scroll_started" from="VB/SC" to="." method="_on_SC_scroll_started"]
 [connection signal="item_rect_changed" from="VB/SC/Grid" to="." method="_on_Grid_item_rect_changed"]
-[connection signal="delete_item" from="ItemDetails" to="VB" method="_on_ItemDetails_delete_item"]
-[connection signal="popup_hide" from="ItemDetails" to="VB" method="_on_ItemDetails_popup_hide"]
-[connection signal="timeout" from="SearchTimer" to="VB" method="_on_SearchTimer_timeout"]
-[connection signal="update_groups" from="CSVImport" to="VB" method="_on_CSVImport_update_groups"]
-[connection signal="update_item_list" from="CSVImport" to="VB" method="_on_CSVImport_update_item_list"]
-[connection signal="update_groups" from="KeePassImport" to="VB" method="_on_KeePassImport_update_groups"]
-[connection signal="update_item_list" from="KeePassImport" to="VB" method="_on_KeePassImport_update_item_list"]
+[connection signal="delete_item" from="ItemDetails" to="." method="_on_ItemDetails_delete_item"]
+[connection signal="popup_hide" from="ItemDetails" to="." method="_on_ItemDetails_popup_hide"]
+[connection signal="timeout" from="SearchTimer" to="." method="_on_SearchTimer_timeout"]
+[connection signal="update_groups" from="CSVImport" to="." method="_on_CSVImport_update_groups"]
+[connection signal="update_item_list" from="CSVImport" to="." method="_on_CSVImport_update_item_list"]
+[connection signal="update_groups" from="KeePassImport" to="." method="_on_KeePassImport_update_groups"]
+[connection signal="update_item_list" from="KeePassImport" to="." method="_on_KeePassImport_update_item_list"]
