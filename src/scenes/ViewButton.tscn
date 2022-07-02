@@ -7,13 +7,15 @@
 [node name="ViewButton" type="CenterContainer"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+margin_right = -1008.0
+margin_bottom = -784.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 script = ExtResource( 3 )
 
 [node name="Show" type="TextureButton" parent="."]
-margin_left = 504.0
-margin_top = 292.0
-margin_right = 520.0
-margin_bottom = 308.0
+margin_right = 16.0
+margin_bottom = 16.0
 hint_tooltip = "View details"
 texture_normal = ExtResource( 2 )
 script = ExtResource( 1 )

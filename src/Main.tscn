@@ -87,8 +87,6 @@ margin_right = 1024.0
 margin_bottom = 538.0
 
 [node name="DataForm" parent="Content" instance=ExtResource( 6 )]
-anchor_right = 0.0
-anchor_bottom = 0.0
 margin_right = 1024.0
 margin_bottom = 724.0
 
