@@ -43,7 +43,7 @@ func _ready():
 		header.add_child(heading)
 
 
-func populate_grid(db: Database, key, reverse, group, filter = ""):
+func populate_grid(db: Database, key, reverse, group):
 	if db.items.size() == 0:
 		return
 	grid_items.clear()
@@ -58,9 +58,6 @@ func populate_grid(db: Database, key, reverse, group, filter = ""):
 		var show = true
 		if group > 0 and not group in item.groups:
 			show = false
-		if not filter.empty():
-			if not filter.is_subsequence_ofi(item.title + item.username + item.url):
-				show = false
 		num_rows += 1
 		var vb = view_button.instance()
 		var _e = vb.connect("view_button_pressed", self, "show_item_details", [item])
@@ -215,8 +212,9 @@ func update_group_buttons():
 
 func set_group(id):
 	current_group = id
-	$VB/SB/SearchBox.text = ""
-	populate_grid(database, current_key, current_reverse_state, current_group)
+	searchtext = ""
+	$VB/SB/SearchBox.text = searchtext	
+	set_visibility_of_cells()
 
 
 func heading_clicked(heading: Heading):
@@ -271,22 +269,29 @@ func _on_SearchBox_text_changed(new_text):
 
 
 func _on_SearchTimer_timeout():
-	# Set visibility of cells
+	set_visibility_of_cells()
+
+
+func set_visibility_of_cells():
 	var idx = 0
 	while idx < grid.get_child_count():
 		var cell = grid.get_child(idx)
-		if cell.item.title.matchn(searchtext)\
+		var found = searchtext.empty()\
+			or cell.item.title.matchn(searchtext)\
 			or cell.item.username.matchn(searchtext)\
-			or cell.item.url.matchn(searchtext):
-				if cell.visible:
-					idx += 5
-				else:
-					cell.show()
-					for n in 4:
-						idx += 1
-						grid.get_child(idx).show()
+			or cell.item.url.matchn(searchtext)
+		if (current_group == 0 or current_group in cell.item.groups) and found:
+			# Show
+			if cell.visible:
+				idx += 5
+			else:
+				cell.show()
+				for n in 4:
 					idx += 1
+					grid.get_child(idx).show()
+				idx += 1
 		else:
+			# Hide
 			if cell.visible:
 				cell.hide()
 				for n in 4:
