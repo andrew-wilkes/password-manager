@@ -58,6 +58,8 @@ func pad_data(d: PoolByteArray):
 
 func save_data(settings):
 	var failed = true
+	if settings.current_file.empty():
+		return failed
 	var bytes = iv
 	bytes.append_array(data)
 	var file = File.new()

@@ -79,12 +79,21 @@ func state_handler(action, data):
 
 func set_title():
 	var title = ProjectSettings.get_setting("application/config/name")
-	title += " - " + settings.current_file
+	title += get_title_text()
 	if locked:
 		title += " [LOCKED]"
 	if OS.is_debug_build():
 		title += " (DEBUG)"
 	OS.set_window_title(title)
+
+
+func get_title_text():
+	if password.empty():
+		return " "
+	if settings.current_file.empty():
+		return " - unsaved"
+	else:
+		return " - " + settings.current_file
 
 
 func load_passwords():

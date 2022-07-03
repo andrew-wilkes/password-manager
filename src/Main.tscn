@@ -19,7 +19,7 @@ menu_icon = ExtResource( 10 )
 
 [node name="M" type="MarginContainer" parent="."]
 margin_right = 1024.0
-margin_bottom = 40.0
+margin_bottom = 38.0
 custom_constants/margin_right = 10
 custom_constants/margin_top = 5
 custom_constants/margin_left = 10
@@ -29,11 +29,11 @@ custom_constants/margin_bottom = 5
 margin_left = 10.0
 margin_top = 5.0
 margin_right = 1014.0
-margin_bottom = 35.0
+margin_bottom = 33.0
 
 [node name="File" type="MenuButton" parent="M/Menu"]
 margin_right = 35.0
-margin_bottom = 30.0
+margin_bottom = 28.0
 text = "File"
 
 [node name="ImportMenu" type="PopupMenu" parent="M/Menu/File"]
@@ -43,21 +43,21 @@ margin_bottom = 8.0
 [node name="Tools" type="MenuButton" parent="M/Menu"]
 margin_left = 39.0
 margin_right = 86.0
-margin_bottom = 30.0
+margin_bottom = 28.0
 focus_mode = 2
 text = "Tools"
 
 [node name="Settings" type="Button" parent="M/Menu"]
 margin_left = 90.0
 margin_right = 157.0
-margin_bottom = 30.0
+margin_bottom = 28.0
 text = "Settings"
 flat = true
 
 [node name="Help" type="MenuButton" parent="M/Menu"]
 margin_left = 161.0
 margin_right = 204.0
-margin_bottom = 30.0
+margin_bottom = 28.0
 focus_mode = 2
 text = "Help"
 
@@ -65,11 +65,11 @@ text = "Help"
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 208.0
-margin_right = 218.0
-margin_bottom = 30.0
+margin_right = 1004.0
+margin_bottom = 28.0
 
 [node name="Content" type="VBoxContainer" parent="."]
-margin_top = 44.0
+margin_top = 42.0
 margin_right = 1024.0
 margin_bottom = 800.0
 size_flags_horizontal = 3
@@ -88,7 +88,7 @@ margin_bottom = 538.0
 
 [node name="DataForm" parent="Content" instance=ExtResource( 6 )]
 margin_right = 1024.0
-margin_bottom = 756.0
+margin_bottom = 758.0
 
 [node name="Popups" type="CanvasLayer" parent="."]
 
@@ -101,8 +101,8 @@ rect_min_size = Vector2( 186, 65.1 )
 theme = ExtResource( 7 )
 access = 2
 filters = PoolStringArray( "*.pdb ; Password Database Files" )
-current_dir = "/mnt/windows/WData/dev/godot/git/andrew-wilkes/godot-password-manager/src"
-current_path = "/mnt/windows/WData/dev/godot/git/andrew-wilkes/godot-password-manager/src/"
+current_dir = "/mnt/files/dev/godot/git/andrew-wilkes/godot-password-manager/src"
+current_path = "/mnt/files/dev/godot/git/andrew-wilkes/godot-password-manager/src/"
 
 [node name="Licences" parent="Popups" instance=ExtResource( 3 )]
 margin_right = -163.0
@@ -186,8 +186,8 @@ window_title = "Open a File"
 mode = 0
 access = 2
 filters = PoolStringArray( "*.csv ; Comma separated Files" )
-current_dir = "/mnt/windows/WData/dev/godot/git/andrew-wilkes/godot-password-manager/src"
-current_path = "/mnt/windows/WData/dev/godot/git/andrew-wilkes/godot-password-manager/src/"
+current_dir = "/mnt/files/dev/godot/git/andrew-wilkes/godot-password-manager/src"
+current_path = "/mnt/files/dev/godot/git/andrew-wilkes/godot-password-manager/src/"
 
 [node name="LoadKeePassFile" type="FileDialog" parent="Popups"]
 margin_right = 700.0
@@ -197,8 +197,8 @@ window_title = "Open a File"
 mode = 0
 access = 2
 filters = PoolStringArray( "*.kdbx ; KeePass 2 Database Files" )
-current_dir = "/mnt/windows/WData/dev/godot/git/andrew-wilkes/godot-password-manager/src"
-current_path = "/mnt/windows/WData/dev/godot/git/andrew-wilkes/godot-password-manager/src/"
+current_dir = "/mnt/files/dev/godot/git/andrew-wilkes/godot-password-manager/src"
+current_path = "/mnt/files/dev/godot/git/andrew-wilkes/godot-password-manager/src/"
 
 [connection signal="pressed" from="M/Menu/File" to="." method="_on_File_pressed"]
 [connection signal="id_pressed" from="M/Menu/File/ImportMenu" to="." method="_on_ImportMenu_id_pressed"]
