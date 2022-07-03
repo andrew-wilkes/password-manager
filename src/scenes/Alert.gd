@@ -1,4 +1,4 @@
-extends MarginContainer
+extends Container
 
 func show_message(txt):
 	$Label.text = txt

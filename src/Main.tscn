@@ -19,7 +19,7 @@ menu_icon = ExtResource( 10 )
 
 [node name="M" type="MarginContainer" parent="."]
 margin_right = 1024.0
-margin_bottom = 38.0
+margin_bottom = 40.0
 custom_constants/margin_right = 10
 custom_constants/margin_top = 5
 custom_constants/margin_left = 10
@@ -29,11 +29,11 @@ custom_constants/margin_bottom = 5
 margin_left = 10.0
 margin_top = 5.0
 margin_right = 1014.0
-margin_bottom = 33.0
+margin_bottom = 35.0
 
 [node name="File" type="MenuButton" parent="M/Menu"]
 margin_right = 35.0
-margin_bottom = 28.0
+margin_bottom = 30.0
 text = "File"
 
 [node name="ImportMenu" type="PopupMenu" parent="M/Menu/File"]
@@ -43,33 +43,33 @@ margin_bottom = 8.0
 [node name="Tools" type="MenuButton" parent="M/Menu"]
 margin_left = 39.0
 margin_right = 86.0
-margin_bottom = 28.0
+margin_bottom = 30.0
 focus_mode = 2
 text = "Tools"
 
 [node name="Settings" type="Button" parent="M/Menu"]
 margin_left = 90.0
 margin_right = 157.0
-margin_bottom = 28.0
+margin_bottom = 30.0
 text = "Settings"
 flat = true
 
 [node name="Help" type="MenuButton" parent="M/Menu"]
 margin_left = 161.0
 margin_right = 204.0
-margin_bottom = 28.0
+margin_bottom = 30.0
 focus_mode = 2
 text = "Help"
 
-[node name="Alert" parent="." instance=ExtResource( 2 )]
+[node name="Alert" parent="M/Menu" instance=ExtResource( 2 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 42.0
-margin_right = 1024.0
-margin_bottom = 72.0
+margin_left = 208.0
+margin_right = 218.0
+margin_bottom = 30.0
 
 [node name="Content" type="VBoxContainer" parent="."]
-margin_top = 76.0
+margin_top = 44.0
 margin_right = 1024.0
 margin_bottom = 800.0
 size_flags_horizontal = 3
@@ -88,7 +88,7 @@ margin_bottom = 538.0
 
 [node name="DataForm" parent="Content" instance=ExtResource( 6 )]
 margin_right = 1024.0
-margin_bottom = 724.0
+margin_bottom = 756.0
 
 [node name="Popups" type="CanvasLayer" parent="."]
 
