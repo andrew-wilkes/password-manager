@@ -14,6 +14,7 @@ var group_button = preload("res://scenes/GroupButton.tscn")
 var view_button = preload("res://scenes/ViewButton.tscn")
 onready var header = find_node("Header")
 onready var grid: GridContainer = $VB/SC/Grid
+onready var bars = $BG/SC/VBox
 var headings = {
 	"title": "Title",
 	"username": "Username",
@@ -29,6 +30,7 @@ var current_reverse_state = false
 var searchtext = ""
 var num_rows = 0
 var scrolling = false
+var grid_items = []
 
 func _ready():
 	emit_signal("action", null)
@@ -42,6 +44,9 @@ func _ready():
 
 
 func populate_grid(db: Database, key, reverse, group, filter = ""):
+	if db.items.size() == 0:
+		return
+	grid_items.clear()
 	num_rows = 0
 	current_key = key
 	current_reverse_state = reverse
@@ -50,21 +55,25 @@ func populate_grid(db: Database, key, reverse, group, filter = ""):
 	for idx in grid.get_child_count():
 		grid.get_child(idx).queue_free()
 	for item in db.items:
+		var show = true
 		if group > 0 and not group in item.groups:
-			continue
+			show = false
 		if not filter.empty():
 			if not filter.is_subsequence_ofi(item.title + item.username + item.url):
-				continue
+				show = false
 		num_rows += 1
 		var vb = view_button.instance()
 		var _e = vb.connect("view_button_pressed", self, "show_item_details", [item])
+		vb.item = item
 		grid.add_child(vb)
 		for key in headings:
 			var cell = cell_scene.instance()
+			cell.item = item
 			var font_color = Color.black
 			if item.expire < 0 and key == "title":
 				font_color = Color.red
 			cell.set_text(get_cell_content(item, key), key == "url", font_color)
+			cell.visible = show
 			grid.add_child(cell)
 	call_deferred("align_background")
 	yield(get_tree(), "idle_frame")
@@ -99,34 +108,36 @@ func show_item_details(item):
 
 
 func add_or_update_bars():
-	var num_bars_existing = $BG/SC/VBox.get_child_count()
+	var num_bars_existing = bars.get_child_count()
 	if num_bars_existing == 0:
 		var bar = ColorRect.new()
-		bar.color = light_color
-		#bar.rect_min_size = Vector2(grid.rect_size.x, row_height)
-		$BG/SC/VBox.add_child(bar)
+		bars.add_child(bar)
 		num_bars_existing = 1
 	var to_add = num_rows - num_bars_existing
 	if to_add > 0:
-		var bar = $BG/SC/VBox.get_child(0)
-		var color_idx = num_bars_existing
+		var bar = bars.get_child(0)
 		for n in to_add:
 			bar = bar.duplicate()
-			bar.color = [light_color, dark_color][color_idx % 2]
-			color_idx += 1
-			$BG/SC/VBox.add_child(bar)
+			bars.add_child(bar)
 	if to_add < 0:
 		for idx in range(num_bars_existing + to_add, num_bars_existing):
-			$BG/SC/VBox.get_child(idx).queue_free()
-	call_deferred("resize_bars")
+			bars.get_child(idx).queue_free()
+	call_deferred("resize_and_colorize_bars")
 
 
-func resize_bars():
+func resize_and_colorize_bars():
 	yield(get_tree(), "idle_frame")
 	var idx = 0
-	for bar in $BG/SC/VBox.get_children():
+	var color_idx = 0
+	for bar in bars.get_children():
 		bar.rect_min_size.y = grid.get_child(idx).rect_size.y
 		bar.rect_size.y = bar.rect_min_size.y
+		if grid.get_child(idx).visible:
+			bar.color = [light_color, dark_color][color_idx % 2]
+			color_idx += 1
+			bar.show()
+		else:
+			bar.hide()
 		idx += 5
 
 
@@ -255,12 +266,36 @@ func _on_ItemDetails_popup_hide():
 
 
 func _on_SearchBox_text_changed(new_text):
-	searchtext = new_text
+	searchtext = "*" + new_text + "*"
 	$SearchTimer.start()
 
 
 func _on_SearchTimer_timeout():
-	populate_grid(database, "", false, 0, searchtext)
+	# Set visibility of cells
+	var idx = 0
+	while idx < grid.get_child_count():
+		var cell = grid.get_child(idx)
+		if cell.item.title.matchn(searchtext)\
+			or cell.item.username.matchn(searchtext)\
+			or cell.item.url.matchn(searchtext):
+				if cell.visible:
+					idx += 5
+				else:
+					cell.show()
+					for n in 4:
+						idx += 1
+						grid.get_child(idx).show()
+					idx += 1
+		else:
+			if cell.visible:
+				cell.hide()
+				for n in 4:
+					idx += 1
+					grid.get_child(idx).hide()
+				idx += 1
+			else:
+				idx += 5
+	add_or_update_bars()
 
 
 func csv_import(path, csv_data):

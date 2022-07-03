@@ -2,6 +2,8 @@ extends MarginContainer
 
 signal clicked(this)
 
+var item
+
 func set_text(txt, rich_text, font_color):
 	if rich_text and not txt.empty():
 		$RichTextLabel.bbcode_text = '[url=%s]%s[/url]' % [txt, txt]
