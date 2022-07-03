@@ -63,6 +63,7 @@ func populate_grid(db: Database, key, reverse, group):
 		var vb = view_button.instance()
 		var _e = vb.connect("view_button_pressed", self, "show_item_details", [item])
 		vb.item = item
+		vb.visible = show
 		grid.add_child(vb)
 		for key in headings:
 			var cell = cell_scene.instance()
@@ -78,10 +79,11 @@ func populate_grid(db: Database, key, reverse, group):
 
 func sync_heading_sizes():
 	var idx = first_visible_cell_index
-	for heading in header.get_children():
-		heading.rect_size.x = 0
-		heading.rect_min_size.x = grid.get_child(idx).rect_size.x
-		idx += 1
+	if idx >= 0:
+		for heading in header.get_children():
+			heading.rect_size.x = 0
+			heading.rect_min_size.x = grid.get_child(idx).rect_size.x
+			idx += 1
 
 
 func align_background():
