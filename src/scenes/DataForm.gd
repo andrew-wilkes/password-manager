@@ -31,6 +31,7 @@ var searchtext = ""
 var num_rows = 0
 var scrolling = false
 var grid_items = []
+var first_visible_cell_index
 
 func _ready():
 	emit_signal("action", null)
@@ -73,12 +74,10 @@ func populate_grid(db: Database, key, reverse, group):
 			cell.visible = show
 			grid.add_child(cell)
 	call_deferred("align_background")
-	yield(get_tree(), "idle_frame")
-	call_deferred("sync_heading_sizes")
 
 
 func sync_heading_sizes():
-	var idx = 0
+	var idx = first_visible_cell_index
 	for heading in header.get_children():
 		heading.rect_size.x = 0
 		heading.rect_min_size.x = grid.get_child(idx).rect_size.x
@@ -126,16 +125,20 @@ func resize_and_colorize_bars():
 	yield(get_tree(), "idle_frame")
 	var idx = 0
 	var color_idx = 0
+	first_visible_cell_index = -1
 	for bar in bars.get_children():
 		bar.rect_min_size.y = grid.get_child(idx).rect_size.y
 		bar.rect_size.y = bar.rect_min_size.y
 		if grid.get_child(idx).visible:
+			if first_visible_cell_index < 0:
+				first_visible_cell_index = idx
 			bar.color = [light_color, dark_color][color_idx % 2]
 			color_idx += 1
 			bar.show()
 		else:
 			bar.hide()
 		idx += 5
+	call_deferred("sync_heading_sizes")
 
 
 func get_cell_content(data, key):
