@@ -62,6 +62,8 @@ func set_panel_size():
 	# Long group names are a good test
 	rect_size = $M.rect_size
 	rect_position -= (rect_size - size) / 2
+	if item.title.empty():
+		$M/VB/HB/Title.grab_focus()
 
 
 func _on_Show_pressed():

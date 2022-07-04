@@ -298,11 +298,20 @@ func parse_xml():
 	# Assign group IDs to the records and add to DB
 	for rec in records:
 		rec.data["groups"] = [settings.get_group_id(rec.data["groups"])]
+		set_password_strength(rec.data)
 		database.items.append(rec.data)
 	msg.text += "\nAdded " + str(records.size()) + " new records to the database."
 	emit_signal("update_item_list")
 	yield(get_tree().create_timer(2.0), "timeout")
 	hide()
+
+
+func set_password_strength(item):
+	if not item.password.empty():
+		var user_inputs = []
+		if not item.username.empty():
+			user_inputs.append(item.username)
+		item.strength = ZXCVBN.zxcvbn(item.password, user_inputs)["score"]
 
 
 func init_salsa():

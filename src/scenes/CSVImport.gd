@@ -174,8 +174,17 @@ func _on_OK_pressed():
 								continue
 					record.data[key] = data
 				idx += 1
+			set_password_strength(record.data)
 			database.items.append(record.data)
 		rn += 1
 	if rn >= 0:
 		emit_signal("update_item_list")
 	hide()
+
+
+func set_password_strength(item):
+	if not item.password.empty():
+		var user_inputs = []
+		if not item.username.empty():
+			user_inputs.append(item.username)
+		item.strength = ZXCVBN.zxcvbn(item.password, user_inputs)["score"]
