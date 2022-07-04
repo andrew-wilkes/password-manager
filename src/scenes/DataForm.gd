@@ -203,6 +203,8 @@ func update_group_buttons():
 		node.pressed = true if node.id == 0 else false
 		if node.id == 0 or node.id in settings.groups:
 			existing_buttons.append(node.id)
+			if node.id > 0:
+				node.text = settings.groups[node.id]
 		else:
 			node.queue_free()
 	for group_id in settings.groups:
@@ -213,6 +215,7 @@ func update_group_buttons():
 		gb.text = settings.groups[group_id]
 		var _e = gb.connect("group_button_pressed", self, "set_group")
 		$VB/Groups/Grid.add_child(gb)
+	call_deferred("align_background")
 
 
 func set_group(id):

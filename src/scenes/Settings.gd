@@ -1,6 +1,7 @@
 extends WindowDialog
 
 signal group_removed(group_id)
+signal groups_changed()
 
 const MIN_KEY_LENGTH = 8
 
@@ -84,12 +85,14 @@ func add_group(group_name):
 		groups.select(idx)
 		groups.set_item_id(idx, group_id)
 		set_group_button_visibility()
+	emit_signal("groups_changed")
 
 
 func edit_group(txt):
 	var group_id = groups.get_selected_id()
 	settings.groups[group_id] = txt
 	groups.set_item_text(groups.selected, txt)
+	emit_signal("groups_changed")
 
 
 func _on_EditGroup_pressed():

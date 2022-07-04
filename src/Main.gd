@@ -357,3 +357,7 @@ func _on_LoadCSVFile_popup_hide():
 
 func _on_LoadKeePassFile_popup_hide():
 	file_menu.hide()
+
+
+func _on_Settings_groups_changed():
+	$Content/DataForm.update_group_buttons()
