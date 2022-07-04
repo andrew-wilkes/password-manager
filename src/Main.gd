@@ -66,8 +66,12 @@ func state_handler(action, data):
 						state = ACCESS_DATA
 						var parse_obj = JSON.parse(passwords.decrypted_data.get_string_from_utf8())
 						var db = Database.new()
-						if typeof(parse_obj.result) == TYPE_ARRAY:
-							db.items = parse_obj.result
+						var res = parse_obj.result
+						if res is Dictionary:
+							db.items = res.items
+							settings.groups = {}
+							for group in res.groups:
+								settings.groups[int(group)] = res.groups[group]
 						show_content(form_map[state], { "settings": settings, "database": db })
 						set_locked(false)
 					else:
@@ -163,6 +167,7 @@ func _on_FileMenu_id_pressed(id):
 				load_passwords()
 			else:
 				# Save before setting new data
+				update_password_data()
 				if save_passwords():
 					settings.current_file = ""
 					load_passwords()
@@ -186,14 +191,6 @@ func _on_FileMenu_id_pressed(id):
 			do_action()
 		QUIT:
 			save_and_quit()
-
-
-func save_passwords():
-	var result = true
-	if passwords.save_data(settings):
-		alert.show_message("Failed to save passwords to file")
-		result = false
-	return result
 
 
 func _on_ToolsMenu_id_pressed(id):
@@ -258,11 +255,20 @@ func save_and_quit():
 
 
 func update_password_data():
-	var serialized_data =  JSON.print(data_form.database.items)
+	var serialized_data =  JSON.print({ groups = settings.groups, items = data_form.database.items })
 	var the_data = serialized_data.sha256_buffer()
 	the_data.append_array(serialized_data.to_utf8())
 	passwords.pre_encode_data(the_data, settings.keys[settings.key_idx])
 	passwords.post_encode_data(settings.keys[settings.key_idx], password)
+
+
+func save_passwords():
+	update_password_data()
+	var result = true
+	if passwords.save_data(settings):
+		alert.show_message("Failed to save passwords to file")
+		result = false
+	return result
 
 
 func _on_File_pressed():

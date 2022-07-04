@@ -8,9 +8,10 @@ const CHARS = "01234567890abcdefghijklmnopqrstuvwxyz"
 export var current_file = "pw1.pwd"
 export var last_dir = ""
 export var date_format = "YYYY-MM-DD"
-export var groups = {}
 export var keys = []
 export var key_idx = 0
+
+var groups = {} # Saved with the database
 
 func save_data():
 	var _result = ResourceSaver.save(FILE_NAME, self)

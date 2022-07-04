@@ -74,6 +74,7 @@ func populate_grid(db: Database, key, reverse, group):
 			cell.set_text(get_cell_content(item, key), key == "url", font_color)
 			cell.visible = show
 			grid.add_child(cell)
+	yield(get_tree(), "idle_frame")
 	call_deferred("align_background")
 
 
