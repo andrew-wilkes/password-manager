@@ -21,3 +21,4 @@ addons/
 test.p*
 
 .vscode/
+.VSCodeCounter/
