@@ -255,11 +255,21 @@ func save_and_quit():
 
 
 func update_password_data():
-	var serialized_data =  JSON.print({ groups = settings.groups, items = data_form.database.items })
+	var serialized_data =  JSON.print({ groups = settings.groups, items = get_database_items() })
 	var the_data = serialized_data.sha256_buffer()
 	the_data.append_array(serialized_data.to_utf8())
 	passwords.pre_encode_data(the_data, settings.keys[settings.key_idx])
 	passwords.post_encode_data(settings.keys[settings.key_idx], password)
+
+
+func get_database_items():
+	var items = data_form.database.items
+	var keys = Record.new().data.keys()
+	for item in items:
+		for key in item.keys():
+			if not key in keys:
+				item.erase(key)
+	return items
 
 
 func save_passwords():

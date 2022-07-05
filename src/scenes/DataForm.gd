@@ -23,14 +23,12 @@ var headings = {
 }
 var settings: Settings
 var database: Database
-var update_bars = false
 var current_group = 0
 var current_key = ""
 var current_reverse_state = false
 var searchtext = ""
 var num_rows = 0
 var scrolling = false
-var grid_items = []
 var first_visible_cell_index
 
 func _ready():
@@ -44,38 +42,38 @@ func _ready():
 		header.add_child(heading)
 
 
-func populate_grid(db: Database, key, reverse, group):
+func populate_grid(db: Database):
 	if db.items.size() == 0:
 		return
-	grid_items.clear()
 	num_rows = 0
-	current_key = key
-	current_reverse_state = reverse
-	if not key.empty():
-		db.order_items(key, reverse)
 	for idx in grid.get_child_count():
 		grid.get_child(idx).queue_free()
 	for item in db.items:
-		var show = true
-		if group > 0 and not group in item.groups:
-			show = false
 		num_rows += 1
-		var vb = view_button.instance()
-		var _e = vb.connect("view_button_pressed", self, "show_item_details", [item])
-		vb.item = item
-		vb.visible = show
-		grid.add_child(vb)
+		grid.add_child(get_view_button_node(item))
 		for key in headings:
-			var cell = cell_scene.instance()
-			cell.item = item
-			var font_color = Color.black
-			if item.expire < 0 and key == "title":
-				font_color = Color.red
-			cell.set_text(get_cell_content(item, key), key == "url", font_color)
-			cell.visible = show
-			grid.add_child(cell)
+			grid.add_child(get_cell_node(item, key))
 	yield(get_tree(), "idle_frame")
 	call_deferred("align_background")
+
+
+func get_view_button_node(item):
+	var vb = view_button.instance()
+	var _e = vb.connect("view_button_pressed", self, "show_item_details", [item])
+	vb.item = item
+	item["nodes"] = [vb]
+	return vb
+
+
+func get_cell_node(item, key):
+	var cell = cell_scene.instance()
+	cell.item = item
+	var font_color = Color.black
+	if item.expire < 0 and key == "title":
+		font_color = Color.red
+	cell.set_text(get_cell_content(item, key), key == "url", font_color)
+	item["nodes"].append(cell)
+	return cell
 
 
 func sync_heading_sizes():
@@ -98,7 +96,7 @@ func remove_group(group_id):
 		item.groups.erase(group_id)
 	if current_group == group_id:
 		current_group = 0
-		populate_grid(database, "", false, 0)
+		populate_grid(database)
 	update_group_buttons()
 
 
@@ -181,7 +179,7 @@ func init(data):
 	settings = data.settings
 	database = data.database
 	#add_dummy_data()
-	populate_grid(database, "", false, 0)
+	populate_grid(database)
 	update_group_buttons()
 	$VB/SB/SearchBox.grab_focus()
 	check_for_reminders()
@@ -232,31 +230,23 @@ func heading_clicked(heading: Heading):
 		if key != heading.db_key:
 			header.get_child(idx).set_sort_mode(heading.NONE)
 		idx += 1
-	populate_grid(database, heading.db_key, bool(heading.sort_mode), current_group)
+	database.order_items(heading.db_key, bool(heading.sort_mode))
+	# Move each items row of nodes to a new position based on the new array order
+	var offset = 0
+	for item in database.items:
+		for node in item.nodes:
+			grid.move_child(node, offset)
+			offset += 1
+	call_deferred("resize_and_colorize_bars")
 
-
-func _on_Grid_item_rect_changed():
-	#$BG/MC/SC.rect_position = grid.rect_global_position
-	#update_bars = true
-	pass
 
 func _process(_delta):
-	if update_bars:
-		add_or_update_bars()
-		update_bars = false
-	if scrolling:
-		$BG/SC.scroll_vertical = $VB/SC.scroll_vertical
 	if $BG/SC.scroll_vertical != $VB/SC.scroll_vertical:
 		$BG/SC.scroll_vertical = $VB/SC.scroll_vertical
 
 
 func _on_DataForm_visibility_changed():
 	$BG/SC.visible = visible
-
-
-func _on_ItemDetails_delete_item(item):
-	database.items.erase(item)
-	populate_grid(database, "", false, 0)
 
 
 func _on_Add_pressed():
@@ -268,8 +258,13 @@ func _on_Add_pressed():
 
 
 func _on_ItemDetails_popup_hide():
-	populate_grid(database, current_key, current_reverse_state, current_group)
+	populate_grid(database) #, current_key, current_reverse_state, current_group)
 	check_for_reminders()
+
+
+func _on_ItemDetails_delete_item(item):
+	database.items.erase(item)
+	populate_grid(database) #, "", false, 0)
 
 
 func _on_SearchBox_text_changed(new_text):
@@ -321,7 +316,7 @@ func _on_CSVImport_update_groups():
 
 
 func _on_CSVImport_update_item_list():
-	populate_grid(database, current_key, current_reverse_state, current_group)
+	populate_grid(database)
 
 
 func keepass_import(path, keepass_data):
@@ -329,18 +324,8 @@ func keepass_import(path, keepass_data):
 
 
 func _on_KeePassImport_update_item_list():
-	populate_grid(database, current_key, current_reverse_state, current_group)
+	populate_grid(database)
 
 
 func _on_KeePassImport_update_groups():
 	update_group_buttons()
-
-
-# This doesn't get triggered
-func _on_SC_scroll_started():
-	scrolling = true
-	print("scroll started")
-
-
-func _on_SC_scroll_ended():
-	scrolling = false
