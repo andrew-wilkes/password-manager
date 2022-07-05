@@ -261,6 +261,7 @@ func _on_Add_pressed():
 		grid.move_child(node, 0)
 	current_group = 0
 	show_item_details(item)
+	add_or_update_bars()
 
 
 func _on_ItemDetails_update_item(item):
@@ -279,8 +280,11 @@ func _on_ItemDetails_update_item(item):
 
 
 func _on_ItemDetails_delete_item(item):
+	for node in item.nodes:
+		node.queue_free()
 	database.items.erase(item)
-	populate_grid(database) #, "", false, 0)
+	num_rows -= 1
+	add_or_update_bars()
 
 
 func _on_SearchBox_text_changed(new_text):
