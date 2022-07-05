@@ -254,11 +254,27 @@ func _on_Add_pressed():
 	var item = record.data
 	item.created = OS.get_unix_time()
 	database.items.push_front(item)
+	grid.add_child(get_view_button_node(item))
+	for key in headings:
+		grid.add_child(get_cell_node(item, key))
+	for node in item.nodes:
+		grid.move_child(node, 0)
+	current_group = 0
 	show_item_details(item)
 
 
-func _on_ItemDetails_popup_hide():
-	populate_grid(database) #, current_key, current_reverse_state, current_group)
+func _on_ItemDetails_update_item(item):
+	# Update the affected row of cells
+	var idx = 0
+	for cell in item.nodes:
+		if idx > 0:
+			var key = headings.keys()[idx - 1]
+			var font_color = Color.black
+			if item.expire < 0 and key == "title":
+				font_color = Color.red
+			cell.set_text(get_cell_content(item, key), key == "url", font_color)
+		idx += 1
+	call_deferred("resize_and_colorize_bars")
 	check_for_reminders()
 
 

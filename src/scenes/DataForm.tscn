@@ -165,7 +165,7 @@ margin_bottom = 112.0
 [connection signal="pressed" from="VB/SB/C/Add" to="." method="_on_Add_pressed"]
 [connection signal="text_changed" from="VB/SB/SearchBox" to="." method="_on_SearchBox_text_changed"]
 [connection signal="delete_item" from="ItemDetails" to="." method="_on_ItemDetails_delete_item"]
-[connection signal="popup_hide" from="ItemDetails" to="." method="_on_ItemDetails_popup_hide"]
+[connection signal="update_item" from="ItemDetails" to="." method="_on_ItemDetails_update_item"]
 [connection signal="timeout" from="SearchTimer" to="." method="_on_SearchTimer_timeout"]
 [connection signal="update_groups" from="CSVImport" to="." method="_on_CSVImport_update_groups"]
 [connection signal="update_item_list" from="CSVImport" to="." method="_on_CSVImport_update_item_list"]

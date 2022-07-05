@@ -1,6 +1,7 @@
 extends WindowDialog
 
 signal delete_item(item)
+signal update_item(item)
 
 const GOOD_PASSWORD_SCORE = 3
 
@@ -230,3 +231,7 @@ func _on_DatePicker_date_changed(new_date, caller_id):
 		REMIND:
 			item.remind = new_time
 			$M/VB/HB4/Time/Remind.text = get_date(item.remind)
+
+
+func _on_ItemDetails_popup_hide():
+	emit_signal("update_item", item)

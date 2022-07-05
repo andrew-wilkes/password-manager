@@ -361,6 +361,7 @@ window_title = "Feedback"
 
 [node name="DatePicker" parent="." instance=ExtResource( 12 )]
 
+[connection signal="popup_hide" from="." to="." method="_on_ItemDetails_popup_hide"]
 [connection signal="text_changed" from="M/VB/HB/Title" to="." method="_on_Title_text_changed"]
 [connection signal="pressed" from="M/VB/HB5/C4/CopyUser" to="." method="_on_CopyUser_pressed"]
 [connection signal="text_changed" from="M/VB/HB5/Username" to="." method="_on_Username_text_changed"]
