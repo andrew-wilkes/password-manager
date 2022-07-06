@@ -348,3 +348,14 @@ func _on_KeePassImport_update_item_list():
 
 func _on_KeePassImport_update_groups():
 	update_group_buttons()
+
+
+func store_to_csv_file(path):
+	var file = File.new()
+	if file.open(path, File.WRITE) == OK:
+		file.store_csv_line(PoolStringArray(["Title", "Username", "URL", "Notes", "Created", "Accessed"]))
+		for item in database.items:
+			file.store_csv_line(PoolStringArray([item.title, item.username, item.url, item.notes,
+			 Date.get_date_string_from_unix_time(item.created),
+			 Date.get_date_string_from_unix_time(item.accessed)]))
+		file.close()

@@ -1,7 +1,7 @@
 extends Control
 
 enum { NO_ACTION, NEW, OPEN, SAVE, SAVE_AS, SAVE_INC, IMPORT, QUIT, ABOUT, LICENCES, PWD_GEN, CHG_PW }
-enum { LOAD_CSV, LOAD_KP }
+enum { LOAD_CSV, LOAD_KP, EXPORT_CSV }
 enum { UNLOCKED, LOCKED }
 enum { SET_PASSWORD, ENTER_PASSWORD, ACCESS_DATA }
 enum { ENTER_PRESSED, PASSWORD_TEXT_CHANGED, BROWSE_PRESSED }
@@ -129,6 +129,7 @@ func configure_menu():
 	file_menu.add_item("Save Increment", SAVE_INC, KEY_MASK_CTRL | KEY_MASK_SHIFT | KEY_I)
 	file_menu.add_separator()
 	file_menu.add_submenu_item("Import", "../ImportMenu")
+	file_menu.add_submenu_item("Export", "../ExportMenu")
 	file_menu.add_separator()
 	file_menu.add_item("Quit", QUIT, KEY_MASK_CTRL | KEY_Q)
 	file_menu.connect("id_pressed", self, "_on_FileMenu_id_pressed")
@@ -144,13 +145,15 @@ func configure_menu():
 	
 	$M/Menu/File/ImportMenu.add_item("KeePass 2 Database...", LOAD_KP)
 	$M/Menu/File/ImportMenu.add_item("CSV File...", LOAD_CSV)
+	$M/Menu/File/ExportMenu.add_item("CSV File...", EXPORT_CSV)
 	$M/Menu/Settings.show()
+
 
 
 func set_locked(lock):
 	locked = lock
 	# Enable/disable Save menu items
-	for idx in [3, 4, 5, 7]:
+	for idx in [3, 4, 5, 7, 8]:
 		file_menu.set_item_disabled(idx, lock)
 		file_menu.set_item_shortcut_disabled(idx, lock)
 	tools_menu.set_item_disabled(1, lock)
@@ -377,3 +380,14 @@ func _on_LoadKeePassFile_popup_hide():
 
 func _on_Settings_groups_changed():
 	$Content/DataForm.update_group_buttons()
+
+
+func _on_ExportMenu_id_pressed(id):
+	match id:
+		EXPORT_CSV:
+			$Popups/SaveCSVFile.current_dir = settings.last_dir
+			$Popups/SaveCSVFile.popup_centered()
+
+
+func _on_SaveCSVFile_file_selected(path):
+	$Content/DataForm.store_to_csv_file(path)

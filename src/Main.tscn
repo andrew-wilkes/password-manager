@@ -40,6 +40,10 @@ text = "File"
 margin_right = 12.0
 margin_bottom = 8.0
 
+[node name="ExportMenu" type="PopupMenu" parent="M/Menu/File"]
+margin_right = 12.0
+margin_bottom = 8.0
+
 [node name="Tools" type="MenuButton" parent="M/Menu"]
 margin_left = 39.0
 margin_right = 86.0
@@ -189,6 +193,17 @@ filters = PoolStringArray( "*.csv ; Comma separated Files" )
 current_dir = "/mnt/files/dev/godot/git/andrew-wilkes/godot-password-manager/src"
 current_path = "/mnt/files/dev/godot/git/andrew-wilkes/godot-password-manager/src/"
 
+[node name="SaveCSVFile" type="FileDialog" parent="Popups"]
+margin_right = 700.0
+margin_bottom = 400.0
+theme = ExtResource( 7 )
+dialog_text = "WARNING: this will expose your passwords in clear text.
+"
+access = 2
+filters = PoolStringArray( "*.csv ; Comma separated Files" )
+current_dir = "/mnt/files/dev/godot/git/andrew-wilkes/godot-password-manager/src"
+current_path = "/mnt/files/dev/godot/git/andrew-wilkes/godot-password-manager/src/"
+
 [node name="LoadKeePassFile" type="FileDialog" parent="Popups"]
 margin_right = 700.0
 margin_bottom = 400.0
@@ -202,6 +217,7 @@ current_path = "/mnt/files/dev/godot/git/andrew-wilkes/godot-password-manager/sr
 
 [connection signal="pressed" from="M/Menu/File" to="." method="_on_File_pressed"]
 [connection signal="id_pressed" from="M/Menu/File/ImportMenu" to="." method="_on_ImportMenu_id_pressed"]
+[connection signal="id_pressed" from="M/Menu/File/ExportMenu" to="." method="_on_ExportMenu_id_pressed"]
 [connection signal="pressed" from="M/Menu/Tools" to="." method="_on_Tools_pressed"]
 [connection signal="pressed" from="M/Menu/Settings" to="." method="_on_Settings_pressed"]
 [connection signal="pressed" from="M/Menu/Help" to="." method="_on_Help_pressed"]
@@ -210,5 +226,7 @@ current_path = "/mnt/files/dev/godot/git/andrew-wilkes/godot-password-manager/sr
 [connection signal="confirmed" from="Popups/ConfirmQuit" to="." method="_on_ConfirmQuit_confirmed"]
 [connection signal="file_selected" from="Popups/LoadCSVFile" to="." method="_on_LoadCSVFile_file_selected"]
 [connection signal="popup_hide" from="Popups/LoadCSVFile" to="." method="_on_LoadCSVFile_popup_hide"]
+[connection signal="file_selected" from="Popups/SaveCSVFile" to="." method="_on_SaveCSVFile_file_selected"]
+[connection signal="popup_hide" from="Popups/SaveCSVFile" to="." method="_on_LoadCSVFile_popup_hide"]
 [connection signal="file_selected" from="Popups/LoadKeePassFile" to="." method="_on_LoadKeePassFile_file_selected"]
 [connection signal="popup_hide" from="Popups/LoadKeePassFile" to="." method="_on_LoadKeePassFile_popup_hide"]
