@@ -359,9 +359,10 @@ func _on_KeePassImport_update_groups():
 func store_to_csv_file(path):
 	var file = File.new()
 	if file.open(path, File.WRITE) == OK:
-		file.store_csv_line(PoolStringArray(["Title", "Username", "URL", "Notes", "Created", "Accessed"]))
+		file.store_csv_line(PoolStringArray(["Group", "Title", "Username", "URL", "Notes", "Created", "Accessed"]))
 		for item in database.items:
-			file.store_csv_line(PoolStringArray([item.title, item.username, item.url, item.notes,
+			var group = "" if item.groups.empty() else settings.groups[int(item.groups[0])]
+			file.store_csv_line(PoolStringArray([group, item.title, item.username, item.url, item.notes,
 			 Date.get_date_string_from_unix_time(item.created),
 			 Date.get_date_string_from_unix_time(item.accessed)]))
 		file.close()

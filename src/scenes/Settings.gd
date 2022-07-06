@@ -1,7 +1,7 @@
 extends WindowDialog
 
 signal group_removed(group_id)
-signal groups_changed()
+signal groups_changed
 
 const MIN_KEY_LENGTH = 8
 
