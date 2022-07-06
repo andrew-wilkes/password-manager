@@ -117,3 +117,8 @@ static func get_unix_time_from_iso_string(iso: String):
 			2:
 				date["day"] = int(ymd[2])
 	return OS.get_unix_time_from_datetime(date)
+
+
+static func get_date_string_from_unix_time(time, date_format = "YYYY-MM-DD"):
+	var date = OS.get_datetime_from_unix_time(time)
+	return format(date, date_format)

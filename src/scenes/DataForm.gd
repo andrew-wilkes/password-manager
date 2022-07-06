@@ -146,8 +146,7 @@ func get_cell_content(data, key):
 	var txt = ""
 	match key:
 		"accessed":
-			var date = OS.get_datetime_from_unix_time(data[key])
-			txt = Date.format(date, settings.date_format)
+			txt = Date.get_date_string_from_unix_time(data[key], settings.date_format)
 		"notes":
 			var idx = data[key].find("\n")
 			if idx > -1:

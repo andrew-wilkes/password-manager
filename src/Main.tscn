@@ -207,8 +207,6 @@ current_path = "/mnt/files/dev/godot/git/andrew-wilkes/godot-password-manager/sr
 [connection signal="pressed" from="M/Menu/Help" to="." method="_on_Help_pressed"]
 [connection signal="resized" from="Content" to="." method="_on_Content_resized"]
 [connection signal="file_selected" from="Popups/FileDialog" to="." method="_on_FileDialog_file_selected"]
-[connection signal="group_removed" from="Popups/Settings" to="." method="_on_Settings_group_removed"]
-[connection signal="groups_changed" from="Popups/Settings" to="." method="_on_Settings_groups_changed"]
 [connection signal="confirmed" from="Popups/ConfirmQuit" to="." method="_on_ConfirmQuit_confirmed"]
 [connection signal="file_selected" from="Popups/LoadCSVFile" to="." method="_on_LoadCSVFile_file_selected"]
 [connection signal="popup_hide" from="Popups/LoadCSVFile" to="." method="_on_LoadCSVFile_popup_hide"]

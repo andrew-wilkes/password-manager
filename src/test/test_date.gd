@@ -50,3 +50,6 @@ func test_get_unix_time_from_iso_string():
 	assert_eq(Date.get_unix_time_from_iso_string(date), dt)
 	date = "2021"
 	assert_ne(Date.get_unix_time_from_iso_string(date), dt)
+
+func test_get_date_string_from_unix_time():
+	assert_eq(Date.get_date_string_from_unix_time(0), "1970-01-01")
