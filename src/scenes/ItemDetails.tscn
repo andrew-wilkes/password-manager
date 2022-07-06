@@ -19,6 +19,7 @@ margin_left = 9.0
 margin_top = 9.0
 margin_right = 556.0
 margin_bottom = 404.0
+theme = ExtResource( 9 )
 window_title = "Password Record"
 script = ExtResource( 8 )
 
@@ -33,7 +34,7 @@ custom_constants/margin_bottom = 9
 [node name="VB" type="VBoxContainer" parent="M"]
 margin_left = 9.0
 margin_top = 9.0
-margin_right = 536.0
+margin_right = 538.0
 margin_bottom = 381.0
 custom_constants/separation = 10
 
@@ -258,6 +259,7 @@ margin_left = 226.0
 margin_top = 30.0
 margin_right = 300.0
 margin_bottom = 50.0
+rect_min_size = Vector2( 76, 0 )
 text = "2022-09-12"
 
 [node name="EditRemind" type="TextureButton" parent="M/VB/HB4/Time"]
