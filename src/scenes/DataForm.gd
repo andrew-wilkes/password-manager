@@ -146,7 +146,11 @@ func get_cell_content(data, key):
 	var txt = ""
 	match key:
 		"accessed":
-			txt = Date.get_date_string_from_unix_time(data[key], settings.date_format)
+			# Prevent display of 1970-01-01
+			if data[key] == 0:
+				txt = ""
+			else:
+				txt = Date.get_date_string_from_unix_time(data[key], settings.date_format)
 		"notes":
 			var idx = data[key].find("\n")
 			if idx > -1:
@@ -256,8 +260,10 @@ func _on_Add_pressed():
 	grid.add_child(get_view_button_node(item))
 	for key in headings:
 		grid.add_child(get_cell_node(item, key))
-	for node in item.nodes:
-		grid.move_child(node, 0)
+	num_rows = database.items.size()
+	if num_rows > 1:
+		for n in item.nodes.size():
+			grid.move_child(item.nodes[item.nodes.size() - n - 1], 0)
 	current_group = 0
 	show_item_details(item)
 	add_or_update_bars()
