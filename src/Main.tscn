@@ -105,8 +105,8 @@ rect_min_size = Vector2( 186, 65.1 )
 theme = ExtResource( 7 )
 access = 2
 filters = PoolStringArray( "*.pdb ; Password Database Files" )
-current_dir = "/mnt/files/dev/godot/git/andrew-wilkes/godot-password-manager/src"
-current_path = "/mnt/files/dev/godot/git/andrew-wilkes/godot-password-manager/src/"
+current_dir = "/mnt/windows/WData/dev/godot/git/andrew-wilkes/godot-password-manager/src"
+current_path = "/mnt/windows/WData/dev/godot/git/andrew-wilkes/godot-password-manager/src/"
 
 [node name="Licences" parent="Popups" instance=ExtResource( 3 )]
 margin_right = -163.0
@@ -190,8 +190,8 @@ window_title = "Open a File"
 mode = 0
 access = 2
 filters = PoolStringArray( "*.csv ; Comma separated Files" )
-current_dir = "/mnt/files/dev/godot/git/andrew-wilkes/godot-password-manager/src"
-current_path = "/mnt/files/dev/godot/git/andrew-wilkes/godot-password-manager/src/"
+current_dir = "/mnt/windows/WData/dev/godot/git/andrew-wilkes/godot-password-manager/src"
+current_path = "/mnt/windows/WData/dev/godot/git/andrew-wilkes/godot-password-manager/src/"
 
 [node name="SaveCSVFile" type="FileDialog" parent="Popups"]
 margin_right = 700.0
@@ -201,8 +201,8 @@ dialog_text = "WARNING: this will expose your passwords in clear text.
 "
 access = 2
 filters = PoolStringArray( "*.csv ; Comma separated Files" )
-current_dir = "/mnt/files/dev/godot/git/andrew-wilkes/godot-password-manager/src"
-current_path = "/mnt/files/dev/godot/git/andrew-wilkes/godot-password-manager/src/"
+current_dir = "/mnt/windows/WData/dev/godot/git/andrew-wilkes/godot-password-manager/src"
+current_path = "/mnt/windows/WData/dev/godot/git/andrew-wilkes/godot-password-manager/src/"
 
 [node name="LoadKeePassFile" type="FileDialog" parent="Popups"]
 margin_right = 700.0
@@ -212,8 +212,8 @@ window_title = "Open a File"
 mode = 0
 access = 2
 filters = PoolStringArray( "*.kdbx ; KeePass 2 Database Files" )
-current_dir = "/mnt/files/dev/godot/git/andrew-wilkes/godot-password-manager/src"
-current_path = "/mnt/files/dev/godot/git/andrew-wilkes/godot-password-manager/src/"
+current_dir = "/mnt/windows/WData/dev/godot/git/andrew-wilkes/godot-password-manager/src"
+current_path = "/mnt/windows/WData/dev/godot/git/andrew-wilkes/godot-password-manager/src/"
 
 [connection signal="pressed" from="M/Menu/File" to="." method="_on_File_pressed"]
 [connection signal="id_pressed" from="M/Menu/File/ImportMenu" to="." method="_on_ImportMenu_id_pressed"]

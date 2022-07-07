@@ -266,7 +266,7 @@ func update_password_data():
 
 
 func get_database_items():
-	var items = data_form.database.items
+	var items = data_form.database.items.duplicate(true)
 	var keys = Record.new().data.keys()
 	for item in items:
 		for key in item.keys():
